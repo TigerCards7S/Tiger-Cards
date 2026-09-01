@@ -6,6 +6,17 @@
 
 <title>Tiger Cards - Volley Lab Settesoli Tigers</title>
 
+<!-- OneSignal Web Push SDK -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "3d528e76-4fa4-464d-b6e9-6746e3b53fef", // Sostituisci IL_TUO_APP_ID con il codice alfanumerico fornito da OneSignal
+    });
+  });
+</script>
+
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./app_img/icon-180.png">
 <link rel="icon" type="image/png" href="./app_img/icon-192.png">
