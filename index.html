@@ -31,6 +31,7 @@
 --text-gold: #ffd700;
 --border-blue: #1e3a5f;
 --border-orange: #ff7300;
+--border-gold: #ffd700;
 --success-green: #10b981;
 --danger-red: #ef4444;
 }
@@ -254,6 +255,13 @@ border-color: var(--accent-orange);
 box-shadow: 0 12px 30px rgba(255, 115, 0, 0.3), inset 0 0 15px rgba(255, 115, 0, 0.2);
 }
 
+/* Stile Pacchetto Speciale Dorato */
+.pack-card.special {
+background: linear-gradient(145deg, #382c16, #120d04);
+border-color: var(--text-gold);
+box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.25);
+}
+
 .pack-card.coming-soon {
 background: linear-gradient(145deg, #1e293b, #0f172a);
 border-color: #475569;
@@ -273,6 +281,7 @@ text-transform: uppercase;
 }
 
 .pack-card.bonus .pack-badge-top { background: var(--accent-orange); color: #fff; }
+.pack-card.special .pack-badge-top { background: var(--text-gold); color: #000; }
 .pack-card.coming-soon .pack-badge-top { background: #64748b; color: #fff; }
 
 .pack-logo-img {
@@ -389,8 +398,14 @@ flex-direction: column;
 align-items: center;
 }
 
-.card-item.special-card { background: var(--bg-card-special); border-color: var(--accent-orange); }
-.card-item.locked { border-color: #1e293b; opacity: 0.85; }
+/* Bordi Dorati per Carte Speciali Sbloccate */
+.card-item.special-card {
+background: var(--bg-card-special);
+border-color: var(--border-gold);
+box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
+}
+
+.card-item.locked { border-color: #1e293b; opacity: 0.85; box-shadow: none; }
 
 .card-type-tag {
 position: absolute;
@@ -405,7 +420,12 @@ z-index: 2;
 }
 
 .card-type-tag.base { background: rgba(0, 168, 255, 0.9); color: #000; }
-.card-type-tag.special { background: rgba(255, 115, 0, 0.9); color: #fff; }
+
+/* Scritta piccolina in alto dorata per Carte Speciali */
+.card-type-tag.special {
+background: var(--text-gold);
+color: #000;
+}
 
 .card-img-wrapper {
 width: 100%;
@@ -579,7 +599,12 @@ justify-content: center;
 box-shadow: 0 10px 30px rgba(0, 168, 255, 0.3);
 }
 
-.pulled-card.is-special { border-color: var(--accent-orange); background: var(--bg-card-special); box-shadow: 0 10px 30px rgba(255, 115, 0, 0.4); }
+/* Card Rivelata Speciale con Bordo Dorato */
+.pulled-card.is-special {
+border-color: var(--text-gold);
+background: var(--bg-card-special);
+box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+}
 
 .duplicate-tag { font-size: 0.7rem; color: var(--accent-orange); font-weight: 800; margin-top: 6px; }
 .new-tag { font-size: 0.7rem; color: var(--success-green); font-weight: 800; margin-top: 6px; }
@@ -851,7 +876,7 @@ animation: cardAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 </div>
 </div>
 <button class="btn" disabled style="background: #1e293b; color: #64748b; box-shadow: none; border: 1px solid #334155;">COMING SOON</button>
-<p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">In arrivo nelle prossime versioni!</p>
+<p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Novità in arrivo!</p>
 </div>
 </div>
 </div>
@@ -1056,15 +1081,19 @@ const PACK_DAILY_IMAGE_PATH = "app_img/base_pack.png";
 const PACK_BONUS_IMAGE_PATH = "app_img/bonus_pack.png";
 const PACK_SPECIAL_IMAGE_PATH = "app_img/special_card.png";
 
-// PLACEHOLDER VETTORIALI SVG
+// DIRECTORY IMMAGINI RETRO DELLE CARTE (INSERISCI QUI I TUOI PERCORSI)
+const BACK_CARD_BASE_PATH = "app_img/back_base.png";       // <-- Modifica questo percorso per le carte base non sbloccate
+const BACK_CARD_SPECIAL_PATH = "app_img/back_special.png"; // <-- Modifica questo percorso per le carte speciali non sbloccate
+
+// PLACEHOLDER VETTORIALI SVG (UTILIZZATI IN CASO DI IMMAGINE MANCANTE)
 const LOGO_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230a192f' stroke='%2300a8ff' stroke-width='3'/><path d='M30 40 Q 50 10 70 40 Q 80 65 50 85 Q 20 65 30 40 Z' fill='%231d72b8' stroke='%23ff7300' stroke-width='2'/><circle cx='40' cy='42' r='4' fill='%23ff7300'/><circle cx='60' cy='42' r='4' fill='%23ff7300'/><path d='M 38 62 Q 50 72 62 62' fill='none' stroke='%23fff' stroke-width='3'/></svg>";
 const PACK_DAILY_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='3'/><path d='M 20 40 L 80 40 L 50 90 Z' fill='%2300a8ff'/><text x='50' y='115' font-size='10' font-weight='bold' fill='%23fff' text-anchor='middle'>DAILY PACK</text></svg>";
 const PACK_BONUS_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%233b1b54' stroke='%23ff7300' stroke-width='3'/><polygon points='50,25 60,50 85,50 65,65 73,90 50,75 27,90 35,65 15,50 40,50' fill='%23ff7300'/><text x='50' y='118' font-size='10' font-weight='bold' fill='%23ffd700' text-anchor='middle'>BONUS PACK</text></svg>";
 const PACK_SPECIAL_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%23231d42' stroke='%23ffd700' stroke-width='3'/><polygon points='50,20 63,45 90,45 68,62 77,88 50,72 23,88 32,62 10,45 37,45' fill='%23ffd700'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffd700' text-anchor='middle'>SPECIAL PACK</text></svg>";
 const PACK_LOCKED_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231e293b' stroke='%23475569' stroke-width='3'/><text x='50' y='75' font-size='32' font-weight='bold' fill='%2364748b' text-anchor='middle'>?</text><text x='50' y='115' font-size='8' font-weight='bold' fill='%2394a3b8' text-anchor='middle'>COMING SOON</text></svg>";
 
-const BACK_CARD_BASE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/><text x='90' y='120' font-size='18' font-weight='900' fill='%23ffffff' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='3'>TIGER CARDS</text></svg>";
-const BACK_CARD_SPECIAL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%2312213a' stroke='%23ff7300' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='%23ff7300' stroke-width='1.5' stroke-dasharray='6,4'/><text x='90' y='120' font-size='15' font-weight='900' fill='%23ffd700' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='2'>TIGER CARDS SPECIAL</text></svg>";
+const BACK_CARD_BASE_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/><text x='90' y='120' font-size='18' font-weight='900' fill='%23ffffff' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='3'>TIGER CARDS</text></svg>";
+const BACK_CARD_SPECIAL_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%2312213a' stroke='%23ffd700' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='%23ffd700' stroke-width='1.5' stroke-dasharray='6,4'/><text x='90' y='120' font-size='15' font-weight='900' fill='%23ffd700' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='2'>TIGER CARDS SPECIAL</text></svg>";
 
 const BASE_PLAYERS = [
 { id: 1, name: "Giocatore 1", image: "percorso/immagine1.jpg", type: "base", description: "inserire descrizione" },
@@ -1178,7 +1207,6 @@ try { state = Object.assign(state, JSON.parse(saved)); } catch(e){}
 if (!state.unlockedTrophies) state.unlockedTrophies = {};
 if (!state.stats) state.stats = { packsOpened: 0, bonusPacksOpened: 0 };
 
-// Inizializzazione automatica per salvataggi precedenti
 const totalOwnedCount = Object.values(state.inventory).reduce((a, b) => a + b, 0);
 if (totalOwnedCount > 0 && (state.stats.packsOpened || 0) === 0) {
 state.stats.packsOpened = Math.ceil(totalOwnedCount / 3);
@@ -1215,7 +1243,6 @@ localStorage.setItem('tigerCardsState_v5', JSON.stringify(state));
 updateUI();
 }
 
-// LOGICA CONTROLLO TROFEI
 function checkTrophiesQuiet() {
 const uniqueBaseCount = BASE_PLAYERS.filter(p => state.inventory[p.id]).length;
 const uniqueSpecialCount = SPECIAL_PLAYERS.filter(p => state.inventory[p.id]).length;
@@ -1429,7 +1456,7 @@ sealedCard.className = "pack-card";
 sealedImg.src = PACK_SPECIAL_IMAGE_PATH || PACK_SPECIAL_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_SPECIAL_PLACEHOLDER; };
 sealedTitle.innerText = "PACCHETTO SPECIALE";
-sealedCard.className = "pack-card bonus";
+sealedCard.className = "pack-card special"; // Impostata la classe speciale con bordi dorati
 } else {
 sealedImg.src = PACK_BONUS_IMAGE_PATH || PACK_BONUS_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_BONUS_PLACEHOLDER; };
@@ -1530,7 +1557,7 @@ img.style.borderRadius = '8px';
 img.style.objectFit = 'contain';
 img.src = item.player.image;
 img.onerror = function() {
-this.src = isSpecial ? BACK_CARD_SPECIAL : BACK_CARD_BASE;
+this.src = isSpecial ? (BACK_CARD_SPECIAL_PATH || BACK_CARD_SPECIAL_SVG) : (BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG);
 };
 
 const titleEl = document.createElement('div');
@@ -1649,6 +1676,7 @@ filtered.forEach(card => {
 const count = state.inventory[card.id] || 0;
 const isOwned = count > 0;
 const isSpecial = card.type === 'special';
+const backImagePath = isSpecial ? (BACK_CARD_SPECIAL_PATH || BACK_CARD_SPECIAL_SVG) : (BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG);
 
 const item = document.createElement('div');
 item.className = `card-item ${isSpecial ? 'special-card' : ''} ${!isOwned ? 'locked' : ''}`;
@@ -1665,10 +1693,13 @@ img.className = 'card-img';
 if (isOwned) {
 img.src = card.image;
 img.onerror = function() {
-this.src = isSpecial ? BACK_CARD_SPECIAL : BACK_CARD_BASE;
+this.src = backImagePath;
 };
 } else {
-img.src = isSpecial ? BACK_CARD_SPECIAL : BACK_CARD_BASE;
+img.src = backImagePath;
+img.onerror = function() {
+this.src = isSpecial ? BACK_CARD_SPECIAL_SVG : BACK_CARD_BASE_SVG;
+};
 }
 
 imgWrapper.appendChild(img);
@@ -1714,7 +1745,6 @@ function closeMenuModal() {
 document.getElementById('menu-modal').classList.remove('active');
 }
 
-// GESTIONE TROFEI MODALS
 function openTrophiesModal() {
 closeMenuModal();
 renderTrophiesList();
@@ -1827,7 +1857,7 @@ function openFullScreenModal(card) {
 const img = document.getElementById('fullscreen-img');
 img.src = card.image;
 img.onerror = function() {
-this.src = card.type === 'special' ? BACK_CARD_SPECIAL : BACK_CARD_BASE;
+this.src = card.type === 'special' ? (BACK_CARD_SPECIAL_PATH || BACK_CARD_SPECIAL_SVG) : (BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG);
 };
 document.getElementById('fullscreen-modal').classList.add('active');
 }
