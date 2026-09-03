@@ -255,7 +255,6 @@ border-color: var(--accent-orange);
 box-shadow: 0 12px 30px rgba(255, 115, 0, 0.3), inset 0 0 15px rgba(255, 115, 0, 0.2);
 }
 
-/* Stile Pacchetto Speciale Dorato */
 .pack-card.special {
 background: linear-gradient(145deg, #382c16, #120d04);
 border-color: var(--text-gold);
@@ -398,7 +397,6 @@ flex-direction: column;
 align-items: center;
 }
 
-/* Bordi Dorati per Carte Speciali Sbloccate */
 .card-item.special-card {
 background: var(--bg-card-special);
 border-color: var(--border-gold);
@@ -421,7 +419,6 @@ z-index: 2;
 
 .card-type-tag.base { background: rgba(0, 168, 255, 0.9); color: #000; }
 
-/* Scritta piccolina in alto dorata per Carte Speciali */
 .card-type-tag.special {
 background: var(--text-gold);
 color: #000;
@@ -599,7 +596,6 @@ justify-content: center;
 box-shadow: 0 10px 30px rgba(0, 168, 255, 0.3);
 }
 
-/* Card Rivelata Speciale con Bordo Dorato */
 .pulled-card.is-special {
 border-color: var(--text-gold);
 background: var(--bg-card-special);
@@ -704,16 +700,15 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-font-size: 0.72rem;
+font-size: 0.68rem;
 font-weight: 700;
-gap: 3px;
+gap: 2px;
 padding-top: 6px;
 }
 
 .nav-btn.active { color: var(--bright-blue); }
 .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
-/* STILI TROFEI E TITOLI */
 .trophy-list {
 display: flex;
 flex-direction: column;
@@ -816,6 +811,214 @@ max-width: 320px;
 text-align: center;
 box-shadow: 0 10px 30px rgba(255, 115, 0, 0.4);
 animation: cardAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* STILI NUOVI: FANTATIGERS */
+.fanta-banner {
+background: linear-gradient(135deg, #1c2e4a, #0d1b30);
+border: 2px solid var(--bright-blue);
+border-radius: 16px;
+padding: 15px;
+margin-bottom: 20px;
+text-align: center;
+box-shadow: 0 6px 20px rgba(0, 168, 255, 0.2);
+}
+
+.fanta-banner-title {
+font-size: 0.8rem;
+text-transform: uppercase;
+color: var(--text-muted);
+font-weight: 700;
+letter-spacing: 1px;
+}
+
+.fanta-match-name {
+font-size: 1.1rem;
+font-weight: 900;
+color: var(--text-gold);
+margin: 4px 0 8px 0;
+text-transform: uppercase;
+}
+
+.fanta-timer-badge {
+display: inline-block;
+background: rgba(0, 168, 255, 0.15);
+border: 1px solid var(--bright-blue);
+color: var(--bright-blue);
+padding: 6px 14px;
+border-radius: 20px;
+font-size: 0.95rem;
+font-weight: 900;
+letter-spacing: 1px;
+margin-top: 4px;
+}
+
+.fanta-timer-badge.locked {
+background: rgba(239, 68, 68, 0.15);
+border-color: var(--danger-red);
+color: var(--danger-red);
+}
+
+.fanta-section-card {
+background: var(--bg-surface);
+border: 1px solid var(--border-blue);
+border-radius: 16px;
+padding: 16px;
+margin-bottom: 20px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.fanta-section-title {
+font-size: 1rem;
+font-weight: 800;
+color: var(--bright-blue);
+text-transform: uppercase;
+margin-bottom: 12px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.fielded-card-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 10px;
+border: 2px dashed var(--border-blue);
+border-radius: 12px;
+background: rgba(6, 14, 26, 0.5);
+min-height: 180px;
+text-align: center;
+}
+
+.fielded-card-preview {
+width: 120px;
+height: 160px;
+border-radius: 10px;
+overflow: hidden;
+border: 2px solid var(--bright-blue);
+box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+margin-bottom: 10px;
+position: relative;
+}
+
+.fielded-card-preview img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.fielded-card-name {
+font-size: 0.95rem;
+font-weight: 800;
+color: #fff;
+margin-bottom: 2px;
+}
+
+.fielded-card-vote {
+font-size: 0.85rem;
+font-weight: 800;
+color: var(--text-gold);
+}
+
+.leaderboard-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 10px;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+padding: 10px 8px;
+text-align: left;
+font-size: 0.8rem;
+border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.leaderboard-table th {
+color: var(--text-muted);
+text-transform: uppercase;
+font-size: 0.7rem;
+letter-spacing: 0.5px;
+}
+
+.leaderboard-table tr.current-user-row {
+background: rgba(0, 168, 255, 0.15);
+border-left: 3px solid var(--bright-blue);
+font-weight: bold;
+}
+
+.leaderboard-rank {
+font-weight: 900;
+color: var(--accent-orange);
+width: 30px;
+text-align: center;
+}
+
+.leaderboard-points {
+font-weight: 900;
+color: var(--text-gold);
+text-align: right;
+}
+
+.name-edit-box {
+display: flex;
+gap: 8px;
+margin-bottom: 12px;
+}
+
+.name-input {
+flex: 1;
+padding: 8px 12px;
+border-radius: 8px;
+border: 1px solid var(--border-blue);
+background: var(--dark-navy);
+color: #fff;
+font-size: 0.85rem;
+font-weight: 600;
+}
+
+.deploy-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+max-height: 50vh;
+overflow-y: auto;
+width: 100%;
+padding: 5px;
+}
+
+.deploy-card-item {
+background: var(--bg-card);
+border: 2px solid var(--border-blue);
+border-radius: 10px;
+padding: 6px;
+text-align: center;
+cursor: pointer;
+transition: transform 0.2s;
+}
+
+.deploy-card-item:active { transform: scale(0.95); }
+.deploy-card-item.selected {
+border-color: var(--bright-blue);
+box-shadow: 0 0 12px var(--bright-blue);
+}
+
+.deploy-card-img {
+width: 100%;
+aspect-ratio: 3/4;
+object-fit: cover;
+border-radius: 6px;
+background: var(--dark-navy);
+}
+
+.deploy-card-name {
+font-size: 0.7rem;
+font-weight: 800;
+margin-top: 4px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 </style>
 </head>
@@ -930,6 +1133,67 @@ animation: cardAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 </div>
 
 <div class="cards-grid" id="collection-grid"></div>
+</div>
+
+<!-- NUOVA TAB: FANTATIGERS -->
+<div id="tab-fantaTigers" class="tab-content">
+<div class="fanta-banner">
+<div class="fanta-banner-title">Prossimo Match fantaTigers</div>
+<div class="fanta-match-name" id="fanta-match-title">Tigers vs Volley Rivals</div>
+<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;" id="fanta-match-date-display">--/--/---- --:--</div>
+<div class="fanta-timer-badge" id="fanta-timer-display">Tempo rimanente: --:--:--</div>
+</div>
+
+<div class="fanta-section-card">
+<div class="fanta-section-title">
+<span>La tua Formazione</span>
+<span style="font-size: 0.7rem; color: var(--text-gold);" id="fanta-status-text">SCHIERAMENTO APERTO</span>
+</div>
+<div class="fielded-card-container" id="fielded-card-box">
+<!-- Popolato via JS -->
+</div>
+<button id="btn-open-deploy" class="btn btn-orange" style="margin-top: 12px; font-size: 0.85rem; padding: 10px 18px;" onclick="openDeployModal()">
+SCHIERA / MODIFICA CARTA
+</button>
+</div>
+
+<div class="fanta-section-card">
+<div class="fanta-section-title">
+<span>Classifica Globale <small id="fanta-cloud-status" style="font-size: 0.65rem; color: var(--text-muted);"></small></span>
+<span style="font-size: 0.75rem; color: var(--text-gold);" id="fanta-user-total-pts">0 Punti</span>
+</div>
+
+<div class="name-edit-box">
+<input type="text" id="fanta-name-input" class="name-input" placeholder="Il tuo Nome in Classifica" maxlength="18">
+<button class="btn" style="width: auto; padding: 8px 16px; font-size: 0.8rem; border-radius: 8px;" onclick="saveFantaName()">Salva</button>
+</div>
+
+<table class="leaderboard-table">
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>Giocatore</th>
+<th style="text-align: right;">Punti Totali</th>
+</tr>
+</thead>
+<tbody id="leaderboard-body">
+<!-- Popolato via JS -->
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- Modal Schiera Carta fantaTigers -->
+<div id="deploy-modal" class="modal">
+<div class="options-menu-box" style="max-width: 340px;">
+<h3 style="color: var(--bright-blue); font-size: 1.1rem; text-transform: uppercase;">Schiera una Carta Base</h3>
+<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Scegli uno dei tuoi giocatori base della collezione:</p>
+<div id="deploy-cards-grid" class="deploy-grid"></div>
+<div style="display: flex; gap: 10px; margin-top: 15px;">
+<button class="options-btn" style="flex: 1; background: var(--bright-blue); color: #000; border: none; font-weight: 800;" onclick="confirmDeployment()">Conferma</button>
+<button class="options-btn" style="flex: 1;" onclick="closeDeployModal()">Annulla</button>
+</div>
+</div>
 </div>
 
 <!-- Modal Apertura Pacchetto -->
@@ -1072,20 +1336,91 @@ Negozio
 <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
 Collezione
 </button>
+<button class="nav-btn" onclick="switchTab('fantaTigers', this)">
+<svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+fantaTigers
+</button>
 </nav>
 
+<!-- ========================================== -->
+<!-- FIREBASE (per la Classifica Globale condivisa tra tutti i dispositivi) -->
+<!-- ========================================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
+// ==========================================
+// CONFIGURAZIONE FIREBASE
+// Incolla qui sotto l'oggetto "firebaseConfig" che trovi nella Console Firebase
+// (Impostazioni progetto > Le tue app > SDK di configurazione).
+// Finché non lo compili, l'app funziona comunque ma la classifica resta solo locale.
+// ==========================================
+const firebaseConfig = {
+apiKey: "AIzaSyCzSudf8vs35ORViJr6qjSIL9JNAvBV-wo",
+authDomain: "tiger-cards-cec56.firebaseapp.com",
+projectId: "tiger-cards-cec56",
+storageBucket: "tiger-cards-cec56.firebasestorage.app",
+messagingSenderId: "311565843395",
+appId: "1:311565843395:web:5ebd065c1d0d384bc79b76"
+};
+
+let db = null;
+let firebaseReady = false;
+
+try {
+if (firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("INCOLLA_QUI") === -1) {
+firebase.initializeApp(firebaseConfig);
+db = firebase.firestore();
+firebaseReady = true;
+} else {
+console.warn("Firebase non configurato: la Classifica Globale resterà solo locale finché non compili firebaseConfig.");
+}
+} catch (e) {
+console.error("Errore inizializzazione Firebase:", e);
+firebaseReady = false;
+}
+
+// ==========================================
+// CONFIGURAZIONE FANTATIGERS (PARTITA CORRENTE)
+// Imposta votesPublished a true quando vuoi pubblicare i voti e calcolare la classifica!
+// ==========================================
+const CURRENT_MATCH_CONFIG = {
+matchId: "match_01",
+title: "Tigers vs Bears - Giornata 1",
+// Data e ora inizio partita (Formato ISO: YYYY-MM-DDTHH:mm:ss)
+matchDate: "2026-09-03T01:40:00",
+// Imposta 'true' quando i voti sono pubblicati ed il calcolo deve essere effettuato
+votesPublished: true,
+// Voti delle carte base (ID del giocatore -> Voto prestazione)
+playerVotes: {
+1:0 , 2:0 , 3:0 , 4:0 , 5:0 ,
+6:0 , 7:0 , 8:0 , 9:8 , 10:0 ,
+11:0 , 12:0 , 13:0 , 14:0, 15:0 ,
+16:0 , 17:0 , 18:0 , 19:0 , 20:0 ,
+21:0 , 22:0 , 23:0 , 24:0 , 25:0 
+}
+};
+
+// SIMULAZIONE UTENTI ALTRI IN CLASSIFICA GLOBALE
+const MOCK_LEADERBOARD = [
+{ id: "bot_1", name: "SpikeMaster99", points: 0 },
+{ id: "bot_2", name: "CapitanTiger", points: 0 },
+{ id: "bot_3", name: "VolleyAce_00", points: 0 },
+{ id: "bot_4", name: "MuroInsuperabile", points: 0 },
+{ id: "bot_5", name: "TigerFan2026", points: 0 }
+];
+
 // CONFIGURAZIONE PERCORSI IMMAGINI
 const HEADER_LOGO_PATH = "app_img/logo.png";
 const PACK_DAILY_IMAGE_PATH = "app_img/base_pack.png";
 const PACK_BONUS_IMAGE_PATH = "app_img/bonus_pack.png";
 const PACK_SPECIAL_IMAGE_PATH = "app_img/special_card.png";
 
-// DIRECTORY IMMAGINI RETRO DELLE CARTE (INSERISCI QUI I TUOI PERCORSI)
-const BACK_CARD_BASE_PATH = "app_img/back_base.png";       // <-- Modifica questo percorso per le carte base non sbloccate
-const BACK_CARD_SPECIAL_PATH = "app_img/back_special.png"; // <-- Modifica questo percorso per le carte speciali non sbloccate
+// DIRECTORY IMMAGINI RETRO DELLE CARTE
+const BACK_CARD_BASE_PATH = "app_img/back_base.png";
+const BACK_CARD_SPECIAL_PATH = "app_img/back_special.png";
 
-// PLACEHOLDER VETTORIALI SVG (UTILIZZATI IN CASO DI IMMAGINE MANCANTE)
+// PLACEHOLDER VETTORIALI SVG
 const LOGO_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230a192f' stroke='%2300a8ff' stroke-width='3'/><path d='M30 40 Q 50 10 70 40 Q 80 65 50 85 Q 20 65 30 40 Z' fill='%231d72b8' stroke='%23ff7300' stroke-width='2'/><circle cx='40' cy='42' r='4' fill='%23ff7300'/><circle cx='60' cy='42' r='4' fill='%23ff7300'/><path d='M 38 62 Q 50 72 62 62' fill='none' stroke='%23fff' stroke-width='3'/></svg>";
 const PACK_DAILY_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='3'/><path d='M 20 40 L 80 40 L 50 90 Z' fill='%2300a8ff'/><text x='50' y='115' font-size='10' font-weight='bold' fill='%23fff' text-anchor='middle'>DAILY PACK</text></svg>";
 const PACK_BONUS_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%233b1b54' stroke='%23ff7300' stroke-width='3'/><polygon points='50,25 60,50 85,50 65,65 73,90 50,75 27,90 35,65 15,50 40,50' fill='%23ff7300'/><text x='50' y='118' font-size='10' font-weight='bold' fill='%23ffd700' text-anchor='middle'>BONUS PACK</text></svg>";
@@ -1167,11 +1502,11 @@ description: "Apri il tuo primo pacchetto bonus.",
 check: (st, uniqueBase, uniqueSpec) => (st.stats.bonusPacksOpened || 0) >= 1
 },
 {
-  id: "veterano_pack",
-  title: "OSS",
-  icon: "📦",
-  description: "Apri almeno 15 pacchetti totali.",
-  check: (st, uniqueBase, uniqueSpec) => (st.stats.packsOpened || 0) >= 15
+id: "veterano_pack",
+title: "OSSERVATORE",
+icon: "📦",
+description: "Apri almeno 15 pacchetti totali.",
+check: (st, uniqueBase, uniqueSpec) => (st.stats.packsOpened || 0) >= 15
 }
 ];
 
@@ -1184,7 +1519,13 @@ unlockedTrophies: {},
 stats: {
 packsOpened: 0,
 bonusPacksOpened: 0
-}
+},
+// DATI FANTATIGERS
+fantaUserId: null,
+fantaUserName: "",
+fantaDeployedCardId: null,
+fantaTotalPoints: 0,
+fantaProcessedMatches: {}
 };
 
 let trophyNotificationQueue = [];
@@ -1199,6 +1540,19 @@ let currentPulledData = { pulled: [], infoText: '', title: '' };
 let currentRevealIndex = 0;
 let cardTouchStartX = 0;
 
+let tempSelectedDeployCardId = null;
+let fantaTimerInterval = null;
+
+// Cache della classifica globale ricevuta da Firebase.
+// null = non ancora ricevuta nessuna risposta dal cloud (mostriamo un fallback locale).
+// [] o array con dati = risposta ricevuta correttamente, anche se vuota.
+let cloudLeaderboardCache = null;
+let leaderboardUnsubscribe = null;
+
+function generateUserId() {
+return 'tiger_usr_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+}
+
 function loadState() {
 const saved = localStorage.getItem('tigerCardsState_v5');
 if (saved) {
@@ -1206,6 +1560,17 @@ try { state = Object.assign(state, JSON.parse(saved)); } catch(e){}
 }
 if (!state.unlockedTrophies) state.unlockedTrophies = {};
 if (!state.stats) state.stats = { packsOpened: 0, bonusPacksOpened: 0 };
+
+// Inizializza dati FantaTigers se assenti
+if (!state.fantaUserId) {
+state.fantaUserId = generateUserId();
+}
+if (!state.fantaUserName) {
+state.fantaUserName = "TigerFan_" + Math.floor(1000 + Math.random() * 9000);
+}
+if (state.fantaDeployedCardId === undefined) state.fantaDeployedCardId = null;
+if (state.fantaTotalPoints === undefined) state.fantaTotalPoints = 0;
+if (!state.fantaProcessedMatches) state.fantaProcessedMatches = {};
 
 const totalOwnedCount = Object.values(state.inventory).reduce((a, b) => a + b, 0);
 if (totalOwnedCount > 0 && (state.stats.packsOpened || 0) === 0) {
@@ -1216,6 +1581,7 @@ checkTrophiesQuiet();
 initImages();
 setupHomeCarouselTouch();
 updateUI();
+initFantaTigers();
 }
 
 function initImages() {
@@ -1334,6 +1700,261 @@ btnShop.innerText = "ACQUISTA CON 5 PUNTI";
 }
 }
 
+// ==========================================
+// SINCRONIZZAZIONE CLOUD (CLASSIFICA GLOBALE CONDIVISA)
+// ==========================================
+
+// Si iscrive in tempo reale alla classifica su Firestore: ogni volta che QUALSIASI
+// utente (tu, un tuo amico, ecc.) aggiorna il proprio punteggio, questa funzione
+// riceve automaticamente la nuova classifica aggiornata e la ridisegna.
+function initFantaCloudSync() {
+if (!firebaseReady || !db) {
+renderLeaderboard();
+return;
+}
+if (leaderboardUnsubscribe) return;
+
+const statusEl = document.getElementById('fanta-cloud-status');
+if (statusEl) statusEl.innerText = "🟡 Connessione...";
+
+leaderboardUnsubscribe = db.collection('fantaLeaderboard')
+.orderBy('points', 'desc')
+.limit(100)
+.onSnapshot(function(snapshot) {
+cloudLeaderboardCache = snapshot.docs.map(function(doc) {
+return Object.assign({ id: doc.id }, doc.data());
+});
+if (statusEl) statusEl.innerText = "🟢 Online";
+renderLeaderboard();
+}, function(err) {
+console.error("Errore sincronizzazione classifica globale:", err);
+if (statusEl) statusEl.innerText = "🔴 Offline";
+renderLeaderboard();
+});
+}
+
+// Invia (o aggiorna) il tuo punteggio e nome sul database condiviso, cosi' che
+// tutti gli altri utenti dell'app possano vederli nella loro classifica.
+function syncFantaScoreToCloud() {
+if (!firebaseReady || !db || !state.fantaUserId) return;
+db.collection('fantaLeaderboard').doc(state.fantaUserId).set({
+name: state.fantaUserName || 'Giocatore',
+points: state.fantaTotalPoints || 0,
+updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+}, { merge: true }).catch(function(err) {
+console.error("Errore invio punteggio alla classifica globale:", err);
+});
+}
+
+// ==========================================
+// LOGICA FANTATIGERS
+// ==========================================
+function initFantaTigers() {
+document.getElementById('fanta-match-title').innerText = CURRENT_MATCH_CONFIG.title;
+document.getElementById('fanta-name-input').value = state.fantaUserName;
+
+const d = new Date(CURRENT_MATCH_CONFIG.matchDate);
+const dateFormatted = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} alle ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+document.getElementById('fanta-match-date-display').innerText = "Inizio: " + dateFormatted;
+
+if (fantaTimerInterval) clearInterval(fantaTimerInterval);
+updateFantaTimer();
+fantaTimerInterval = setInterval(updateFantaTimer, 1000);
+
+renderFantaSection();
+}
+
+function updateFantaTimer() {
+const now = new Date();
+const matchTime = new Date(CURRENT_MATCH_CONFIG.matchDate);
+const diff = matchTime - now;
+
+const timerBadge = document.getElementById('fanta-timer-display');
+const statusText = document.getElementById('fanta-status-text');
+const btnDeploy = document.getElementById('btn-open-deploy');
+
+// Calcola ed assegna il punteggio della partita SOLO SE i voti sono ufficialmente pubblicati (votesPublished === true)
+// NOTA: la chiave usata per "ricordare" che una partita è già stata conteggiata è una combinazione
+// di matchId + matchDate, cosi' anche se ti dimentichi di cambiare il matchId per una nuova partita
+// (basta che tu aggiorni la data/ora), il sistema la riconosce comunque come una partita nuova e
+// somma correttamente il punteggio invece di restare bloccato per sempre sul vecchio matchId.
+const fantaMatchKey = CURRENT_MATCH_CONFIG.matchId + '_' + CURRENT_MATCH_CONFIG.matchDate;
+if (CURRENT_MATCH_CONFIG.votesPublished && state.fantaDeployedCardId && !state.fantaProcessedMatches[fantaMatchKey]) {
+const vote = CURRENT_MATCH_CONFIG.playerVotes[state.fantaDeployedCardId] || 0;
+state.fantaTotalPoints = Math.round((state.fantaTotalPoints + vote) * 10) / 10;
+state.fantaProcessedMatches[fantaMatchKey] = true;
+saveState();
+syncFantaScoreToCloud();
+renderFantaSection();
+}
+
+if (diff <= 0) {
+timerBadge.innerText = CURRENT_MATCH_CONFIG.votesPublished ? "VOTI PUBBLICATI" : "PARTITA IN CORSO / CONCLUSA";
+timerBadge.classList.add('locked');
+statusText.innerText = "SCHIERAMENTO BLOCCATO";
+statusText.style.color = "var(--danger-red)";
+if (btnDeploy) btnDeploy.style.display = 'none';
+} else {
+const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+let timeStr = "Scadenza: ";
+if (days > 0) timeStr += `${days}g `;
+timeStr += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+timerBadge.innerText = timeStr;
+timerBadge.classList.remove('locked');
+statusText.innerText = "SCHIERAMENTO APERTO";
+statusText.style.color = "var(--text-gold)";
+if (btnDeploy) btnDeploy.style.display = 'block';
+}
+}
+
+function renderFantaSection() {
+const container = document.getElementById('fielded-card-box');
+document.getElementById('fanta-user-total-pts').innerText = `${state.fantaTotalPoints} Punti`;
+
+if (!state.fantaDeployedCardId) {
+container.innerHTML = `
+<div style="font-size: 2rem; margin-bottom: 6px;">🏐</div>
+<div style="font-size: 0.9rem; font-weight: 800; color: #fff;">Nessun Giocatore Schierato</div>
+<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Schiera una carta base della tua collezione prima dell'inizio della partita!</div>
+`;
+} else {
+const player = BASE_PLAYERS.find(p => p.id === state.fantaDeployedCardId);
+const isMatchStarted = new Date() >= new Date(CURRENT_MATCH_CONFIG.matchDate);
+const votesAvailable = CURRENT_MATCH_CONFIG.votesPublished;
+const vote = CURRENT_MATCH_CONFIG.playerVotes[player.id];
+
+let voteStatusHTML = `<span style="color:var(--success-green);">Schierato e Pronto!</span>`;
+if (votesAvailable) {
+voteStatusHTML = `Voto Prestazione: <strong style="color:var(--bright-blue);">${vote !== undefined ? vote : 'N/D'}</strong>`;
+} else if (isMatchStarted) {
+voteStatusHTML = `<span style="color:var(--text-gold);">In attesa della pubblicazione dei voti...</span>`;
+}
+
+container.innerHTML = `
+<div class="fielded-card-preview">
+<img src="${player.image}" onerror="this.src='${BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG}'" alt="${player.name}">
+</div>
+<div class="fielded-card-name">${player.name}</div>
+<div class="fielded-card-vote">
+${voteStatusHTML}
+</div>
+`;
+}
+
+renderLeaderboard();
+}
+
+function saveFantaName() {
+const input = document.getElementById('fanta-name-input');
+const newName = input.value.trim();
+if (newName) {
+state.fantaUserName = newName;
+saveState();
+syncFantaScoreToCloud();
+renderLeaderboard();
+alert("Nome aggiornato con successo!");
+}
+}
+
+function renderLeaderboard() {
+const tbody = document.getElementById('leaderboard-body');
+tbody.innerHTML = '';
+
+// Se Firebase non è configurato, o non abbiamo ancora ricevuto la prima risposta dal
+// cloud, mostriamo un fallback locale (i "bot" finti + solo te) cosi' la classifica
+// non appare mai vuota o rotta durante il setup. Appena i dati cloud arrivano, questo
+// fallback viene automaticamente sostituito con la classifica vera e condivisa.
+let list = cloudLeaderboardCache !== null ? [...cloudLeaderboardCache] : [...MOCK_LEADERBOARD];
+
+const userIdx = list.findIndex(u => u.id === state.fantaUserId);
+if (userIdx >= 0) {
+list[userIdx] = Object.assign({}, list[userIdx], { name: state.fantaUserName, points: state.fantaTotalPoints });
+} else {
+list.push({
+id: state.fantaUserId,
+name: state.fantaUserName,
+points: state.fantaTotalPoints
+});
+}
+
+list.sort((a, b) => b.points - a.points);
+
+if (list.length === 0) {
+tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding: 16px; font-size: 0.8rem;">Nessun giocatore in classifica ancora. Sii il primo!</td></tr>`;
+return;
+}
+
+list.forEach((item, index) => {
+const tr = document.createElement('tr');
+if (item.id === state.fantaUserId) {
+tr.className = 'current-user-row';
+}
+
+tr.innerHTML = `
+<td class="leaderboard-rank">${index + 1}</td>
+<td>${item.name} ${item.id === state.fantaUserId ? '<small style="color:var(--bright-blue);">(TU)</small>' : ''}</td>
+<td class="leaderboard-points">${item.points} pt</td>
+`;
+tbody.appendChild(tr);
+});
+}
+
+function openDeployModal() {
+if (new Date() >= new Date(CURRENT_MATCH_CONFIG.matchDate)) {
+alert("I termini per lo schieramento sono scaduti!");
+return;
+}
+
+const grid = document.getElementById('deploy-cards-grid');
+grid.innerHTML = '';
+
+const ownedBaseCards = BASE_PLAYERS.filter(p => state.inventory[p.id] && state.inventory[p.id] > 0);
+
+if (ownedBaseCards.length === 0) {
+grid.innerHTML = `<div style="grid-column: 1/-1; padding: 20px; font-size: 0.85rem; color: var(--text-muted);">Non possiedi alcuna carta base nella tua collezione! Apri qualche pacchetto prima.</div>`;
+} else {
+tempSelectedDeployCardId = state.fantaDeployedCardId || ownedBaseCards[0].id;
+
+ownedBaseCards.forEach(card => {
+const item = document.createElement('div');
+item.className = `deploy-card-item ${card.id === tempSelectedDeployCardId ? 'selected' : ''}`;
+
+item.innerHTML = `
+<img class="deploy-card-img" src="${card.image}" onerror="this.src='${BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG}'">
+<div class="deploy-card-name">${card.name}</div>
+`;
+
+item.onclick = () => {
+document.querySelectorAll('.deploy-card-item').forEach(i => i.classList.remove('selected'));
+item.classList.add('selected');
+tempSelectedDeployCardId = card.id;
+};
+
+grid.appendChild(item);
+});
+}
+
+document.getElementById('deploy-modal').classList.add('active');
+}
+
+function closeDeployModal() {
+document.getElementById('deploy-modal').classList.remove('active');
+}
+
+function confirmDeployment() {
+if (tempSelectedDeployCardId) {
+state.fantaDeployedCardId = tempSelectedDeployCardId;
+saveState();
+renderFantaSection();
+closeDeployModal();
+}
+}
+
 function updateCarousel() {
 const track = document.getElementById('carousel-track');
 track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
@@ -1391,6 +2012,7 @@ document.getElementById('tab-' + tabId).classList.add('active');
 el.classList.add('active');
 
 if (tabId === 'collection') renderCollection();
+if (tabId === 'fantaTigers') renderFantaSection();
 }
 
 function openPack(type) {
@@ -1456,7 +2078,7 @@ sealedCard.className = "pack-card";
 sealedImg.src = PACK_SPECIAL_IMAGE_PATH || PACK_SPECIAL_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_SPECIAL_PLACEHOLDER; };
 sealedTitle.innerText = "PACCHETTO SPECIALE";
-sealedCard.className = "pack-card special"; // Impostata la classe speciale con bordi dorati
+sealedCard.className = "pack-card special";
 } else {
 sealedImg.src = PACK_BONUS_IMAGE_PATH || PACK_BONUS_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_BONUS_PLACEHOLDER; };
@@ -1810,6 +2432,10 @@ document.getElementById('reset-modal').classList.remove('active');
 }
 
 function executeReset() {
+// Salviamo il vecchio ID prima di sovrascrivere lo stato, così possiamo
+// rimuovere il tuo vecchio punteggio dalla classifica globale condivisa.
+const oldFantaUserId = state.fantaUserId;
+
 localStorage.removeItem('tigerCardsState_v5');
 state = {
 points: 0,
@@ -1817,10 +2443,23 @@ inventory: {},
 usedCodes: {},
 lastDailyDate: null,
 unlockedTrophies: {},
-stats: { packsOpened: 0, bonusPacksOpened: 0 }
+stats: { packsOpened: 0, bonusPacksOpened: 0 },
+fantaUserId: generateUserId(),
+fantaUserName: "TigerFan_" + Math.floor(1000 + Math.random() * 9000),
+fantaDeployedCardId: null,
+fantaTotalPoints: 0,
+fantaProcessedMatches: {}
 };
 saveState();
 closeResetModal();
+
+// Elimina definitivamente il documento del vecchio utente dal database condiviso,
+// così scompare anche dalla classifica di tutti gli altri (non solo dalla tua).
+if (firebaseReady && db && oldFantaUserId) {
+db.collection('fantaLeaderboard').doc(oldFantaUserId).delete().catch(function(err) {
+console.error("Errore rimozione dati dalla classifica globale:", err);
+});
+}
 
 const firstNavBtn = document.querySelector('.nav-btn');
 switchTab('home', firstNavBtn);
@@ -1868,6 +2507,8 @@ document.getElementById('fullscreen-modal').classList.remove('active');
 
 window.onload = function() {
 loadState();
+initFantaCloudSync();
+syncFantaScoreToCloud();
 };
 </script>
 </body>
