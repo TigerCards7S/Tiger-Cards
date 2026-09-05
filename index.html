@@ -15,14 +15,20 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tiger Cards">
 
+<!-- Font sportivi: Anton per il wordmark principale (un solo momento "forte"),
+     Oswald per titoli/etichette/numeri in tutta l'app, in stile squadra sportiva. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root {
 --bg-main: #0a1322;
 --bg-surface: #12213a;
 --bg-card: #1a2d4c;
 --bg-card-special: #231d42;
---primary-blue: #1d72b8;
---bright-blue: #00a8ff;
+--primary-blue: #1f4d78;
+--bright-blue: #4f86c4;
 --dark-navy: #060e1a;
 --accent-orange: #ff7300;
 --accent-orange-glow: rgba(255, 115, 0, 0.4);
@@ -32,8 +38,11 @@
 --border-blue: #1e3a5f;
 --border-orange: #ff7300;
 --border-gold: #ffd700;
+--brand-silver: #c8d2dc;
 --success-green: #10b981;
 --danger-red: #ef4444;
+--font-display: 'Anton', 'Oswald', sans-serif;
+--font-heading: 'Oswald', -apple-system, sans-serif;
 }
 
 * {
@@ -73,35 +82,61 @@ align-items: center;
 gap: 12px;
 }
 
+/* ========================================== */
+/* TIPOGRAFIA — font sportivo condensato per titoli, etichette e numeri.
+   Anton è riservato al solo wordmark "Tiger Cards" (un unico momento "forte"),
+   Oswald copre tutti gli altri titoli/etichette per coerenza in stile squadra. */
+/* ========================================== */
+h1, h2, h3,
+.modal-title,
+.pack-title,
+.points-title,
+.fanta-banner-title,
+.fanta-match-name,
+.fanta-section-title,
+.leaderboard-table th,
+.card-name,
+.filter-btn,
+.nav-btn,
+.btn,
+.options-btn {
+font-family: var(--font-heading);
+}
+
+header h1 {
+font-family: var(--font-display);
+letter-spacing: 1.5px;
+}
+
 .header-logo {
 width: 70px;
 height: 70px;
 border-radius: 50%;
 object-fit: contain;
 border: 2px solid var(--bright-blue);
-box-shadow: 0 0 12px rgba(0, 168, 255, 0.5);
+box-shadow: 0 0 12px rgba(79, 134, 196, 0.5);
 background: var(--dark-navy);
 }
 
 .header-title-container { text-align: left; }
 
 header h1 {
-font-size: 1.25rem;
+font-size: 1.4rem;
 color: var(--text-main);
 text-transform: uppercase;
-letter-spacing: 1px;
-font-weight: 900;
-line-height: 1.1;
+letter-spacing: 1.5px;
+font-weight: 400;
+line-height: 1.05;
 background: linear-gradient(90deg, #ffffff, var(--bright-blue));
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
 }
 
 header h2 {
-font-size: 0.75rem;
-color: var(--accent-orange);
-font-weight: 700;
-letter-spacing: 0.5px;
+font-size: 0.78rem;
+color: var(--brand-silver);
+font-weight: 500;
+letter-spacing: 1px;
 text-transform: uppercase;
 }
 
@@ -243,7 +278,7 @@ flex-direction: column;
 justify-content: space-between;
 align-items: center;
 padding: 18px 15px;
-box-shadow: 0 12px 30px rgba(0, 168, 255, 0.25), inset 0 0 15px rgba(255,255,255,0.1);
+box-shadow: 0 12px 30px rgba(79, 134, 196, 0.25), inset 0 0 15px rgba(255,255,255,0.1);
 border: 3px solid var(--bright-blue);
 position: relative;
 overflow: hidden;
@@ -259,6 +294,83 @@ box-shadow: 0 12px 30px rgba(255, 115, 0, 0.3), inset 0 0 15px rgba(255, 115, 0,
 background: linear-gradient(145deg, #382c16, #120d04);
 border-color: var(--text-gold);
 box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.25);
+}
+
+.pack-card.streak {
+background: linear-gradient(145deg, #1a2332, #060e1a);
+border-color: #ffffff;
+box-shadow: 0 12px 30px rgba(255, 255, 255, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================== */
+/* STRISCIA STREAK GIORNALIERA + PULSANTE REGALO */
+/* ========================================== */
+.streak-tracker-banner {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 14px;
+background: var(--bg-surface);
+border: 1px solid var(--border-blue);
+border-radius: 14px;
+padding: 12px 16px;
+margin-bottom: 14px;
+}
+
+.streak-tracker-info { flex: 1; min-width: 0; }
+
+.streak-tracker-label {
+font-size: 0.68rem;
+color: var(--text-muted);
+text-transform: uppercase;
+font-weight: 700;
+letter-spacing: 0.4px;
+}
+
+.streak-flames {
+display: flex;
+gap: 7px;
+margin-top: 7px;
+}
+
+.streak-flame {
+font-size: 1.3rem;
+filter: grayscale(1) opacity(0.35);
+transition: filter 0.3s ease, transform 0.3s ease;
+line-height: 1;
+}
+
+.streak-flame.lit {
+filter: none;
+transform: scale(1.12);
+}
+
+.streak-gift-btn {
+width: 52px;
+height: 52px;
+border-radius: 50%;
+border: none;
+font-size: 1.5rem;
+background: #263449;
+color: #64748b;
+cursor: not-allowed;
+flex-shrink: 0;
+transition: all 0.25s ease;
+}
+
+.streak-gift-btn.active {
+background: linear-gradient(135deg, var(--accent-orange), #ffb703);
+color: #fff;
+cursor: pointer;
+box-shadow: 0 0 18px rgba(255, 115, 0, 0.55);
+animation: giftPulse 1.4s infinite;
+}
+
+.streak-gift-btn.active:active { transform: scale(0.92); }
+
+@keyframes giftPulse {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.08); }
 }
 
 .pack-card.coming-soon {
@@ -281,6 +393,7 @@ text-transform: uppercase;
 
 .pack-card.bonus .pack-badge-top { background: var(--accent-orange); color: #fff; }
 .pack-card.special .pack-badge-top { background: var(--text-gold); color: #000; }
+.pack-card.streak .pack-badge-top { background: #ffffff; color: #000; }
 .pack-card.coming-soon .pack-badge-top { background: #64748b; color: #fff; }
 
 .pack-logo-img {
@@ -306,12 +419,12 @@ cursor: pointer;
 width: 100%;
 max-width: 290px;
 transition: all 0.2s ease;
-box-shadow: 0 4px 15px rgba(0, 168, 255, 0.4);
+box-shadow: 0 4px 15px rgba(79, 134, 196, 0.4);
 text-transform: uppercase;
 }
 
 .btn:active { transform: scale(0.96); }
-.btn:disabled { background: #2a3a50; color: #64748b; box-shadow: none; cursor: not-allowed; }
+.btn:disabled { background: #2a3a50; color: #a8b8cc; box-shadow: none; cursor: not-allowed; }
 .btn-orange { background: linear-gradient(135deg, var(--accent-orange), #e65c00); box-shadow: 0 4px 15px rgba(255, 115, 0, 0.4); }
 
 .code-box-card {
@@ -361,6 +474,32 @@ font-size: 0.85rem;
 }
 
 .filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+
+.filter-select {
+width: 100%;
+padding: 10px 14px;
+border-radius: 10px;
+border: 1px solid var(--border-blue);
+background: var(--bg-surface);
+color: #fff;
+margin-bottom: 12px;
+font-size: 0.85rem;
+font-family: var(--font-heading);
+appearance: none;
+-webkit-appearance: none;
+background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M7 10l5 5 5-5z'/></svg>");
+background-repeat: no-repeat;
+background-position: right 12px center;
+background-size: 18px;
+}
+
+.collection-empty-state {
+text-align: center;
+color: var(--text-muted);
+font-size: 0.85rem;
+padding: 40px 10px;
+grid-column: 1 / -1;
+}
 
 .filter-btn {
 flex: 1;
@@ -417,7 +556,7 @@ text-transform: uppercase;
 z-index: 2;
 }
 
-.card-type-tag.base { background: rgba(0, 168, 255, 0.9); color: #000; }
+.card-type-tag.base { background: rgba(79, 134, 196, 0.9); color: #000; }
 
 .card-type-tag.special {
 background: var(--text-gold);
@@ -448,6 +587,42 @@ text-overflow: ellipsis;
 width: 100%;
 }
 .card-item.special-card .card-name { color: var(--text-gold); }
+
+/* ========================================== */
+/* EFFETTO FOIL OLOGRAFICO — SOLO CARTE SPECIALI */
+/* Overlay puramente additivo: non tocca lo schema oro esistente, */
+/* aggiunge solo un riflesso animato in stile "foil" da vera trading card. */
+/* ========================================== */
+@keyframes foilShimmer {
+0% { background-position: 0% 50%; }
+100% { background-position: 200% 50%; }
+}
+
+.card-item.special-card .card-img-wrapper::after,
+.pulled-card.is-special::after,
+.fullscreen-card-container.special-view::after {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+background: linear-gradient(
+115deg,
+transparent 0%,
+rgba(255, 215, 0, 0.18) 15%,
+rgba(255, 255, 255, 0.5) 25%,
+rgba(79, 134, 196, 0.3) 35%,
+rgba(255, 105, 220, 0.22) 45%,
+transparent 60%,
+rgba(255, 215, 0, 0.18) 78%,
+transparent 100%
+);
+background-size: 250% 250%;
+mix-blend-mode: overlay;
+animation: foilShimmer 3.5s linear infinite;
+z-index: 3;
+}
+
+.pulled-card.is-special { position: relative; overflow: hidden; }
 
 .card-count {
 position: absolute;
@@ -593,7 +768,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-box-shadow: 0 10px 30px rgba(0, 168, 255, 0.3);
+box-shadow: 0 10px 30px rgba(79, 134, 196, 0.3);
 }
 
 .pulled-card.is-special {
@@ -643,7 +818,7 @@ max-width: 320px;
 aspect-ratio: 3 / 4;
 border-radius: 12px;
 overflow: hidden;
-box-shadow: 0 0 25px rgba(0, 168, 255, 0.4);
+box-shadow: 0 0 25px rgba(79, 134, 196, 0.4);
 border: 2px solid var(--bright-blue);
 position: relative;
 }
@@ -677,7 +852,7 @@ border-radius: 20px;
 cursor: pointer;
 text-transform: uppercase;
 letter-spacing: 0.5px;
-box-shadow: 0 2px 10px rgba(0, 168, 255, 0.3);
+box-shadow: 0 2px 10px rgba(79, 134, 196, 0.3);
 }
 
 nav {
@@ -821,7 +996,7 @@ border-radius: 16px;
 padding: 15px;
 margin-bottom: 20px;
 text-align: center;
-box-shadow: 0 6px 20px rgba(0, 168, 255, 0.2);
+box-shadow: 0 6px 20px rgba(79, 134, 196, 0.2);
 }
 
 .fanta-banner-title {
@@ -842,7 +1017,7 @@ text-transform: uppercase;
 
 .fanta-timer-badge {
 display: inline-block;
-background: rgba(0, 168, 255, 0.15);
+background: rgba(79, 134, 196, 0.15);
 border: 1px solid var(--bright-blue);
 color: var(--bright-blue);
 padding: 6px 14px;
@@ -898,7 +1073,7 @@ height: 160px;
 border-radius: 10px;
 overflow: hidden;
 border: 2px solid var(--bright-blue);
-box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+box-shadow: 0 4px 15px rgba(79, 134, 196, 0.3);
 margin-bottom: 10px;
 position: relative;
 }
@@ -943,7 +1118,7 @@ letter-spacing: 0.5px;
 }
 
 .leaderboard-table tr.current-user-row {
-background: rgba(0, 168, 255, 0.15);
+background: rgba(79, 134, 196, 0.15);
 border-left: 3px solid var(--bright-blue);
 font-weight: bold;
 }
@@ -1020,6 +1195,140 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 }
+
+/* ========================================== */
+/* COUNTDOWN URGENTE (ultimi minuti prima della chiusura schieramento) */
+/* ========================================== */
+.fanta-timer-badge.urgent {
+background: rgba(239, 68, 68, 0.2);
+border-color: var(--danger-red);
+color: #ff6b6b;
+animation: urgentPulse 1s infinite;
+}
+
+@keyframes urgentPulse {
+0%, 100% { transform: scale(1); box-shadow: 0 0 0px rgba(239, 68, 68, 0.6); }
+50% { transform: scale(1.05); box-shadow: 0 0 14px rgba(239, 68, 68, 0.6); }
+}
+
+/* ========================================== */
+/* BADGE PRIMO CLASSIFICATO */
+/* ========================================== */
+.leaderboard-table tr.rank-first .leaderboard-rank { color: var(--text-gold); }
+.leaderboard-table tr.rank-first { background: rgba(255, 215, 0, 0.08); }
+.leaderboard-trophy { margin-right: 4px; }
+
+/* ========================================== */
+/* PANNELLO ADMIN FANTATIGERS */
+/* ========================================== */
+.admin-form-label {
+font-size: 0.7rem;
+color: var(--text-muted);
+text-transform: uppercase;
+font-weight: 700;
+letter-spacing: 0.5px;
+display: block;
+margin: 12px 0 5px 0;
+text-align: left;
+}
+
+.admin-input {
+width: 100%;
+padding: 10px 12px;
+border-radius: 8px;
+border: 1px solid var(--border-blue);
+background: var(--bg-main);
+color: #fff;
+font-size: 0.85rem;
+box-sizing: border-box;
+}
+
+.admin-votes-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+max-height: 240px;
+overflow-y: auto;
+padding: 10px;
+background: var(--bg-main);
+border-radius: 10px;
+border: 1px solid var(--border-blue);
+}
+
+.admin-vote-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 3px;
+}
+
+.admin-vote-item label {
+font-size: 0.6rem;
+color: var(--text-muted);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+width: 100%;
+text-align: center;
+}
+
+.admin-vote-item input {
+width: 100%;
+text-align: center;
+padding: 6px 2px;
+border-radius: 6px;
+border: 1px solid var(--border-blue);
+background: var(--bg-surface);
+color: #fff;
+font-size: 0.8rem;
+box-sizing: border-box;
+}
+
+.admin-toggle-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: var(--bg-main);
+border: 1px solid var(--border-blue);
+border-radius: 8px;
+padding: 10px 12px;
+margin-top: 10px;
+}
+
+.admin-status-msg {
+font-size: 0.75rem;
+margin-top: 10px;
+min-height: 16px;
+text-align: center;
+}
+
+/* ========================================== */
+/* TESSERE STATISTICHE PROFILO */
+/* ========================================== */
+.stat-tile {
+background: var(--bg-main);
+border: 1px solid var(--border-blue);
+border-radius: 10px;
+padding: 12px 8px;
+text-align: center;
+}
+
+.stat-tile-value {
+font-size: 1.25rem;
+font-weight: 800;
+color: var(--text-gold);
+line-height: 1.1;
+margin-top: 2px;
+}
+
+.stat-tile-label {
+font-size: 0.6rem;
+color: var(--text-muted);
+text-transform: uppercase;
+letter-spacing: 0.3px;
+margin-top: 3px;
+line-height: 1.2;
+}
 </style>
 </head>
 <body>
@@ -1048,6 +1357,14 @@ text-overflow: ellipsis;
 </div>
 
 <div id="tab-home" class="tab-content active">
+<div class="streak-tracker-banner">
+<div class="streak-tracker-info">
+<span class="streak-tracker-label">Streak Pacchetto Daily</span>
+<div class="streak-flames" id="streak-flames-row"></div>
+</div>
+<button id="streak-gift-btn" class="streak-gift-btn" onclick="openPack('streakBonus')" disabled aria-label="Apri Pacchetto Streak">🎁</button>
+</div>
+
 <div class="carousel-wrapper" id="home-carousel-wrapper">
 <button class="carousel-arrow prev" onclick="prevSlide()" aria-label="Precedente">‹</button>
 <button class="carousel-arrow next" onclick="nextSlide()" aria-label="Successivo">›</button>
@@ -1078,7 +1395,7 @@ text-overflow: ellipsis;
 <div class="pack-desc">Prossimamente disponibile!</div>
 </div>
 </div>
-<button class="btn" disabled style="background: #1e293b; color: #64748b; box-shadow: none; border: 1px solid #334155;">COMING SOON</button>
+<button class="btn" disabled style="background: #1e293b; color: #a8b8cc; box-shadow: none; border: 1px solid #334155;">COMING SOON</button>
 <p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Novità in arrivo!</p>
 </div>
 </div>
@@ -1119,11 +1436,13 @@ text-overflow: ellipsis;
 <div class="collection-header">
 <input type="text" id="search-input" class="search-box" placeholder="Cerca giocatore o figurina..." oninput="renderCollection()">
 
-<div class="filter-tabs">
-<button class="filter-btn active" onclick="setFilter('all', this)">TUTTE</button>
-<button class="filter-btn" onclick="setFilter('base', this)">BASE (25)</button>
-<button class="filter-btn" onclick="setFilter('special', this)">SPECIALI (1)</button>
-</div>
+<select id="filter-select" class="filter-select" onchange="setFilter(this.value)">
+<option value="all">Tutte le carte</option>
+<option value="base" id="filter-option-base">Solo Base</option>
+<option value="special" id="filter-option-special">Solo Speciali</option>
+<option value="owned" id="filter-option-owned">Possedute</option>
+<option value="missing" id="filter-option-missing">Mancanti</option>
+</select>
 
 <div class="stats-counter">
 <span id="stat-base">Base: 0/25</span>
@@ -1155,6 +1474,14 @@ text-overflow: ellipsis;
 <button id="btn-open-deploy" class="btn btn-orange" style="margin-top: 12px; font-size: 0.85rem; padding: 10px 18px;" onclick="openDeployModal()">
 SCHIERA / MODIFICA CARTA
 </button>
+</div>
+
+<div class="fanta-section-card">
+<div class="fanta-section-title">
+<span>📊 Statistiche & Storico</span>
+</div>
+<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Consulta l'andamento dei voti di ogni giocatore nelle partite passate e rivedi i tuoi schieramenti, per decidere meglio chi schierare.</p>
+<button class="btn" style="font-size: 0.85rem; padding: 10px 18px;" onclick="openFantaStatsModal()">Apri Statistiche</button>
 </div>
 
 <div class="fanta-section-card">
@@ -1196,6 +1523,31 @@ SCHIERA / MODIFICA CARTA
 </div>
 </div>
 
+<!-- Modal Statistiche & Storico fantaTigers -->
+<div id="fanta-stats-modal" class="modal" style="z-index: 255;">
+<div style="background: var(--bg-surface); border: 2px solid var(--bright-blue); border-radius: 16px; padding: 18px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; text-align: left;">
+<h3 style="color: var(--bright-blue); font-size: 1.05rem; text-transform: uppercase; text-align: center; margin-bottom: 12px;">📊 Statistiche fantaTigers</h3>
+
+<div style="display: flex; gap: 8px; margin-bottom: 14px;">
+<button id="fanta-stats-tab-votes" class="filter-btn active" style="flex: 1;" onclick="switchFantaStatsTab('votes')">Voti Carte</button>
+<button id="fanta-stats-tab-history" class="filter-btn" style="flex: 1;" onclick="switchFantaStatsTab('history')">I Miei Schieramenti</button>
+</div>
+
+<div id="fanta-stats-votes-panel">
+<p style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 8px;">Ordinati per media voto (solo partite con voti pubblicati). "N.C." = mai convocato.</p>
+<p id="fanta-stats-votes-empty" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0; display: none;"></p>
+<div id="fanta-stats-votes-list"></div>
+</div>
+
+<div id="fanta-stats-history-panel" style="display: none;">
+<p id="fanta-stats-history-empty" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0; display: none;">Non hai ancora schierato nessuna carta in una partita conclusa con voti pubblicati.</p>
+<div id="fanta-stats-history-list"></div>
+</div>
+
+<button class="btn" style="width: 100%; margin-top: 14px; font-size: 0.8rem; padding: 10px;" onclick="closeFantaStatsModal()">Chiudi</button>
+</div>
+</div>
+
 <!-- Modal Apertura Pacchetto -->
 <div id="pack-modal" class="modal">
 <div id="flash-overlay" class="flash-overlay"></div>
@@ -1234,9 +1586,73 @@ SCHIERA / MODIFICA CARTA
 <div id="menu-modal" class="modal">
 <div class="options-menu-box">
 <h3 style="color: var(--bright-blue); font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px;">Menu</h3>
-<button class="options-btn" style="background: rgba(0, 168, 255, 0.15); border-color: var(--bright-blue); color: var(--bright-blue);" onclick="openTrophiesModal()">🏆 Trofei & Titoli</button>
+<button class="options-btn" style="background: rgba(79, 134, 196, 0.15); border-color: var(--bright-blue); color: var(--bright-blue);" onclick="openTrophiesModal()">🏆 Trofei & Titoli</button>
+<button class="options-btn" style="background: rgba(200, 210, 220, 0.12); border-color: var(--brand-silver); color: var(--brand-silver);" onclick="closeMenuModal(); openProfileStatsModal();">📊 Le Mie Statistiche</button>
+<button class="options-btn" style="background: rgba(255, 115, 0, 0.15); border-color: var(--accent-orange); color: var(--accent-orange);" onclick="closeMenuModal(); openAdminPanel();">⚙️ Pannello Admin fantaTigers</button>
 <button class="options-btn" style="background: rgba(239, 68, 68, 0.15); border-color: var(--danger-red); color: var(--danger-red);" onclick="openResetConfirmation()">Reset Applicazione</button>
 <button class="options-btn" onclick="closeMenuModal()">Chiudi</button>
+</div>
+</div>
+
+<!-- Modal Le Mie Statistiche (profilo generale) -->
+<div id="profile-stats-modal" class="modal" style="z-index: 255;">
+<div style="background: var(--bg-surface); border: 2px solid var(--brand-silver); border-radius: 16px; padding: 18px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; text-align: left;">
+<h3 style="color: var(--brand-silver); font-size: 1.05rem; text-transform: uppercase; text-align: center; margin-bottom: 4px;">📊 Le Mie Statistiche</h3>
+<p id="profile-stats-since" style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-bottom: 14px;"></p>
+<div id="profile-stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+<button class="btn" style="width: 100%; margin-top: 16px; font-size: 0.8rem; padding: 10px;" onclick="closeProfileStatsModal()">Chiudi</button>
+</div>
+</div>
+
+<!-- Modal Pannello Admin FantaTigers -->
+<div id="admin-modal" class="modal" style="z-index: 260;">
+<div style="background: var(--bg-surface); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 20px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; text-align: left;">
+<h3 style="color: var(--accent-orange); font-size: 1.05rem; text-transform: uppercase; margin-bottom: 12px; text-align: center;">⚙️ Pannello Admin</h3>
+
+<div id="admin-password-section">
+<label class="admin-form-label">Password Admin</label>
+<input type="password" id="admin-password-input" class="admin-input" placeholder="Inserisci password">
+<p id="admin-password-error" style="color: var(--danger-red); font-size: 0.75rem; margin-top: 6px; min-height: 14px;"></p>
+<button class="btn btn-orange" style="margin-top: 6px; font-size: 0.85rem; padding: 10px;" onclick="checkAdminPassword()">Sblocca</button>
+</div>
+
+<div id="admin-form-section" style="display: none;">
+<label class="admin-form-label">Titolo Partita</label>
+<input type="text" id="admin-match-title" class="admin-input" placeholder="Es: Tigers vs Bears - Giornata 2">
+
+<label class="admin-form-label">Data e Ora Inizio Partita</label>
+<input type="datetime-local" id="admin-match-date" class="admin-input">
+
+<div class="admin-toggle-row">
+<span style="font-size: 0.85rem; font-weight: 700;">Voti Pubblicati</span>
+<input type="checkbox" id="admin-votes-published" style="width: 20px; height: 20px;">
+</div>
+
+<label class="admin-form-label">Voti Giocatori Base</label>
+<div class="admin-votes-grid" id="admin-votes-grid"></div>
+
+<div style="display: flex; gap: 8px; margin-top: 14px;">
+<button class="btn btn-orange" style="flex: 1; font-size: 0.8rem; padding: 10px;" onclick="saveAdminMatchConfig()">💾 Salva Partita</button>
+<button class="btn" style="flex: 1; font-size: 0.8rem; padding: 10px;" onclick="newAdminMatch()">🆕 Nuova Partita</button>
+</div>
+
+<p id="admin-status-msg" class="admin-status-msg"></p>
+
+<hr style="border-color: var(--border-blue); margin: 18px 0; opacity: 0.3;">
+
+<label class="admin-form-label">🧪 Fase di Test (prima di pubblicare)</label>
+<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Cancella tutti i dati della classifica attuale (utile per i tuoi test) SENZA salvarli nello storico stagioni. Usala solo prima di far giocare gli utenti veri.</p>
+<button class="btn" style="width: 100%; font-size: 0.8rem; padding: 10px; background: rgba(148, 163, 184, 0.15); border: 1px solid var(--text-muted); color: var(--text-muted); margin-bottom: 6px;" onclick="handleWipeTestDataClick()">🧪 Cancella Dati di Test (nessun archivio)</button>
+
+<hr style="border-color: var(--border-blue); margin: 18px 0; opacity: 0.3;">
+
+<label class="admin-form-label">🏆 Gestione Stagioni</label>
+<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Archivia la classifica attuale come stagione conclusa e riparti da zero. Operazione irreversibile.</p>
+<input type="text" id="admin-season-label" class="admin-input" placeholder="Nome nuova stagione (es. Ritorno 2025/26)" style="margin-bottom: 8px;">
+<button class="btn" style="width: 100%; font-size: 0.8rem; padding: 10px; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger-red); color: var(--danger-red);" onclick="handleArchiveSeasonClick()">Archivia Stagione & Azzera Classifica</button>
+</div>
+
+<button class="btn" style="width: 100%; margin-top: 14px; font-size: 0.8rem; padding: 10px;" onclick="closeAdminPanel()">Chiudi</button>
 </div>
 </div>
 
@@ -1384,17 +1800,17 @@ firebaseReady = false;
 // CONFIGURAZIONE FANTATIGERS (PARTITA CORRENTE)
 // Imposta votesPublished a true quando vuoi pubblicare i voti e calcolare la classifica!
 // ==========================================
-const CURRENT_MATCH_CONFIG = {
+let CURRENT_MATCH_CONFIG = {
 matchId: "match_01",
-title: "Avversario da definire",
+title: "Tigers vs Bears - Giornata 1",
 // Data e ora inizio partita (Formato ISO: YYYY-MM-DDTHH:mm:ss)
-matchDate: "2026-09-03T12:25:00",
+matchDate: "2026-09-03T01:40:00",
 // Imposta 'true' quando i voti sono pubblicati ed il calcolo deve essere effettuato
-votesPublished: false,
+votesPublished: true,
 // Voti delle carte base (ID del giocatore -> Voto prestazione)
 playerVotes: {
 1:0 , 2:0 , 3:0 , 4:0 , 5:0 ,
-6:0 , 7:0 , 8:0 , 9:0 , 10:0 ,
+6:0 , 7:0 , 8:0 , 9:8 , 10:0 ,
 11:0 , 12:0 , 13:0 , 14:0, 15:0 ,
 16:0 , 17:0 , 18:0 , 19:0 , 20:0 ,
 21:0 , 22:0 , 23:0 , 24:0 , 25:0 
@@ -1415,19 +1831,23 @@ const HEADER_LOGO_PATH = "app_img/logo.png";
 const PACK_DAILY_IMAGE_PATH = "app_img/base_pack.png";
 const PACK_BONUS_IMAGE_PATH = "app_img/bonus_pack.png";
 const PACK_SPECIAL_IMAGE_PATH = "app_img/special_card.png";
+// Immagine del "Pacchetto Streak" (bonus dei 5 giorni consecutivi): cambia questo
+// percorso per usare la tua grafica, esattamente come per gli altri pacchetti.
+const PACK_STREAK_IMAGE_PATH = "app_img/streak_pack.png";
 
 // DIRECTORY IMMAGINI RETRO DELLE CARTE
 const BACK_CARD_BASE_PATH = "app_img/back_base.png";
 const BACK_CARD_SPECIAL_PATH = "app_img/back_special.png";
 
 // PLACEHOLDER VETTORIALI SVG
-const LOGO_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230a192f' stroke='%2300a8ff' stroke-width='3'/><path d='M30 40 Q 50 10 70 40 Q 80 65 50 85 Q 20 65 30 40 Z' fill='%231d72b8' stroke='%23ff7300' stroke-width='2'/><circle cx='40' cy='42' r='4' fill='%23ff7300'/><circle cx='60' cy='42' r='4' fill='%23ff7300'/><path d='M 38 62 Q 50 72 62 62' fill='none' stroke='%23fff' stroke-width='3'/></svg>";
-const PACK_DAILY_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='3'/><path d='M 20 40 L 80 40 L 50 90 Z' fill='%2300a8ff'/><text x='50' y='115' font-size='10' font-weight='bold' fill='%23fff' text-anchor='middle'>DAILY PACK</text></svg>";
+const LOGO_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230a192f' stroke='%234f86c4' stroke-width='3'/><path d='M30 40 Q 50 10 70 40 Q 80 65 50 85 Q 20 65 30 40 Z' fill='%231f4d78' stroke='%23ff7300' stroke-width='2'/><circle cx='40' cy='42' r='4' fill='%23ff7300'/><circle cx='60' cy='42' r='4' fill='%23ff7300'/><path d='M 38 62 Q 50 72 62 62' fill='none' stroke='%23fff' stroke-width='3'/></svg>";
+const PACK_DAILY_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231f4d78' stroke='%234f86c4' stroke-width='3'/><path d='M 20 40 L 80 40 L 50 90 Z' fill='%234f86c4'/><text x='50' y='115' font-size='10' font-weight='bold' fill='%23fff' text-anchor='middle'>DAILY PACK</text></svg>";
 const PACK_BONUS_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%233b1b54' stroke='%23ff7300' stroke-width='3'/><polygon points='50,25 60,50 85,50 65,65 73,90 50,75 27,90 35,65 15,50 40,50' fill='%23ff7300'/><text x='50' y='118' font-size='10' font-weight='bold' fill='%23ffd700' text-anchor='middle'>BONUS PACK</text></svg>";
 const PACK_SPECIAL_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%23231d42' stroke='%23ffd700' stroke-width='3'/><polygon points='50,20 63,45 90,45 68,62 77,88 50,72 23,88 32,62 10,45 37,45' fill='%23ffd700'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffd700' text-anchor='middle'>SPECIAL PACK</text></svg>";
+const PACK_STREAK_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231a2332' stroke='%23ffffff' stroke-width='3'/><path d='M50 22 C 40 40, 30 48, 35 65 C 38 80, 50 88, 50 88 C 50 88, 62 80, 65 65 C 70 48, 60 40, 50 22 Z' fill='%23ff7300'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffffff' text-anchor='middle'>STREAK PACK</text></svg>";
 const PACK_LOCKED_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231e293b' stroke='%23475569' stroke-width='3'/><text x='50' y='75' font-size='32' font-weight='bold' fill='%2364748b' text-anchor='middle'>?</text><text x='50' y='115' font-size='8' font-weight='bold' fill='%2394a3b8' text-anchor='middle'>COMING SOON</text></svg>";
 
-const BACK_CARD_BASE_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%231d72b8' stroke='%2300a8ff' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/><text x='90' y='120' font-size='18' font-weight='900' fill='%23ffffff' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='3'>TIGER CARDS</text></svg>";
+const BACK_CARD_BASE_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%231f4d78' stroke='%234f86c4' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/><text x='90' y='120' font-size='18' font-weight='900' fill='%23ffffff' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='3'>TIGER CARDS</text></svg>";
 const BACK_CARD_SPECIAL_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%2312213a' stroke='%23ffd700' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='%23ffd700' stroke-width='1.5' stroke-dasharray='6,4'/><text x='90' y='120' font-size='15' font-weight='900' fill='%23ffd700' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='2'>TIGER CARDS SPECIAL</text></svg>";
 
 const BASE_PLAYERS = [
@@ -1518,14 +1938,22 @@ lastDailyDate: null,
 unlockedTrophies: {},
 stats: {
 packsOpened: 0,
-bonusPacksOpened: 0
+bonusPacksOpened: 0,
+duplicatesFound: 0,
+dailyStreak: 0,
+longestStreak: 0,
+streakCycleCount: 0
 },
+streakBonusAvailable: false,
+firstOpenDate: null,
 // DATI FANTATIGERS
 fantaUserId: null,
 fantaUserName: "",
 fantaDeployedCardId: null,
 fantaTotalPoints: 0,
-fantaProcessedMatches: {}
+fantaProcessedMatches: {},
+fantaLastSeasonNumber: null,
+fantaDeploymentHistory: []
 };
 
 let trophyNotificationQueue = [];
@@ -1549,6 +1977,17 @@ let fantaTimerInterval = null;
 let cloudLeaderboardCache = null;
 let leaderboardUnsubscribe = null;
 
+// ==========================================
+// PANNELLO ADMIN FANTATIGERS
+// NOTA IMPORTANTE: questa password protegge solo l'INTERFACCIA (evita che qualcuno
+// tocchi il pannello per sbaglio o per gioco). Non è una vera sicurezza: chiunque
+// sappia usare gli strumenti sviluppatore del browser potrebbe comunque scrivere sul
+// database, esattamente come già accade per il resto dell'app senza autenticazione.
+// Cambiala pure con una password a piacere.
+// ==========================================
+const ADMIN_PASSWORD = "TigersAdmin2026";
+let adminCurrentMatchId = null;
+
 function generateUserId() {
 return 'tiger_usr_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 }
@@ -1559,7 +1998,20 @@ if (saved) {
 try { state = Object.assign(state, JSON.parse(saved)); } catch(e){}
 }
 if (!state.unlockedTrophies) state.unlockedTrophies = {};
-if (!state.stats) state.stats = { packsOpened: 0, bonusPacksOpened: 0 };
+if (!state.stats) state.stats = { packsOpened: 0, bonusPacksOpened: 0, duplicatesFound: 0, dailyStreak: 0, longestStreak: 0 };
+if (state.stats.duplicatesFound === undefined) state.stats.duplicatesFound = 0;
+if (state.stats.dailyStreak === undefined) state.stats.dailyStreak = 0;
+if (state.stats.longestStreak === undefined) state.stats.longestStreak = 0;
+if (state.stats.streakCycleCount === undefined) state.stats.streakCycleCount = 0;
+if (state.streakBonusAvailable === undefined) state.streakBonusAvailable = false;
+
+// La prima volta che questa versione dell'app viene aperta su un dispositivo,
+// registriamo la data odierna come "data di inizio". Per chi gioca già da prima
+// di questo aggiornamento, la data registrata sarà quella di oggi (non possiamo
+// risalire retroattivamente alla data di installazione originale).
+if (!state.firstOpenDate) {
+state.firstOpenDate = getTodayString();
+}
 
 // Inizializza dati FantaTigers se assenti
 if (!state.fantaUserId) {
@@ -1571,6 +2023,8 @@ state.fantaUserName = "TigerFan_" + Math.floor(1000 + Math.random() * 9000);
 if (state.fantaDeployedCardId === undefined) state.fantaDeployedCardId = null;
 if (state.fantaTotalPoints === undefined) state.fantaTotalPoints = 0;
 if (!state.fantaProcessedMatches) state.fantaProcessedMatches = {};
+if (state.fantaLastSeasonNumber === undefined) state.fantaLastSeasonNumber = null;
+if (!state.fantaDeploymentHistory) state.fantaDeploymentHistory = [];
 
 const totalOwnedCount = Object.values(state.inventory).reduce((a, b) => a + b, 0);
 if (totalOwnedCount > 0 && (state.stats.packsOpened || 0) === 0) {
@@ -1671,8 +2125,31 @@ const day = String(now.getDate()).padStart(2, '0');
 return `${year}-${month}-${day}`;
 }
 
+// Disegna la striscia di 5 fiammelle (grigie finché non raggiunte, colorate una per
+// ogni giorno consecutivo) e attiva/disattiva il pulsante regalo del Pacchetto Streak.
+function renderStreakTracker() {
+const flamesRow = document.getElementById('streak-flames-row');
+const giftBtn = document.getElementById('streak-gift-btn');
+if (!flamesRow || !giftBtn) return;
+
+const cycle = Math.min(5, state.stats.streakCycleCount || 0);
+flamesRow.innerHTML = '';
+for (let i = 1; i <= 5; i++) {
+const span = document.createElement('span');
+span.className = 'streak-flame' + (i <= cycle ? ' lit' : '');
+span.innerText = '🔥';
+flamesRow.appendChild(span);
+}
+
+const isActive = !!state.streakBonusAvailable;
+giftBtn.disabled = !isActive;
+giftBtn.classList.toggle('active', isActive);
+}
+
 function updateUI() {
 document.getElementById('points-display').innerText = state.points;
+
+renderStreakTracker();
 
 const btnDaily = document.getElementById('btn-daily');
 const timerDaily = document.getElementById('daily-timer');
@@ -1747,6 +2224,510 @@ console.error("Errore invio punteggio alla classifica globale:", err);
 }
 
 // ==========================================
+// LE MIE STATISTICHE (PROFILO GENERALE)
+// ==========================================
+
+function openProfileStatsModal() {
+renderProfileStats();
+document.getElementById('profile-stats-modal').classList.add('active');
+}
+
+function closeProfileStatsModal() {
+document.getElementById('profile-stats-modal').classList.remove('active');
+}
+
+function renderProfileStats() {
+const ownedBase = BASE_PLAYERS.filter(function(p) { return state.inventory[p.id]; }).length;
+const ownedSpecial = SPECIAL_PLAYERS.filter(function(p) { return state.inventory[p.id]; }).length;
+const totalCopies = Object.values(state.inventory || {}).reduce(function(a, b) { return a + b; }, 0);
+const codesRedeemed = Object.keys(state.usedCodes || {}).length;
+const trophiesUnlocked = Object.keys(state.unlockedTrophies || {}).length;
+
+let sinceText = '';
+if (state.firstOpenDate) {
+try {
+const start = new Date(state.firstOpenDate);
+const days = Math.max(0, Math.floor((Date.now() - start.getTime()) / 86400000));
+sinceText = 'Giocatore dal ' + start.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' · ' + days + ' giorni fa';
+} catch (e) { sinceText = ''; }
+}
+document.getElementById('profile-stats-since').innerText = sinceText;
+
+const tiles = [
+{ icon: '📦', value: state.stats.packsOpened || 0, label: 'Pacchetti Aperti' },
+{ icon: '🎁', value: state.stats.bonusPacksOpened || 0, label: 'Pacchetti Bonus' },
+{ icon: '🔑', value: codesRedeemed, label: 'Codici Riscattati' },
+{ icon: '🃏', value: (ownedBase + ownedSpecial) + '/' + (BASE_PLAYERS.length + SPECIAL_PLAYERS.length), label: 'Carte Uniche' },
+{ icon: '📚', value: totalCopies, label: 'Carte Totali (con copie)' },
+{ icon: '🔁', value: state.stats.duplicatesFound || 0, label: 'Doppioni Trovati' },
+{ icon: '🏆', value: trophiesUnlocked + '/' + TROPHIES.length, label: 'Trofei Sbloccati' },
+{ icon: '🔥', value: state.stats.dailyStreak || 0, label: 'Streak Giorni Consecutivi' },
+{ icon: '⭐', value: state.stats.longestStreak || 0, label: 'Record Streak' },
+{ icon: '💰', value: state.points || 0, label: 'Punti Tigers' },
+{ icon: '⚡', value: state.fantaTotalPoints || 0, label: 'Punti fantaTigers' },
+{ icon: '⚽', value: (state.fantaDeploymentHistory || []).length, label: 'Partite fantaTigers' }
+];
+
+const grid = document.getElementById('profile-stats-grid');
+grid.innerHTML = tiles.map(function(t) {
+return `
+<div class="stat-tile">
+<div>${t.icon}</div>
+<div class="stat-tile-value">${t.value}</div>
+<div class="stat-tile-label">${t.label}</div>
+</div>
+`;
+}).join('');
+}
+
+// ==========================================
+// STATISTICHE VOTI CARTE & STORICO SCHIERAMENTI
+// ==========================================
+
+let fantaStatsCache = null;
+
+function openFantaStatsModal() {
+document.getElementById('fanta-stats-modal').classList.add('active');
+switchFantaStatsTab('votes');
+loadAndRenderFantaVoteStats();
+renderFantaDeploymentHistory();
+}
+
+function closeFantaStatsModal() {
+document.getElementById('fanta-stats-modal').classList.remove('active');
+}
+
+function switchFantaStatsTab(tab) {
+document.getElementById('fanta-stats-tab-votes').classList.toggle('active', tab === 'votes');
+document.getElementById('fanta-stats-tab-history').classList.toggle('active', tab === 'history');
+document.getElementById('fanta-stats-votes-panel').style.display = tab === 'votes' ? 'block' : 'none';
+document.getElementById('fanta-stats-history-panel').style.display = tab === 'history' ? 'block' : 'none';
+}
+
+// Legge lo storico di TUTTE le partite mai salvate dall'admin (collezione 'matchHistory'
+// su Firestore, condivisa tra tutti) e calcola, per ogni giocatore base, l'andamento dei
+// voti nelle varie partite e la media — utile per decidere chi schierare la prossima volta.
+async function loadAndRenderFantaVoteStats() {
+const listEl = document.getElementById('fanta-stats-votes-list');
+const emptyEl = document.getElementById('fanta-stats-votes-empty');
+listEl.innerHTML = '<p style="text-align:center; color: var(--text-muted); font-size:0.8rem; padding: 14px 0;">Caricamento...</p>';
+emptyEl.style.display = 'none';
+
+if (!firebaseReady || !db) {
+listEl.innerHTML = '';
+emptyEl.innerText = 'Firebase non configurato: le statistiche non sono disponibili.';
+emptyEl.style.display = 'block';
+return;
+}
+
+try {
+const snapshot = await db.collection('matchHistory').orderBy('matchDate', 'asc').get();
+const matches = snapshot.docs.map(function(d) { return d.data(); }).filter(function(m) { return m.votesPublished; });
+
+const byPlayer = {};
+matches.forEach(function(match) {
+Object.keys(match.playerVotes || {}).forEach(function(pid) {
+if (!byPlayer[pid]) byPlayer[pid] = [];
+byPlayer[pid].push({ title: match.title, date: match.matchDate, vote: match.playerVotes[pid] });
+});
+});
+
+fantaStatsCache = { matches: matches, byPlayer: byPlayer };
+renderFantaVoteStatsList();
+} catch (e) {
+console.error("Errore caricamento statistiche voti:", e);
+listEl.innerHTML = '';
+emptyEl.innerText = 'Errore nel caricamento delle statistiche.';
+emptyEl.style.display = 'block';
+}
+}
+
+function renderFantaVoteStatsList() {
+const listEl = document.getElementById('fanta-stats-votes-list');
+const emptyEl = document.getElementById('fanta-stats-votes-empty');
+listEl.innerHTML = '';
+
+if (!fantaStatsCache || fantaStatsCache.matches.length === 0) {
+emptyEl.innerText = 'Nessun dato ancora disponibile: le statistiche compariranno dopo la prima partita con voti pubblicati.';
+emptyEl.style.display = 'block';
+return;
+}
+emptyEl.style.display = 'none';
+
+const rows = BASE_PLAYERS.map(function(p) {
+const votes = fantaStatsCache.byPlayer[p.id] || [];
+const avg = votes.length > 0 ? (votes.reduce(function(a, v) { return a + v.vote; }, 0) / votes.length) : null;
+return { player: p, votes: votes, avg: avg };
+});
+
+// Media voto decrescente: chi rende di più in cima, cosi' aiuta davvero a decidere chi schierare.
+rows.sort(function(a, b) {
+if (a.avg === null && b.avg === null) return 0;
+if (a.avg === null) return 1;
+if (b.avg === null) return -1;
+return b.avg - a.avg;
+});
+
+rows.forEach(function(row) {
+const div = document.createElement('div');
+div.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:8px; padding: 8px 4px; border-bottom: 1px solid var(--border-blue);';
+
+const lastVote = row.votes.length > 0 ? row.votes[row.votes.length - 1].vote : null;
+const sparkline = row.votes.length > 1 ? buildSparklineSVG(row.votes.map(function(v) { return v.vote; })) : '';
+
+div.innerHTML = `
+<div style="flex: 1; min-width: 0;">
+<div style="font-size: 0.85rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row.player.name}</div>
+<div style="font-size: 0.65rem; color: var(--text-muted);">${row.votes.length} partite${lastVote !== null ? ' · ultimo: ' + lastVote : ''}</div>
+</div>
+<div style="width: 70px; flex-shrink: 0; display:flex; justify-content:center;">${sparkline}</div>
+<div style="text-align: right; min-width: 44px; font-weight: 800; font-size: 0.95rem; color: ${row.avg !== null ? 'var(--text-gold)' : 'var(--text-muted)'};">${row.avg !== null ? row.avg.toFixed(1) : 'N.C.'}</div>
+`;
+listEl.appendChild(div);
+});
+}
+
+// Piccolo grafico SVG "sparkline" inline, senza dipendenze esterne: mostra a colpo
+// d'occhio l'andamento dei voti di un giocatore nelle sue ultime partite.
+function buildSparklineSVG(values) {
+const w = 70, h = 24, pad = 3;
+const min = Math.min.apply(null, values.concat([0]));
+const max = Math.max.apply(null, values.concat([10]));
+const range = (max - min) || 1;
+const stepX = values.length > 1 ? (w - pad * 2) / (values.length - 1) : 0;
+
+const points = values.map(function(v, i) {
+const x = pad + i * stepX;
+const y = h - pad - ((v - min) / range) * (h - pad * 2);
+return x.toFixed(1) + ',' + y.toFixed(1);
+}).join(' ');
+
+return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${points}" fill="none" stroke="var(--bright-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+// Storico PERSONALE (locale, solo su questo dispositivo) di ogni carta schierata e dei
+// punti guadagnati partita per partita — coerente con l'approccio "dati personali in
+// localStorage" già usato nel resto dell'app.
+function renderFantaDeploymentHistory() {
+const listEl = document.getElementById('fanta-stats-history-list');
+const emptyEl = document.getElementById('fanta-stats-history-empty');
+listEl.innerHTML = '';
+
+const history = state.fantaDeploymentHistory || [];
+if (history.length === 0) {
+emptyEl.style.display = 'block';
+return;
+}
+emptyEl.style.display = 'none';
+
+history.forEach(function(entry) {
+const div = document.createElement('div');
+div.style.cssText = 'padding: 8px 4px; border-bottom: 1px solid var(--border-blue);';
+
+let dateStr = entry.matchDate || '';
+try {
+dateStr = new Date(entry.matchDate).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+} catch (e) {}
+
+div.innerHTML = `
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div style="font-size: 0.8rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;">${entry.matchTitle}</div>
+<div style="font-size: 0.9rem; font-weight: 800; color: var(--text-gold); white-space: nowrap;">+${entry.voteEarned} pt</div>
+</div>
+<div style="font-size: 0.65rem; color: var(--text-muted);">${dateStr} · Schierato: ${entry.cardName}</div>
+`;
+listEl.appendChild(div);
+});
+}
+
+// Si iscrive in tempo reale alla configurazione della partita corrente su Firestore.
+// Cosi' quando l'admin salva data/voti dal pannello, TUTTI i dispositivi (compreso il
+// tuo) ricevono l'aggiornamento automaticamente, senza bisogno di modificare il file
+// HTML o rifare il deploy su GitHub Pages.
+function initMatchConfigSync() {
+if (!firebaseReady || !db) return;
+db.collection('meta').doc('currentMatch').onSnapshot(function(doc) {
+if (!doc.exists) return;
+const data = doc.data();
+CURRENT_MATCH_CONFIG = {
+matchId: data.matchId || CURRENT_MATCH_CONFIG.matchId,
+title: data.title || CURRENT_MATCH_CONFIG.title,
+matchDate: data.matchDate || CURRENT_MATCH_CONFIG.matchDate,
+votesPublished: !!data.votesPublished,
+playerVotes: data.playerVotes || CURRENT_MATCH_CONFIG.playerVotes
+};
+initFantaTigers();
+}, function(err) {
+console.error("Errore sincronizzazione configurazione partita:", err);
+});
+}
+
+// Si iscrive in tempo reale al numero di stagione corrente. Se cambia rispetto
+// all'ultima stagione vista da questo dispositivo, azzera il punteggio locale e lo
+// ripubblica sul cloud, cosi' il "reset stagionale" fatto dall'admin si applica
+// automaticamente a ogni utente quando riapre l'app (il database viene comunque
+// azzerato subito per tutti dall'azione admin stessa).
+function initSeasonSync() {
+if (!firebaseReady || !db) return;
+db.collection('meta').doc('currentSeason').onSnapshot(function(doc) {
+if (!doc.exists) return;
+const remoteSeasonNumber = doc.data().seasonNumber;
+const hadPreviousSeason = (state.fantaLastSeasonNumber !== undefined && state.fantaLastSeasonNumber !== null);
+if (remoteSeasonNumber !== state.fantaLastSeasonNumber) {
+state.fantaTotalPoints = 0;
+state.fantaProcessedMatches = {};
+state.fantaLastSeasonNumber = remoteSeasonNumber;
+saveState();
+syncFantaScoreToCloud();
+renderFantaSection();
+if (hadPreviousSeason) {
+alert("🏆 È iniziata una nuova stagione fantaTigers! Il punteggio di tutti è stato azzerato, si riparte da zero.");
+}
+}
+});
+}
+
+// ---------- Pannello Admin: apertura/chiusura e password ----------
+
+function openAdminPanel() {
+document.getElementById('admin-modal').classList.add('active');
+document.getElementById('admin-password-section').style.display = 'block';
+document.getElementById('admin-form-section').style.display = 'none';
+document.getElementById('admin-password-input').value = '';
+document.getElementById('admin-password-error').innerText = '';
+}
+
+function closeAdminPanel() {
+document.getElementById('admin-modal').classList.remove('active');
+}
+
+function checkAdminPassword() {
+const pwd = document.getElementById('admin-password-input').value;
+if (pwd === ADMIN_PASSWORD) {
+document.getElementById('admin-password-section').style.display = 'none';
+document.getElementById('admin-form-section').style.display = 'block';
+populateAdminForm();
+} else {
+document.getElementById('admin-password-error').innerText = 'Password errata, riprova.';
+}
+}
+
+// ---------- Pannello Admin: gestione form partita ----------
+
+function populateAdminForm() {
+adminCurrentMatchId = CURRENT_MATCH_CONFIG.matchId;
+document.getElementById('admin-match-title').value = CURRENT_MATCH_CONFIG.title || '';
+document.getElementById('admin-match-date').value = CURRENT_MATCH_CONFIG.matchDate || '';
+document.getElementById('admin-votes-published').checked = !!CURRENT_MATCH_CONFIG.votesPublished;
+buildAdminVotesGrid(CURRENT_MATCH_CONFIG.playerVotes || {});
+document.getElementById('admin-status-msg').innerText = '';
+
+if (firebaseReady && db) {
+db.collection('meta').doc('currentSeason').get().then(function(doc) {
+const seasonLabelInput = document.getElementById('admin-season-label');
+if (doc.exists) {
+seasonLabelInput.placeholder = 'Stagione attuale: ' + (doc.data().label || ('Stagione ' + doc.data().seasonNumber));
+} else {
+seasonLabelInput.placeholder = 'Nome nuova stagione (es. Ritorno 2025/26)';
+}
+}).catch(function() {});
+}
+}
+
+function buildAdminVotesGrid(votesObj) {
+const grid = document.getElementById('admin-votes-grid');
+grid.innerHTML = '';
+BASE_PLAYERS.forEach(function(p) {
+const wrap = document.createElement('div');
+wrap.className = 'admin-vote-item';
+// Campo vuoto = "non convocato/non giocato" per questa partita (non conta nelle medie).
+// Un valore numerico, anche 0, viene invece considerato un voto reale.
+const currentVote = votesObj[p.id] !== undefined ? votesObj[p.id] : '';
+wrap.innerHTML = `
+<label title="${p.name}">${p.name}</label>
+<input type="number" step="0.5" id="admin-vote-${p.id}" value="${currentVote}" placeholder="N.C.">
+`;
+grid.appendChild(wrap);
+});
+}
+
+function newAdminMatch() {
+adminCurrentMatchId = 'match_' + Date.now();
+document.getElementById('admin-match-title').value = '';
+document.getElementById('admin-match-date').value = '';
+document.getElementById('admin-votes-published').checked = false;
+buildAdminVotesGrid({});
+showAdminStatus('Modulo pronto per una nuova partita. Lascia vuoti i giocatori non convocati: solo i campi compilati contano come voto.', false);
+}
+
+function saveAdminMatchConfig() {
+if (!firebaseReady || !db) {
+showAdminStatus('Firebase non è configurato: impossibile salvare.', true);
+return;
+}
+
+const title = document.getElementById('admin-match-title').value.trim();
+const dateVal = document.getElementById('admin-match-date').value;
+const votesPublished = document.getElementById('admin-votes-published').checked;
+
+if (!title || !dateVal) {
+showAdminStatus('Compila titolo e data/ora della partita prima di salvare.', true);
+return;
+}
+
+// Solo i campi effettivamente compilati diventano un voto: un campo lasciato vuoto
+// significa "non convocato" e non viene incluso, cosi' non falsa le statistiche/medie.
+const playerVotes = {};
+BASE_PLAYERS.forEach(function(p) {
+const input = document.getElementById('admin-vote-' + p.id);
+if (input && input.value !== '') {
+playerVotes[p.id] = parseFloat(input.value) || 0;
+}
+});
+
+if (!adminCurrentMatchId) adminCurrentMatchId = 'match_' + Date.now();
+
+showAdminStatus('⏳ Salvataggio in corso...', false);
+
+const matchPayload = {
+matchId: adminCurrentMatchId,
+title: title,
+matchDate: dateVal,
+votesPublished: votesPublished,
+playerVotes: playerVotes
+};
+
+db.collection('meta').doc('currentMatch').set(matchPayload).then(function() {
+// Registriamo/aggiorniamo anche questa partita nello storico (chiave = matchId, cosi'
+// correzioni successive aggiornano lo stesso record invece di duplicarlo). Serve per
+// le statistiche voti/andamento e per lo storico consultabile in fantaTigers.
+return db.collection('matchHistory').doc(adminCurrentMatchId).set(matchPayload);
+}).then(function() {
+showAdminStatus('✅ Partita salvata! Tutti i dispositivi la riceveranno automaticamente.', false);
+}).catch(function(err) {
+console.error("Errore salvataggio configurazione partita:", err);
+showAdminStatus('Errore nel salvataggio: ' + err.message, true);
+});
+}
+
+function showAdminStatus(msg, isError) {
+const el = document.getElementById('admin-status-msg');
+el.innerText = msg;
+el.style.color = isError ? 'var(--danger-red)' : 'var(--success-green)';
+}
+
+// ---------- Pannello Admin: cancellazione dati di test (senza archiviare) ----------
+
+function handleWipeTestDataClick() {
+if (!confirm("Questo cancellerà TUTTI i punteggi/nomi della classifica globale E lo storico voti/partite (usato per le statistiche), SENZA salvarli nello storico stagioni. Usalo solo durante i test, prima di far giocare gli utenti veri. Continuare?")) return;
+wipeCurrentSeasonForTesting();
+}
+
+// Cancella tutti i documenti della classifica condivisa (utile durante i test, prima
+// di pubblicizzare l'app) senza creare alcun record nello storico 'seasons'. Incrementa
+// comunque il numero di stagione, cosi' anche il TUO dispositivo (e quelli di eventuali
+// altri tester) si autoazzerano al prossimo giro, invece di re-inviare punti vecchi.
+async function wipeCurrentSeasonForTesting() {
+if (!firebaseReady || !db) {
+showAdminStatus('Firebase non configurato: impossibile cancellare i dati.', true);
+return;
+}
+
+showAdminStatus('⏳ Cancellazione dati di test in corso...', false);
+
+try {
+const snapshot = await db.collection('fantaLeaderboard').get();
+const batch = db.batch();
+snapshot.docs.forEach(function(doc) {
+batch.delete(doc.ref);
+});
+await batch.commit();
+
+// Ripulisce anche lo storico voti/partite di prova, cosi' non falsa le statistiche
+// (medie, andamenti) una volta che inizi a giocare sul serio.
+const historySnapshot = await db.collection('matchHistory').get();
+const historyBatch = db.batch();
+historySnapshot.docs.forEach(function(doc) {
+historyBatch.delete(doc.ref);
+});
+await historyBatch.commit();
+
+const seasonMetaSnap = await db.collection('meta').doc('currentSeason').get();
+const currentSeasonNumber = (seasonMetaSnap.exists && seasonMetaSnap.data().seasonNumber) ? seasonMetaSnap.data().seasonNumber : 0;
+const currentLabel = (seasonMetaSnap.exists && seasonMetaSnap.data().label) ? seasonMetaSnap.data().label : null;
+
+await db.collection('meta').doc('currentSeason').set({
+seasonNumber: currentSeasonNumber + 1,
+label: currentLabel || 'Test',
+startedAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+
+showAdminStatus('✅ Dati di test cancellati (classifica + storico voti). Nessuna stagione archiviata.', false);
+} catch (e) {
+console.error("Errore cancellazione dati di test:", e);
+showAdminStatus('Errore: ' + e.message, true);
+}
+}
+
+// ---------- Pannello Admin: gestione stagioni ----------
+
+function handleArchiveSeasonClick() {
+const label = document.getElementById('admin-season-label').value.trim();
+if (!confirm("Sei sicuro di voler archiviare la classifica attuale e azzerare i punteggi di TUTTI i giocatori? L'operazione non è reversibile.")) return;
+archiveSeasonAndReset(label);
+}
+
+// Archivia la classifica corrente in una nuova collezione 'seasons' (per tenerne
+// traccia storica), poi azzera i punteggi di tutti i giocatori nel database
+// condiviso e incrementa il numero di stagione, cosi' che ogni dispositivo si
+// autocorregga al prossimo accesso (vedi initSeasonSync).
+async function archiveSeasonAndReset(label) {
+if (!firebaseReady || !db) {
+showAdminStatus('Firebase non configurato: impossibile gestire le stagioni.', true);
+return;
+}
+
+showAdminStatus('⏳ Archiviazione stagione in corso...', false);
+
+try {
+const snapshot = await db.collection('fantaLeaderboard').orderBy('points', 'desc').limit(200).get();
+const players = snapshot.docs.map(function(doc) {
+const d = doc.data();
+return { id: doc.id, name: d.name || 'Giocatore', points: d.points || 0 };
+});
+
+const seasonMetaSnap = await db.collection('meta').doc('currentSeason').get();
+const prevSeasonNumber = (seasonMetaSnap.exists && seasonMetaSnap.data().seasonNumber) ? seasonMetaSnap.data().seasonNumber : 0;
+const prevLabel = (seasonMetaSnap.exists && seasonMetaSnap.data().label) ? seasonMetaSnap.data().label : ('Stagione ' + prevSeasonNumber);
+const newSeasonNumber = prevSeasonNumber + 1;
+
+await db.collection('seasons').add({
+seasonNumber: prevSeasonNumber,
+label: prevLabel,
+endedAt: firebase.firestore.FieldValue.serverTimestamp(),
+players: players
+});
+
+const batch = db.batch();
+snapshot.docs.forEach(function(doc) {
+batch.update(doc.ref, { points: 0 });
+});
+await batch.commit();
+
+await db.collection('meta').doc('currentSeason').set({
+seasonNumber: newSeasonNumber,
+label: label || ('Stagione ' + newSeasonNumber),
+startedAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+
+showAdminStatus('✅ Stagione archiviata! Classifica azzerata per tutti.', false);
+} catch (e) {
+console.error("Errore archiviazione stagione:", e);
+showAdminStatus('Errore: ' + e.message, true);
+}
+}
+
+// ==========================================
 // LOGICA FANTATIGERS
 // ==========================================
 function initFantaTigers() {
@@ -1783,6 +2764,21 @@ if (CURRENT_MATCH_CONFIG.votesPublished && state.fantaDeployedCardId && !state.f
 const vote = CURRENT_MATCH_CONFIG.playerVotes[state.fantaDeployedCardId] || 0;
 state.fantaTotalPoints = Math.round((state.fantaTotalPoints + vote) * 10) / 10;
 state.fantaProcessedMatches[fantaMatchKey] = true;
+
+// Registriamo questo schieramento nello storico personale (solo sul tuo dispositivo,
+// coerente col resto dei tuoi dati locali), cosi' puoi rivedere chi hai schierato
+// partita per partita e quanti punti ti ha fatto guadagnare.
+const deployedPlayer = BASE_PLAYERS.find(p => p.id === state.fantaDeployedCardId);
+if (!state.fantaDeploymentHistory) state.fantaDeploymentHistory = [];
+state.fantaDeploymentHistory.unshift({
+matchId: CURRENT_MATCH_CONFIG.matchId,
+matchTitle: CURRENT_MATCH_CONFIG.title || 'Partita',
+matchDate: CURRENT_MATCH_CONFIG.matchDate,
+cardId: state.fantaDeployedCardId,
+cardName: deployedPlayer ? deployedPlayer.name : ('Giocatore #' + state.fantaDeployedCardId),
+voteEarned: vote
+});
+
 saveState();
 syncFantaScoreToCloud();
 renderFantaSection();
@@ -1791,6 +2787,7 @@ renderFantaSection();
 if (diff <= 0) {
 timerBadge.innerText = CURRENT_MATCH_CONFIG.votesPublished ? "VOTI PUBBLICATI" : "PARTITA IN CORSO / CONCLUSA";
 timerBadge.classList.add('locked');
+timerBadge.classList.remove('urgent');
 statusText.innerText = "SCHIERAMENTO BLOCCATO";
 statusText.style.color = "var(--danger-red)";
 if (btnDeploy) btnDeploy.style.display = 'none';
@@ -1806,6 +2803,15 @@ timeStr += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')
 
 timerBadge.innerText = timeStr;
 timerBadge.classList.remove('locked');
+
+// Ultimi 5 minuti prima della chiusura schieramento: countdown animato per dare urgenza
+const FIVE_MINUTES_MS = 5 * 60 * 1000;
+if (diff <= FIVE_MINUTES_MS) {
+timerBadge.classList.add('urgent');
+} else {
+timerBadge.classList.remove('urgent');
+}
+
 statusText.innerText = "SCHIERAMENTO APERTO";
 statusText.style.color = "var(--text-gold)";
 if (btnDeploy) btnDeploy.style.display = 'block';
@@ -1892,12 +2898,17 @@ return;
 list.forEach((item, index) => {
 const tr = document.createElement('tr');
 if (item.id === state.fantaUserId) {
-tr.className = 'current-user-row';
+tr.className += ' current-user-row';
 }
+if (index === 0) {
+tr.className += ' rank-first';
+}
+
+const trophyBadge = index === 0 ? '<span class="leaderboard-trophy">🏆</span>' : '';
 
 tr.innerHTML = `
 <td class="leaderboard-rank">${index + 1}</td>
-<td>${item.name} ${item.id === state.fantaUserId ? '<small style="color:var(--bright-blue);">(TU)</small>' : ''}</td>
+<td>${trophyBadge}${item.name} ${item.id === state.fantaUserId ? '<small style="color:var(--bright-blue);">(TU)</small>' : ''}</td>
 <td class="leaderboard-points">${item.points} pt</td>
 `;
 tbody.appendChild(tr);
@@ -2018,6 +3029,33 @@ if (tabId === 'fantaTigers') renderFantaSection();
 function openPack(type) {
 if (type === 'daily') {
 if (state.lastDailyDate === getTodayString()) return;
+
+// Calcola lo streak di giorni consecutivi PRIMA di aggiornare lastDailyDate.
+// dailyStreak/longestStreak sono le statistiche "storiche" mostrate nel profilo
+// (non si azzerano mai per il bonus). streakCycleCount è invece un contatore
+// interno dedicato SOLO al bonus dei 5 giorni: cresce insieme allo streak, ma
+// si azzera a parte ogni volta che raggiunge 5, ricominciando da zero.
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+const yesterdayStr = yesterday.getFullYear() + '-' + String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + String(yesterday.getDate()).padStart(2, '0');
+if (state.lastDailyDate === yesterdayStr) {
+state.stats.dailyStreak = (state.stats.dailyStreak || 0) + 1;
+state.stats.streakCycleCount = (state.stats.streakCycleCount || 0) + 1;
+} else {
+state.stats.dailyStreak = 1;
+state.stats.streakCycleCount = 1;
+}
+if (state.stats.dailyStreak > (state.stats.longestStreak || 0)) {
+state.stats.longestStreak = state.stats.dailyStreak;
+}
+
+// Raggiunti i 5 giorni di fila: sblocca il pacchetto bonus extra. Le fiammelle
+// restano tutte accese finché non apri effettivamente il Pacchetto Streak: il
+// reset avviene più sotto, nel branch 'streakBonus'.
+if (state.stats.streakCycleCount >= 5) {
+state.streakBonusAvailable = true;
+}
+
 state.lastDailyDate = getTodayString();
 state.stats.packsOpened = (state.stats.packsOpened || 0) + 1;
 
@@ -2032,6 +3070,7 @@ const isDup = !!state.inventory[player.id];
 if (isDup) {
 duplicatesCount++;
 state.points++;
+state.stats.duplicatesFound = (state.stats.duplicatesFound || 0) + 1;
 }
 
 state.inventory[player.id] = (state.inventory[player.id] || 0) + 1;
@@ -2040,6 +3079,38 @@ pulled.push({ player, isDup });
 
 checkTrophies();
 setupPackModal('daily', "Pacchetto Daily", pulled, duplicatesCount > 0 ? `Trovati ${duplicatesCount} doppioni! Convertiti in +${duplicatesCount} Punti Tigers!` : "Tutte carte nuove aggiunte alla collezione!");
+
+} else if (type === 'streakBonus') {
+// Pacchetto extra sbloccato al raggiungimento di 5 giorni di streak consecutivi.
+// Stessa meccanica del pacchetto daily (3 carte base casuali), ma è un'apertura
+// aggiuntiva indipendente: non tocca lastDailyDate, quindi non consuma né
+// sostituisce il pacchetto daily del giorno.
+if (!state.streakBonusAvailable) return;
+state.streakBonusAvailable = false;
+// Le fiammelle si azzerano solo ora, ad apertura del pacchetto avvenuta.
+state.stats.streakCycleCount = 0;
+state.stats.packsOpened = (state.stats.packsOpened || 0) + 1;
+
+let pulled = [];
+let duplicatesCount = 0;
+
+for (let i = 0; i < 3; i++) {
+const randomIndex = Math.floor(Math.random() * BASE_PLAYERS.length);
+const player = BASE_PLAYERS[randomIndex];
+const isDup = !!state.inventory[player.id];
+
+if (isDup) {
+duplicatesCount++;
+state.points++;
+state.stats.duplicatesFound = (state.stats.duplicatesFound || 0) + 1;
+}
+
+state.inventory[player.id] = (state.inventory[player.id] || 0) + 1;
+pulled.push({ player, isDup });
+}
+
+checkTrophies();
+setupPackModal('streakBonus', "🔥 Bonus Streak 5 Giorni!", pulled, duplicatesCount > 0 ? `Trovati ${duplicatesCount} doppioni! Convertiti in +${duplicatesCount} Punti Tigers!` : "Tutte carte nuove aggiunte alla collezione!");
 
 } else if (type === 'shop') {
 if (state.points < 5) return;
@@ -2079,6 +3150,11 @@ sealedImg.src = PACK_SPECIAL_IMAGE_PATH || PACK_SPECIAL_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_SPECIAL_PLACEHOLDER; };
 sealedTitle.innerText = "PACCHETTO SPECIALE";
 sealedCard.className = "pack-card special";
+} else if (type === 'streakBonus') {
+sealedImg.src = PACK_STREAK_IMAGE_PATH || PACK_STREAK_PLACEHOLDER;
+sealedImg.onerror = function() { this.src = PACK_STREAK_PLACEHOLDER; };
+sealedTitle.innerText = "PACCHETTO STREAK";
+sealedCard.className = "pack-card streak";
 } else {
 sealedImg.src = PACK_BONUS_IMAGE_PATH || PACK_BONUS_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_BONUS_PLACEHOLDER; };
@@ -2128,7 +3204,7 @@ for (let i = 0; i < 35; i++) {
 const particle = document.createElement('div');
 particle.className = 'particle';
 
-const colors = ['#00a8ff', '#ff7300', '#ffd700', '#ffffff', '#10b981'];
+const colors = ['#4f86c4', '#ff7300', '#ffd700', '#ffffff', '#10b981'];
 const color = colors[Math.floor(Math.random() * colors.length)];
 const size = Math.random() * 8 + 4;
 
@@ -2266,10 +3342,8 @@ msgEl.innerText = 'Parola chiave non valida!';
 }
 }
 
-function setFilter(filter, el) {
+function setFilter(filter) {
 currentFilter = filter;
-document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-el.classList.add('active');
 renderCollection();
 }
 
@@ -2288,11 +3362,33 @@ document.getElementById('stat-base').innerText = `Base: ${ownedBase}/${BASE_PLAY
 document.getElementById('stat-special').innerText = `Speciali: ${ownedSpecial}/${SPECIAL_PLAYERS.length}`;
 document.getElementById('stat-total').innerText = `Totale: ${ownedBase + ownedSpecial}/${BASE_PLAYERS.length + SPECIAL_PLAYERS.length}`;
 
+// Le etichette del menu a tendina riflettono sempre il numero REALE di carte definite
+// in BASE_PLAYERS/SPECIAL_PLAYERS: appena ne aggiungi una nuova all'array, il conteggio
+// si aggiorna automaticamente ovunque, senza bisogno di modificare altro a mano.
+const totalMissing = (BASE_PLAYERS.length + SPECIAL_PLAYERS.length) - (ownedBase + ownedSpecial);
+document.getElementById('filter-option-base').innerText = `Solo Base (${BASE_PLAYERS.length})`;
+document.getElementById('filter-option-special').innerText = `Solo Speciali (${SPECIAL_PLAYERS.length})`;
+document.getElementById('filter-option-owned').innerText = `Possedute (${ownedBase + ownedSpecial})`;
+document.getElementById('filter-option-missing').innerText = `Mancanti (${totalMissing})`;
+
 const filtered = ALL_CARDS.filter(card => {
 const matchesSearch = card.name.toLowerCase().includes(searchVal);
-const matchesFilter = currentFilter === 'all' || card.type === currentFilter;
+const count = state.inventory[card.id] || 0;
+let matchesFilter = true;
+if (currentFilter === 'base') matchesFilter = card.type === 'base';
+else if (currentFilter === 'special') matchesFilter = card.type === 'special';
+else if (currentFilter === 'owned') matchesFilter = count > 0;
+else if (currentFilter === 'missing') matchesFilter = count === 0;
 return matchesSearch && matchesFilter;
 });
+
+if (filtered.length === 0) {
+const emptyMsg = searchVal
+? `Nessuna carta trovata per "${searchVal}".`
+: 'Nessuna carta corrisponde a questo filtro.';
+grid.innerHTML = `<div class="collection-empty-state">${emptyMsg}</div>`;
+return;
+}
 
 filtered.forEach(card => {
 const count = state.inventory[card.id] || 0;
@@ -2443,12 +3539,16 @@ inventory: {},
 usedCodes: {},
 lastDailyDate: null,
 unlockedTrophies: {},
-stats: { packsOpened: 0, bonusPacksOpened: 0 },
+stats: { packsOpened: 0, bonusPacksOpened: 0, duplicatesFound: 0, dailyStreak: 0, longestStreak: 0, streakCycleCount: 0 },
+streakBonusAvailable: false,
+firstOpenDate: getTodayString(),
 fantaUserId: generateUserId(),
 fantaUserName: "TigerFan_" + Math.floor(1000 + Math.random() * 9000),
 fantaDeployedCardId: null,
 fantaTotalPoints: 0,
-fantaProcessedMatches: {}
+fantaProcessedMatches: {},
+fantaLastSeasonNumber: null,
+fantaDeploymentHistory: []
 };
 saveState();
 closeResetModal();
@@ -2498,6 +3598,15 @@ img.src = card.image;
 img.onerror = function() {
 this.src = card.type === 'special' ? (BACK_CARD_SPECIAL_PATH || BACK_CARD_SPECIAL_SVG) : (BACK_CARD_BASE_PATH || BACK_CARD_BASE_SVG);
 };
+const container = document.getElementById('fullscreen-container');
+container.classList.toggle('special-view', card.type === 'special');
+if (card.type === 'special') {
+container.style.border = '2px solid var(--text-gold)';
+container.style.boxShadow = '0 0 25px rgba(255, 215, 0, 0.4)';
+} else {
+container.style.border = '2px solid var(--bright-blue)';
+container.style.boxShadow = '0 0 25px rgba(79, 134, 196, 0.4)';
+}
 document.getElementById('fullscreen-modal').classList.add('active');
 }
 
@@ -2508,6 +3617,8 @@ document.getElementById('fullscreen-modal').classList.remove('active');
 window.onload = function() {
 loadState();
 initFantaCloudSync();
+initMatchConfigSync();
+initSeasonSync();
 syncFantaScoreToCloud();
 };
 </script>
