@@ -39,6 +39,7 @@
 --border-orange: #ff7300;
 --border-gold: #ffd700;
 --brand-silver: #c8d2dc;
+--matrix-green: #39ff6a;
 --success-green: #10b981;
 --danger-red: #ef4444;
 --font-display: 'Anton', 'Oswald', sans-serif;
@@ -345,6 +346,9 @@ filter: none;
 transform: scale(1.12);
 }
 
+.info-mini-btn{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:rgba(101,217,255,.18);border:1px solid var(--bright-blue);color:var(--bright-blue);font:800 .6rem/1 var(--font-heading);font-style:italic;cursor:pointer;vertical-align:middle;margin-left:4px;padding:0}
+.info-mini-btn:active{transform:scale(.9)}
+
 .streak-gift-btn {
 width: 52px;
 height: 52px;
@@ -432,7 +436,7 @@ background: var(--bg-surface);
 border: 1px solid var(--border-blue);
 border-radius: 16px;
 padding: 20px;
-margin-top: 20px;
+margin: 20px auto 0 auto;
 width: 100%;
 max-width: 350px;
 text-align: center;
@@ -623,6 +627,37 @@ z-index: 3;
 }
 
 .pulled-card.is-special { position: relative; overflow: hidden; }
+
+/* Secondo sweep di luce, più stretto e veloce, con angolo e ritardo diversi dal primo:
+   sommandosi creano un effetto foil più vivo, sempre automatico (nessuna interazione richiesta). */
+@keyframes foilShimmer2 {
+0% { background-position: 200% 50%; }
+100% { background-position: -50% 50%; }
+}
+
+.card-item.special-card .card-img-wrapper::before,
+.pulled-card.is-special::before,
+.fullscreen-card-container.special-view::before {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+border-radius: inherit;
+background: linear-gradient(
+70deg,
+transparent 0%,
+rgba(255, 255, 255, 0.55) 8%,
+rgba(101, 217, 255, 0.4) 14%,
+transparent 22%,
+transparent 100%
+);
+background-size: 220% 220%;
+mix-blend-mode: color-dodge;
+opacity: 0.8;
+animation: foilShimmer2 4.6s linear infinite;
+animation-delay: -1.6s;
+z-index: 3;
+}
 
 .card-count {
 position: absolute;
@@ -1329,6 +1364,85 @@ letter-spacing: 0.3px;
 margin-top: 3px;
 line-height: 1.2;
 }
+
+/* ===== TIGER CARDS v6 — VISUAL / UX LAYER ===== */
+:root{
+  --bg-main:#071522;
+  --bg-surface:#0d2132;
+  --bg-card:#112c42;
+  --bg-card-special:#18253b;
+  --primary-blue:#168dcc;
+  --bright-blue:#65d9ff;
+  --dark-navy:#040d15;
+  --accent-orange:#f28a2b;
+  --accent-orange-glow:rgba(242,138,43,.35);
+  --text-main:#f8fdff;
+  --text-muted:#91a9b8;
+  --text-gold:#ffd86a;
+  --border-blue:rgba(101,217,255,.28);
+  --border-orange:#f28a2b;
+  --border-gold:#ffd86a;
+  --brand-silver:#d8e7ef;
+  --success-green:#55d6a2;
+  --danger-red:#ff6b6b;
+  --tiger-white:#ffffff;
+  --tiger-cyan:#65d9ff;
+}
+body{background-color:var(--bg-main);background-image:radial-gradient(circle at 50% -10%,rgba(101,217,255,.18),transparent 38%),linear-gradient(135deg,rgba(255,255,255,.018) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.018) 50%,rgba(255,255,255,.018) 75%,transparent 75%);background-size:auto,42px 42px;}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.055;background:repeating-linear-gradient(125deg,transparent 0 70px,#fff 71px 74px,transparent 75px 140px);z-index:-1}
+header{background:linear-gradient(180deg,rgba(5,17,28,.98),rgba(9,31,47,.96));border-bottom:1px solid rgba(101,217,255,.35);box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.header-logo{border-color:var(--tiger-white);box-shadow:0 0 0 3px rgba(101,217,255,.12),0 0 22px rgba(101,217,255,.32);background:#fff}
+header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-background-clip:text;background-clip:text;text-shadow:0 0 24px rgba(101,217,255,.12)}
+.hamburger-btn svg{fill:#fff}.hamburger-btn:active{background:rgba(101,217,255,.12)}
+.status-container{margin:12px 14px}.points-bar{background:linear-gradient(135deg,#102c42,#071925);border-color:rgba(101,217,255,.28)}.points-badge{background:linear-gradient(135deg,#fff,#bfefff);color:#071522;box-shadow:0 0 18px rgba(101,217,255,.28)}.points-sub{color:var(--bright-blue)}
+.pack-card{background:linear-gradient(145deg,#123d59,#071927);border-color:var(--tiger-white);box-shadow:0 16px 35px rgba(0,0,0,.42),inset 0 0 20px rgba(101,217,255,.08)}
+.pack-card:before,.pack-card:after{content:"";position:absolute;pointer-events:none}.pack-card:before{width:180%;height:38%;left:-40%;top:28%;transform:rotate(-18deg);background:repeating-linear-gradient(135deg,transparent 0 18px,rgba(255,255,255,.055) 19px 24px,transparent 25px 42px)}
+.pack-card.bonus{background:linear-gradient(145deg,#173e55,#10202d);border-color:var(--bright-blue);box-shadow:0 16px 35px rgba(0,0,0,.45),inset 0 0 20px rgba(101,217,255,.1)}
+.pack-card.special{background:linear-gradient(145deg,#3a2c10,#171105);border-color:var(--text-gold)}
+.pack-card.streak{background:linear-gradient(145deg,#eef8fb,#7bb9ca);border-color:#fff}.pack-card.streak .pack-title,.pack-card.streak .pack-desc{color:#071522}
+.pack-badge-top{background:#fff;color:#071522}.pack-card.bonus .pack-badge-top{background:var(--bright-blue);color:#04131d}.pack-card.special .pack-badge-top{background:var(--text-gold)}
+.btn{background:linear-gradient(135deg,#fff,var(--bright-blue));color:#061520;box-shadow:0 6px 20px rgba(101,217,255,.22)}.btn-orange{background:linear-gradient(135deg,#fff,var(--accent-orange));color:#111;box-shadow:0 6px 20px rgba(242,138,43,.22)}
+.code-box-card,.fanta-section-card,.streak-tracker-banner{background:rgba(13,33,50,.88);border-color:rgba(101,217,255,.22);box-shadow:0 10px 26px rgba(0,0,0,.2)}
+.cards-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.card-item{background:linear-gradient(180deg,#f9fdff,#dfeef4);border:2px solid #fff;border-radius:11px;padding:5px;box-shadow:0 5px 14px rgba(0,0,0,.3);color:#071522}.card-item.locked{background:#0c1d2a;border-color:#284454}.card-item.special-card{background:linear-gradient(145deg,#3b2a0a,#161105);border:3px solid var(--text-gold);box-shadow:0 0 16px rgba(255,216,106,.22),inset 0 0 16px rgba(255,216,106,.08)}
+.card-img-wrapper{background:#071522;border-radius:7px}.card-item:not(.locked) .card-img-wrapper{border:1px solid rgba(101,217,255,.22)}.card-name{color:#071522}.card-item.special-card .card-name{color:var(--text-gold)}
+.card-type-tag.base{background:#fff;color:#071522;border:1px solid #071522}.card-type-tag.special{background:var(--text-gold)}
+.card-item.special-card .card-img-wrapper::after,.pulled-card.is-special::after,.fullscreen-card-container.special-view::after{background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.48) 18%,rgba(101,217,255,.34) 30%,rgba(255,216,106,.28) 43%,transparent 58%,rgba(255,255,255,.34) 78%,transparent 100%);animation:foilShimmer 2.7s linear infinite}
+.card-item.special-card{position:relative;overflow:hidden}.mastered-badge{position:absolute;left:5px;bottom:5px;z-index:5;background:#071522;color:#fff;border:1px solid var(--bright-blue);font:800 .48rem/1 var(--font-heading);padding:4px 5px;border-radius:5px;letter-spacing:.4px}.mastery-wrap{width:100%;margin-top:5px}.mastery-track{height:4px;background:#9eb1bb;border-radius:5px;overflow:hidden}.mastery-fill{height:100%;background:linear-gradient(90deg,var(--primary-blue),var(--bright-blue));border-radius:5px}.mastery-label{font-size:.45rem;color:#3b5562;margin-top:2px;font-weight:800}
+.nav-btn.active{color:#fff}.nav-btn.active:before{content:"";position:absolute;top:0;width:34px;height:3px;border-radius:0 0 5px 5px;background:var(--bright-blue);box-shadow:0 0 12px rgba(101,217,255,.6)}nav{background:linear-gradient(180deg,#0a1f30,#040d15);border-top-color:rgba(101,217,255,.25)}
+.news-strip{margin:0 14px 14px;border:1px solid rgba(101,217,255,.25);border-radius:12px;background:linear-gradient(90deg,rgba(101,217,255,.09),rgba(255,255,255,.03));padding:9px 0 9px 11px;display:flex;align-items:center;gap:9px;overflow:hidden}.news-dot{width:7px;height:7px;border-radius:50%;background:var(--bright-blue);box-shadow:0 0 9px var(--bright-blue);flex:none}.news-label{font:800 .55rem var(--font-heading);letter-spacing:.7px;color:var(--bright-blue);white-space:nowrap;flex:none}
+.news-marquee{flex:1;min-width:0;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
+.news-marquee-track{display:inline-block;white-space:nowrap;font-size:.7rem;font-weight:700;padding-right:60px;will-change:transform;animation:newsMarqueeScroll 18s linear infinite}
+.news-marquee-track.paused{animation-play-state:paused}
+@keyframes newsMarqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.brand-hero{margin:0 14px 14px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(101,217,255,.08));display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}.brand-hero:after{content:"";position:absolute;right:-45px;top:-55px;width:170px;height:170px;border:18px solid rgba(101,217,255,.07);transform:rotate(25deg)}.brand-hero img{width:48px;height:48px;border-radius:50%;background:#fff;padding:4px}.brand-hero strong{display:block;font:800 .95rem var(--font-heading);letter-spacing:.7px}.brand-hero span{display:block;color:var(--text-muted);font-size:.65rem;margin-top:2px}
+.side-drawer{position:fixed;top:0;bottom:0;left:0;width:min(84vw,350px);background:linear-gradient(180deg,#071522,#0b2639);z-index:1000;transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);box-shadow:16px 0 40px rgba(0,0,0,.5);padding:calc(18px + env(safe-area-inset-top)) 16px 22px;overflow:auto}.side-drawer.open{transform:translateX(0)}.drawer-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:999;display:none}.drawer-scrim.open{display:block}.drawer-head{display:flex;align-items:center;gap:11px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}.drawer-head img{width:50px;height:50px;border-radius:50%;background:#fff;padding:4px}.drawer-title{font:800 1.1rem var(--font-heading)}.drawer-sub{font-size:.65rem;color:var(--text-muted)}.drawer-btn{width:100%;padding:13px 12px;margin:4px 0;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:11px;color:#fff;text-align:left;font:700 .82rem var(--font-heading)}.drawer-btn.primary{border-color:rgba(101,217,255,.35);color:var(--bright-blue)}.drawer-btn.danger{color:var(--danger-red)}
+.profile-page{padding:0 14px 20px}.profile-card{background:linear-gradient(145deg,#12364d,#071927);border:1px solid rgba(101,217,255,.28);border-radius:18px;padding:18px;position:relative;overflow:hidden}.profile-card:after{content:"TIGER";position:absolute;right:-12px;bottom:-17px;font:900 5rem/1 var(--font-display);color:rgba(255,255,255,.025);transform:rotate(-12deg)}.profile-avatar{width:72px;height:72px;border-radius:50%;background:#fff;padding:6px;border:2px solid var(--bright-blue);box-shadow:0 0 20px rgba(101,217,255,.25)}.profile-name{font:800 1.3rem var(--font-heading);margin-top:8px}.friend-code{margin-top:7px;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:8px;background:rgba(0,0,0,.22);border:1px dashed rgba(255,255,255,.22);font:700 .7rem monospace;color:#fff}.profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.profile-section{margin-top:12px;background:rgba(13,33,50,.8);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px}.section-title{font:800 .8rem var(--font-heading);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}.badge-grid{display:flex;gap:7px;flex-wrap:wrap}.season-badge{padding:7px 9px;border-radius:8px;background:linear-gradient(135deg,#ffd86a,#8f6716);color:#0a0b0c;font:900 .58rem var(--font-heading);box-shadow:0 0 12px rgba(255,216,106,.18)}
+.pack-shop-wrapper{position:relative;width:100%;max-width:340px;margin:0 auto;overflow:hidden;padding:10px 0 5px 0}.pack-shop-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}.pack-shop-track::-webkit-scrollbar{display:none}.pack-shop-slide{min-width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:0 10px;scroll-snap-align:center}.pack-shop-dots{display:flex;justify-content:center;gap:8px;margin-top:10px;margin-bottom:4px}.pack-shop-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s ease}.pack-shop-dot.active{background:var(--bright-blue);transform:scale(1.25);box-shadow:0 0 8px var(--bright-blue)}
+.pack-card.tappable{cursor:pointer;transition:transform .15s ease}.pack-card.tappable:active{transform:scale(.97)}
+.pack-card.bonus{background:linear-gradient(145deg,#241a10,#0f0a06);border-color:var(--accent-orange);box-shadow:0 0 16px rgba(255,115,0,.32),0 12px 30px rgba(0,0,0,.4),inset 0 0 16px rgba(255,115,0,.14)}.pack-card.bonus .pack-badge-top{background:var(--accent-orange);color:#1a0d00}
+.pack-card.premium{background:linear-gradient(145deg,#262b30,#0d0f11);border-color:var(--brand-silver);box-shadow:0 0 16px rgba(200,210,220,.3),0 12px 30px rgba(0,0,0,.4),inset 0 0 16px rgba(200,210,220,.12)}.pack-card.premium .pack-badge-top{background:var(--brand-silver);color:#0d1116}
+.pack-card.code{background:linear-gradient(145deg,#03170a,#000502);border-color:var(--matrix-green);box-shadow:0 0 18px rgba(57,255,106,.4),0 12px 30px rgba(0,0,0,.5),inset 0 0 16px rgba(57,255,106,.18)}.pack-card.code .pack-badge-top{background:var(--matrix-green);color:#00220b}
+.pack-tap-hint{margin-top:12px;font-size:.78rem;font-weight:800;letter-spacing:.4px;color:var(--accent-orange);text-transform:uppercase;animation:pulseText 1.8s infinite}.pack-tap-hint.disabled{color:var(--text-muted);animation:none}
+.modal-card-modern{background:linear-gradient(145deg,#12364d,#071927);border:1px solid rgba(101,217,255,.28);border-radius:18px;padding:18px;width:100%;max-width:380px;max-height:85vh;overflow-y:auto;text-align:left;position:relative}
+.modal-card-modern.gold{border-color:rgba(255,215,0,.32)}
+.modal-title-modern{font:800 1.05rem var(--font-heading);text-transform:uppercase;letter-spacing:.6px;text-align:center;margin-bottom:4px;color:var(--bright-blue)}
+.modal-card-modern.gold .modal-title-modern{color:var(--text-gold)}
+.modal-sub-modern{font-size:.7rem;color:var(--text-muted);text-align:center;margin-bottom:14px}
+.streak-info-row{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.streak-info-row:last-child{border-bottom:none}
+.streak-info-day{font:800 .68rem var(--font-heading);text-transform:uppercase;letter-spacing:.4px;color:var(--accent-orange)}
+.streak-info-desc{font-size:.72rem;color:var(--text-muted);line-height:1.4}
+.fanta-rules-list{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px}
+.fanta-rules-list li{font-size:.75rem;color:var(--text-muted);line-height:1.45}
+.fanta-rules-list li b{color:#fff}
+.fanta-rules-btn{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--bright-blue);background:rgba(101,217,255,.12);border:1px solid rgba(101,217,255,.35);border-radius:20px;padding:6px 12px;cursor:pointer}
+.fanta-rules-btn:active{transform:scale(.95)}
+.leaderboard-controls{display:flex;gap:6px;overflow-x:auto;margin:8px 0 12px}.lb-filter{white-space:nowrap;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#0a1b29;color:var(--text-muted);font:700 .65rem var(--font-heading)}.lb-filter.active{background:#fff;color:#071522;border-color:#fff}.friends-mini{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:9px;border:1px dashed rgba(101,217,255,.2);border-radius:9px;font-size:.68rem;color:var(--text-muted)}
+.modal{backdrop-filter:blur(6px);background:rgba(2,10,16,.74)}.modal > .options-menu-box,.modal > div:not(.bottom-back-popup):not(.flash-overlay){box-shadow:0 18px 45px rgba(0,0,0,.55)}.modal.sheet-modal{align-items:flex-end!important}.modal.sheet-modal > .options-menu-box{border-radius:20px 20px 0 0!important;margin:0!important;max-width:none!important;width:100%!important;border-color:rgba(101,217,255,.22)!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;animation:sheetUp .25s ease}.modal-close-x{position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:1.1rem}.social-row{display:flex;gap:8px;margin-top:10px}.social-btn{flex:1;border:1px solid rgba(101,217,255,.25);background:rgba(101,217,255,.08);color:#fff;border-radius:9px;padding:9px;font:800 .65rem var(--font-heading)}
+@keyframes sheetUp{from{transform:translateY(100%);opacity:.5}to{transform:translateY(0);opacity:1}}
+@keyframes packShakePro{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-4deg) scale(1.03)}30%{transform:rotate(4deg) scale(1.06)}45%{transform:rotate(-3deg) scale(1.08)}60%{transform:rotate(2deg) scale(1.09)}75%{transform:rotate(0) scale(1.12)}}
+.pack-opening-stage .sealed-pack-wrapper.burst .pack-card{animation:packShakePro .55s ease both}.reveal-flash-title{font:900 .75rem var(--font-heading);color:#fff;letter-spacing:1px;text-transform:uppercase}.card-reveal-container-pro{perspective:1000px}.pulled-card{box-shadow:0 20px 50px rgba(0,0,0,.55);border:2px solid #fff!important}.pulled-card.is-special{border-color:#ffd86a!important;box-shadow:0 0 28px rgba(255,216,106,.28),0 20px 50px rgba(0,0,0,.55)}
+@media(max-width:380px){.cards-grid{gap:7px}.card-name{font-size:.57rem}}
 </style>
 </head>
 <body>
@@ -1341,7 +1455,7 @@ line-height: 1.2;
 <h2>Volley Lab Settesoli Tigers</h2>
 </div>
 </div>
-<button class="hamburger-btn" onclick="openMenuModal()" aria-label="Menu">
+<button class="hamburger-btn" onclick="openSideDrawer()" aria-label="Menu">
 <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
 </button>
 </header>
@@ -1349,20 +1463,21 @@ line-height: 1.2;
 <div class="status-container">
 <div class="points-bar">
 <div class="points-info">
-<span class="points-title">Punti Tigers (Doppioni)</span>
-<span class="points-sub">5 Punti = 1 Carta Mancante</span>
+<span class="points-title">Punti Tigers</span>
 </div>
 <span class="points-badge" id="points-display">0</span>
 </div>
 </div>
 
+
 <div id="tab-home" class="tab-content active">
+<div class="news-strip" id="news-strip"><span class="news-label">TIGER NEWS</span><span class="news-dot"></span><div class="news-marquee"><div class="news-marquee-track" id="news-marquee-track">Benvenuto nella tua nuova stagione di collezionismo.</div></div></div>
 <div class="streak-tracker-banner">
 <div class="streak-tracker-info">
-<span class="streak-tracker-label">Streak Pacchetto Daily</span>
+<span class="streak-tracker-label">Streak Daily · 7 Giorni <button class="info-mini-btn" onclick="openStreakInfoModal()" aria-label="Info Streak">i</button></span>
 <div class="streak-flames" id="streak-flames-row"></div>
 </div>
-<button id="streak-gift-btn" class="streak-gift-btn" onclick="openPack('streakBonus')" disabled aria-label="Apri Pacchetto Streak">🎁</button>
+<button id="streak-gift-btn" class="streak-gift-btn" onclick="openPack('streakBonus')" disabled aria-label="Apri Weekly Chest">🎁</button>
 </div>
 
 <div class="carousel-wrapper" id="home-carousel-wrapper">
@@ -1409,16 +1524,55 @@ line-height: 1.2;
 </div>
 
 <div id="tab-shop" class="tab-content">
+
+<div class="pack-shop-wrapper">
+<div class="pack-shop-track" id="pack-shop-track">
+
+<div class="pack-shop-slide">
 <div class="pack-container">
-<div class="pack-card bonus">
-<span class="pack-badge-top">Pacchetto Speciale</span>
+<div id="pack-tile-shop" class="pack-card bonus tappable" onclick="handlePackTap('shop')">
+<span class="pack-badge-top">Pacchetto Bonus</span>
 <img id="pack-bonus-img" class="pack-logo-img" src="" alt="Pacchetto Bonus">
 <div>
 <div class="pack-title" style="color: var(--accent-orange);">Pacchetto Bonus</div>
 <div class="pack-desc">Contiene 1 Carta Mancante | Costo: 5 Punti</div>
 </div>
 </div>
-<button id="btn-shop" class="btn btn-orange" onclick="openPack('shop')">ACQUISTA CON 5 PUNTI</button>
+<p id="pack-tap-hint-shop" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
+</div>
+</div>
+
+<div class="pack-shop-slide">
+<div class="pack-container">
+<div id="pack-tile-premium" class="pack-card premium tappable" onclick="handlePackTap('premium')">
+<span class="pack-badge-top">Pacchetto Premium</span>
+<img id="pack-premium-img" class="pack-logo-img" src="" alt="Premium Pack">
+<div>
+<div class="pack-title" style="color: var(--brand-silver); text-shadow: 0 0 10px rgba(200,210,220,.65);">Premium Pack</div>
+<div class="pack-desc">Contiene 5 Carte Base casuali | Costo: 15 Punti</div>
+</div>
+</div>
+<p id="pack-tap-hint-premium" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
+</div>
+</div>
+
+<div class="pack-shop-slide">
+<div class="pack-container">
+<div id="pack-tile-code" class="pack-card code tappable" onclick="handlePackTap('code')">
+<span class="pack-badge-top">Pacchetto Codice</span>
+<img id="pack-code-img" class="pack-logo-img" src="" alt="Code Pack">
+<div>
+<div class="pack-title" style="color: var(--matrix-green); text-shadow: 0 0 10px rgba(57,255,106,.7);">Code Pack</div>
+<div class="pack-desc">Contiene l'ultima Carta Special rilasciata | Costo: 30 Punti</div>
+</div>
+</div>
+<p id="pack-tap-hint-code" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
+</div>
+</div>
+
+</div>
+<div class="pack-shop-dots" id="pack-shop-dots"><span class="pack-shop-dot active"></span><span class="pack-shop-dot"></span><span class="pack-shop-dot"></span></div>
+</div>
 
 <div class="code-box-card">
 <h3>Riscatta Codice Speciale</h3>
@@ -1461,6 +1615,7 @@ line-height: 1.2;
 <div class="fanta-match-name" id="fanta-match-title">Tigers vs Volley Rivals</div>
 <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;" id="fanta-match-date-display">--/--/---- --:--</div>
 <div class="fanta-timer-badge" id="fanta-timer-display">Tempo rimanente: --:--:--</div>
+<button class="fanta-rules-btn" style="margin-top: 10px;" onclick="openFantaRulesModal()">📜 Regole fantaTigers</button>
 </div>
 
 <div class="fanta-section-card">
@@ -1480,11 +1635,11 @@ SCHIERA / MODIFICA CARTA
 <div class="fanta-section-title">
 <span>📊 Statistiche & Storico</span>
 </div>
-<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Consulta l'andamento dei voti di ogni giocatore nelle partite passate e rivedi i tuoi schieramenti, per decidere meglio chi schierare.</p>
-<button class="btn" style="font-size: 0.85rem; padding: 10px 18px;" onclick="openFantaStatsModal()">Apri Statistiche</button>
+<p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; text-align: center;">Consulta l'andamento dei voti di ogni giocatore nelle partite passate e rivedi i tuoi schieramenti, per decidere meglio chi schierare.</p>
+<button class="btn" style="font-size: 0.85rem; padding: 10px 18px; display: block; margin: 0 auto;" onclick="openFantaStatsModal()">Apri Statistiche</button>
 </div>
 
-<div class="fanta-section-card">
+<div class="fanta-section-card" id="fanta-section-leaderboard">
 <div class="fanta-section-title">
 <span>Classifica Globale <small id="fanta-cloud-status" style="font-size: 0.65rem; color: var(--text-muted);"></small></span>
 <span style="font-size: 0.75rem; color: var(--text-gold);" id="fanta-user-total-pts">0 Punti</span>
@@ -1525,14 +1680,18 @@ SCHIERA / MODIFICA CARTA
 
 <!-- Modal Statistiche & Storico fantaTigers -->
 <div id="fanta-stats-modal" class="modal" style="z-index: 255;">
-<div style="background: var(--bg-surface); border: 2px solid var(--bright-blue); border-radius: 16px; padding: 18px; width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; text-align: left;">
-<h3 style="color: var(--bright-blue); font-size: 1.05rem; text-transform: uppercase; text-align: center; margin-bottom: 12px;">📊 Statistiche fantaTigers</h3>
+<div class="modal-card-modern">
+<button class="modal-close-x" onclick="closeFantaStatsModal()" aria-label="Chiudi">×</button>
+<h3 class="modal-title-modern">📊 Statistiche fantaTigers</h3>
 
-<div style="display: flex; gap: 8px; margin-bottom: 14px;">
+<div class="profile-section" style="margin-top:14px">
+<div style="display: flex; gap: 8px;">
 <button id="fanta-stats-tab-votes" class="filter-btn active" style="flex: 1;" onclick="switchFantaStatsTab('votes')">Voti Carte</button>
 <button id="fanta-stats-tab-history" class="filter-btn" style="flex: 1;" onclick="switchFantaStatsTab('history')">I Miei Schieramenti</button>
 </div>
+</div>
 
+<div class="profile-section">
 <div id="fanta-stats-votes-panel">
 <p style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 8px;">Ordinati per media voto (solo partite con voti pubblicati). "N.C." = mai convocato.</p>
 <p id="fanta-stats-votes-empty" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0; display: none;"></p>
@@ -1543,8 +1702,9 @@ SCHIERA / MODIFICA CARTA
 <p id="fanta-stats-history-empty" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 20px 0; display: none;">Non hai ancora schierato nessuna carta in una partita conclusa con voti pubblicati.</p>
 <div id="fanta-stats-history-list"></div>
 </div>
+</div>
 
-<button class="btn" style="width: 100%; margin-top: 14px; font-size: 0.8rem; padding: 10px;" onclick="closeFantaStatsModal()">Chiudi</button>
+<button class="btn" style="width: 100%; margin-top: 6px; font-size: 0.8rem; padding: 10px;" onclick="closeFantaStatsModal()">Chiudi</button>
 </div>
 </div>
 
@@ -1582,6 +1742,55 @@ SCHIERA / MODIFICA CARTA
 </div>
 </div>
 
+<!-- Modal Conferma Acquisto Pacchetto -->
+<div id="pack-confirm-modal" class="modal">
+<div class="options-menu-box">
+<h3 id="pack-confirm-title" style="color: var(--bright-blue); font-size: 1.1rem; text-transform: uppercase;">Conferma Acquisto</h3>
+<p id="pack-confirm-text" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;"></p>
+<div style="display: flex; gap: 10px; margin-top: 5px;">
+<button class="options-btn" id="pack-confirm-btn" style="flex: 1; background: linear-gradient(135deg, var(--accent-orange), #ff9900); border: none; color: #000; font-weight: 800;" onclick="confirmPackPurchase()">Acquista</button>
+<button class="options-btn" style="flex: 1;" onclick="closePackConfirm()">Annulla</button>
+</div>
+</div>
+</div>
+
+<!-- Modal Info Streak Daily -->
+<div id="streak-info-modal" class="modal" style="z-index: 255;">
+<div class="modal-card-modern">
+<button class="modal-close-x" onclick="closeStreakInfoModal()" aria-label="Chiudi">×</button>
+<h3 class="modal-title-modern">🔥 Streak Daily — Premi</h3>
+<p class="modal-sub-modern">Apri il Pacchetto Daily ogni giorno senza saltarne uno per far crescere la streak.</p>
+<div class="profile-section">
+<div class="streak-info-row"><span class="streak-info-day">Giorni 1-2</span><span class="streak-info-desc">Pacchetto Daily: 3 Carte Base casuali. Ogni doppione trovato si converte in +1 Punto Tigers.</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorno 3</span><span class="streak-info-desc">🍀 Lucky Day: il Daily successivo ti garantisce almeno 1 Carta Mancante.</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorni 4-6</span><span class="streak-info-desc">Pacchetto Daily normale, come i giorni 1-2.</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorno 7</span><span class="streak-info-desc">🎁 Sblocchi la Weekly Chest: 3 Carte Base casuali + 2 Punti Tigers bonus.</span></div>
+</div>
+<p style="font-size: 0.68rem; color: var(--text-muted); margin-top: 10px;">Se salti un giorno la streak riparte da 1.</p>
+<button class="btn" style="width: 100%; margin-top: 10px; font-size: 0.8rem; padding: 10px;" onclick="closeStreakInfoModal()">Ho Capito</button>
+</div>
+</div>
+
+<!-- Modal Regole fantaTigers -->
+<div id="fanta-rules-modal" class="modal" style="z-index: 255;">
+<div class="modal-card-modern">
+<button class="modal-close-x" onclick="closeFantaRulesModal()" aria-label="Chiudi">×</button>
+<h3 class="modal-title-modern">📜 Regole fantaTigers</h3>
+<div class="profile-section">
+<ol class="fanta-rules-list">
+<li>Prima della chiusura schieramento, scegli <b>1 sola Carta Base</b> tra quelle che possiedi da schierare per il prossimo match.</li>
+<li>Puoi cambiare la carta schierata quante volte vuoi finché lo schieramento resta aperto (countdown in alto).</li>
+<li>A schieramento chiuso non è più possibile modificare la scelta fino alla partita successiva.</li>
+<li>Quando i voti della partita vengono pubblicati, la carta che hai schierato ti assegna <b>Punti fantaTigers</b> pari al voto ricevuto in quella partita.</li>
+<li>Se non schieri nessuna carta entro la chiusura, non guadagni punti per quel match.</li>
+<li>I Punti fantaTigers si sommano partita dopo partita e determinano la tua posizione in <b>Classifica Globale</b>.</li>
+<li>Consulta le Statistiche fantaTigers per vedere la media voto di ogni carta e il tuo storico schieramenti, utile per scegliere chi convocare.</li>
+</ol>
+</div>
+<button class="btn" style="width: 100%; margin-top: 10px; font-size: 0.8rem; padding: 10px;" onclick="closeFantaRulesModal()">Ho Capito</button>
+</div>
+</div>
+
 <!-- Modal Menu Opzioni -->
 <div id="menu-modal" class="modal">
 <div class="options-menu-box">
@@ -1596,9 +1805,10 @@ SCHIERA / MODIFICA CARTA
 
 <!-- Modal Le Mie Statistiche (profilo generale) -->
 <div id="profile-stats-modal" class="modal" style="z-index: 255;">
-<div style="background: var(--bg-surface); border: 2px solid var(--brand-silver); border-radius: 16px; padding: 18px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; text-align: left;">
-<h3 style="color: var(--brand-silver); font-size: 1.05rem; text-transform: uppercase; text-align: center; margin-bottom: 4px;">📊 Le Mie Statistiche</h3>
-<p id="profile-stats-since" style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-bottom: 14px;"></p>
+<div class="modal-card-modern">
+<button class="modal-close-x" onclick="closeProfileStatsModal()" aria-label="Chiudi">×</button>
+<h3 class="modal-title-modern">📊 Le Mie Statistiche</h3>
+<p id="profile-stats-since" class="modal-sub-modern"></p>
 <div id="profile-stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
 <button class="btn" style="width: 100%; margin-top: 16px; font-size: 0.8rem; padding: 10px;" onclick="closeProfileStatsModal()">Chiudi</button>
 </div>
@@ -1609,14 +1819,20 @@ SCHIERA / MODIFICA CARTA
 <div style="background: var(--bg-surface); border: 2px solid var(--accent-orange); border-radius: 16px; padding: 20px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; text-align: left;">
 <h3 style="color: var(--accent-orange); font-size: 1.05rem; text-transform: uppercase; margin-bottom: 12px; text-align: center;">⚙️ Pannello Admin</h3>
 
-<div id="admin-password-section">
-<label class="admin-form-label">Password Admin</label>
-<input type="password" id="admin-password-input" class="admin-input" placeholder="Inserisci password">
-<p id="admin-password-error" style="color: var(--danger-red); font-size: 0.75rem; margin-top: 6px; min-height: 14px;"></p>
-<button class="btn btn-orange" style="margin-top: 6px; font-size: 0.85rem; padding: 10px;" onclick="checkAdminPassword()">Sblocca</button>
+<div id="admin-password-section" style="text-align: center;">
+<p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">Accedi con l'account Google autorizzato per gestire partite, voti e stagione.</p>
+<button class="btn" id="admin-google-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; color: #1f1f1f; font-weight: 700;" onclick="adminGoogleSignIn()">
+<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.6 29.3 35.5 24 35.5c-6.9 0-12.5-5.6-12.5-12.5S17.1 10.5 24 10.5c3.2 0 6.1 1.2 8.3 3.2l6-6C34.6 4 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22 22-9.8 22-22c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.6 15.9 18.9 13 24 13c3.2 0 6.1 1.2 8.3 3.2l6-6C34.6 4 29.6 2 24 2 15.9 2 8.9 6.6 6.3 14.7z"/><path fill="#4CAF50" d="M24 46c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.6 37.4 26.9 38.5 24 38.5c-5.3 0-9.7-2.9-11.3-7.5l-6.6 5.1C8.9 41.4 15.9 46 24 46z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.5l6.6 5.4C40.1 36.6 44 30.8 44 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+Accedi con Google
+</button>
+<p id="admin-password-error" style="color: var(--danger-red); font-size: 0.75rem; margin-top: 10px; min-height: 14px;"></p>
 </div>
 
 <div id="admin-form-section" style="display: none;">
+<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.05); border-radius: 10px; padding: 8px 10px; margin-bottom: 14px;">
+<span id="admin-logged-as" style="font-size: 0.68rem; color: var(--text-muted);"></span>
+<button class="social-btn" style="padding: 5px 10px; font-size: 0.65rem;" onclick="adminSignOut()">Esci</button>
+</div>
 <label class="admin-form-label">Titolo Partita</label>
 <input type="text" id="admin-match-title" class="admin-input" placeholder="Es: Tigers vs Bears - Giornata 2">
 
@@ -1658,9 +1874,9 @@ SCHIERA / MODIFICA CARTA
 
 <!-- Modal Lista Trofei -->
 <div id="trophies-modal" class="modal" style="z-index: 250;">
-<div style="background: var(--bg-surface); border: 2px solid var(--bright-blue); border-radius: 16px; padding: 20px; width: 100%; max-width: 340px; text-align: center; display: flex; flex-direction: column; align-items: center; max-height: 80vh;">
-<h3 style="color: var(--bright-blue); font-size: 1.1rem; text-transform: uppercase; margin-bottom: 4px;">Trofei & Titoli</h3>
-<p style="font-size: 0.75rem; color: var(--text-muted);">Tocca un trofeo per scoprirne i dettagli</p>
+<div class="modal-card-modern gold" style="text-align:center; display:flex; flex-direction:column; align-items:center; max-width:340px;">
+<h3 class="modal-title-modern">🏆 Trofei & Titoli</h3>
+<p class="modal-sub-modern" style="margin-bottom:0;">Tocca un trofeo per scoprirne i dettagli</p>
 <div id="trophies-list" class="trophy-list"></div>
 </div>
 <div class="bottom-back-popup">
@@ -1740,29 +1956,33 @@ Descrizione trofeo
 </div>
 
 <nav>
-<button class="nav-btn active" onclick="switchTab('home', this)">
-<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-Home
-</button>
-<button class="nav-btn" onclick="switchTab('shop', this)">
-<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-Negozio
-</button>
-<button class="nav-btn" onclick="switchTab('collection', this)">
-<svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-Collezione
-</button>
-<button class="nav-btn" onclick="switchTab('fantaTigers', this)">
-<svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
-fantaTigers
-</button>
+<button class="nav-btn active" onclick="switchTab('home', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</button>
+<button class="nav-btn" onclick="switchTab('collection', this)"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Collezione</button>
+<button class="nav-btn" onclick="switchTab('shop', this)"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14-.14-.25-.25-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2-2 2-2 2-2-.9-2-2z"/></svg>Negozio</button>
+<button class="nav-btn" onclick="switchTab('fantaTigers', this)"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>fantaTigers</button>
 </nav>
+<div id="drawer-scrim" class="drawer-scrim" onclick="closeSideDrawer()"></div>
+<aside id="side-drawer" class="side-drawer" aria-label="Menu laterale">
+  <div class="drawer-head"><img id="drawer-logo" src="" alt="Tigers"><div><div class="drawer-title">Tiger Cards</div><div class="drawer-sub">Il tuo spazio Tigers</div></div></div>
+  <button class="drawer-btn primary" onclick="openProfilePage()">👤 Profilo & Codice Amico</button>
+  <button class="drawer-btn" onclick="openTrophiesModal();closeSideDrawer()">🏆 Trofei & Badge</button>
+  <button class="drawer-btn" onclick="openFriendsPanel();closeSideDrawer()">🤝 Amici & Scambi</button>
+  <button class="drawer-btn" onclick="openProfileStatsModal();closeSideDrawer()">📊 Statistiche</button>
+  <button class="drawer-btn" onclick="shareApp()">📣 Condividi Tiger Cards</button>
+  <button class="drawer-btn" onclick="installPWA()">📲 Installa App</button>
+  <button class="drawer-btn" onclick="openAdminPanel();closeSideDrawer()">⚙️ Area Admin</button>
+  <button class="drawer-btn danger" onclick="openResetConfirmation();closeSideDrawer()">♻️ Reset App</button>
+</aside>
+<div id="profile-page" class="tab-content"><div class="profile-page"><div class="profile-card"><img id="profile-avatar" class="profile-avatar" src="" alt="Logo Tigers"><div class="profile-name" id="profile-page-name">TigerFan</div><div class="friend-code">CODICE AMICO <strong id="profile-friend-code">------</strong> <button class="social-btn" style="flex:none;padding:5px 7px" onclick="copyFriendCode()">COPIA</button></div><div class="profile-actions"><button class="btn" onclick="editProfileName()">MODIFICA NOME</button><button class="btn btn-orange" onclick="shareProfile()">CONDIVIDI</button></div></div><div class="profile-section"><div class="section-title">🏅 Badge stagione</div><div id="season-badges" class="badge-grid"><span style="font-size:.7rem;color:var(--text-muted)">I tuoi podi fantaTigers appariranno qui.</span></div></div><div class="profile-section"><div class="section-title">🤝 Amici</div><div id="friends-list" style="font-size:.72rem;color:var(--text-muted)">Nessun amico aggiunto.</div><button class="btn" style="margin-top:10px;font-size:.75rem;padding:10px" onclick="openFriendsPanel()">GESTISCI AMICI & SCAMBI</button></div><div class="profile-section"><div class="section-title">📈 Panoramica</div><div id="profile-page-stats" class="profile-stats-grid"></div></div></div></div>
+<div id="friends-modal" class="modal sheet-modal"><div class="options-menu-box"><button class="modal-close-x" onclick="closeFriendsPanel()">×</button><h3 style="color:var(--bright-blue);text-transform:uppercase;margin-bottom:8px">Amici & Scambi</h3><p style="font-size:.7rem;color:var(--text-muted);line-height:1.4">Usa il codice amico dell'altra persona. Non servono account.</p><div class="code-input-group"><input id="friend-code-input" class="code-input" maxlength="12" placeholder="CODICE AMICO"><button class="btn" onclick="addFriendByCode()">AGGIUNGI AMICO</button></div><div id="friends-panel-list" style="margin-top:14px"></div><hr style="border-color:rgba(255,255,255,.1);margin:14px 0"><div class="section-title">Scambio carta</div><select id="trade-offer-card" class="filter-select"></select><select id="trade-want-card" class="filter-select"></select><button class="btn btn-orange" onclick="sendTradeRequest()">INVIA PROPOSTA</button><div id="trade-status" class="code-message"></div><div id="trade-inbox" style="margin-top:12px"></div><button class="btn" style="margin-top:12px" onclick="closeFriendsPanel()">CHIUDI</button></div></div>
+
 
 <!-- ========================================== -->
 <!-- FIREBASE (per la Classifica Globale condivisa tra tutti i dispositivi) -->
 <!-- ========================================== -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 <script>
 // ==========================================
@@ -1782,11 +2002,13 @@ appId: "1:311565843395:web:5ebd065c1d0d384bc79b76"
 
 let db = null;
 let firebaseReady = false;
+let fbAuth = null;
 
 try {
 if (firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("INCOLLA_QUI") === -1) {
 firebase.initializeApp(firebaseConfig);
 db = firebase.firestore();
+fbAuth = firebase.auth();
 firebaseReady = true;
 } else {
 console.warn("Firebase non configurato: la Classifica Globale resterà solo locale finché non compili firebaseConfig.");
@@ -1795,6 +2017,19 @@ console.warn("Firebase non configurato: la Classifica Globale resterà solo loca
 console.error("Errore inizializzazione Firebase:", e);
 firebaseReady = false;
 }
+
+// ==========================================
+// ACCESSO PANNELLO ADMIN (Google Sign-In)
+// Inserisci qui sotto l'indirizzo/gli indirizzi Gmail delle persone autorizzate
+// ad accedere al Pannello Admin (una email per riga tra virgolette, separate da virgola).
+// ATTENZIONE: questo elenco serve solo per l'interfaccia (mostra subito un errore
+// se l'account non è autorizzato). La VERA protezione dei dati deve essere impostata
+// nelle Firestore Security Rules della Console Firebase, usando la stessa lista
+// (vedi le istruzioni fornite insieme a questo aggiornamento).
+// ==========================================
+const ADMIN_ALLOWED_EMAILS = [
+"INSERISCI_QUI_LA_TUA_EMAIL_GMAIL@gmail.com"
+];
 
 // ==========================================
 // CONFIGURAZIONE FANTATIGERS (PARTITA CORRENTE)
@@ -1834,6 +2069,9 @@ const PACK_SPECIAL_IMAGE_PATH = "app_img/special_pack.png";
 // Immagine del "Pacchetto Streak" (bonus dei 5 giorni consecutivi): cambia questo
 // percorso per usare la tua grafica, esattamente come per gli altri pacchetti.
 const PACK_STREAK_IMAGE_PATH = "app_img/streak_pack.png";
+// Immagini del negozio: Premium Pack (15 punti) e Code Pack (30 punti, ex Special Ticket).
+const PACK_PREMIUM_IMAGE_PATH = "app_img/premium_pack.png";
+const PACK_CODE_IMAGE_PATH = "app_img/code_pack.png";
 
 // DIRECTORY IMMAGINI RETRO DELLE CARTE
 const BACK_CARD_BASE_PATH = "app_img/back_base.png";
@@ -1846,6 +2084,8 @@ const PACK_BONUS_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w
 const PACK_SPECIAL_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%23231d42' stroke='%23ffd700' stroke-width='3'/><polygon points='50,20 63,45 90,45 68,62 77,88 50,72 23,88 32,62 10,45 37,45' fill='%23ffd700'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffd700' text-anchor='middle'>SPECIAL PACK</text></svg>";
 const PACK_STREAK_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231a2332' stroke='%23ffffff' stroke-width='3'/><path d='M50 22 C 40 40, 30 48, 35 65 C 38 80, 50 88, 50 88 C 50 88, 62 80, 65 65 C 70 48, 60 40, 50 22 Z' fill='%23ff7300'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffffff' text-anchor='middle'>STREAK PACK</text></svg>";
 const PACK_LOCKED_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%231e293b' stroke='%23475569' stroke-width='3'/><text x='50' y='75' font-size='32' font-weight='bold' fill='%2364748b' text-anchor='middle'>?</text><text x='50' y='115' font-size='8' font-weight='bold' fill='%2394a3b8' text-anchor='middle'>COMING SOON</text></svg>";
+const PACK_PREMIUM_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%23262b30' stroke='%23c8d2dc' stroke-width='3'/><polygon points='50,25 60,50 85,50 65,65 73,90 50,75 27,90 35,65 15,50 40,50' fill='%23c8d2dc'/><text x='50' y='118' font-size='9' font-weight='bold' fill='%23ffffff' text-anchor='middle'>PREMIUM PACK</text></svg>";
+const PACK_CODE_PLACEHOLDER = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect width='100' height='140' rx='10' fill='%2303170a' stroke='%2339ff6a' stroke-width='3'/><polygon points='50,20 63,45 90,45 68,62 77,88 50,72 23,88 32,62 10,45 37,45' fill='%2339ff6a'/><text x='50' y='118' font-size='10' font-weight='bold' fill='%2339ff6a' text-anchor='middle'>CODE PACK</text></svg>";
 
 const BACK_CARD_BASE_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%231f4d78' stroke='%234f86c4' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/><text x='90' y='120' font-size='18' font-weight='900' fill='%23ffffff' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='3'>TIGER CARDS</text></svg>";
 const BACK_CARD_SPECIAL_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 240'><rect width='180' height='240' rx='10' fill='%2312213a' stroke='%23ffd700' stroke-width='4'/><rect x='10' y='10' width='160' height='220' rx='6' fill='none' stroke='%23ffd700' stroke-width='1.5' stroke-dasharray='6,4'/><text x='90' y='120' font-size='15' font-weight='900' fill='%23ffd700' text-anchor='middle' transform='rotate(-90 90 120)' letter-spacing='2'>TIGER CARDS SPECIAL</text></svg>";
@@ -1985,7 +2225,8 @@ let leaderboardUnsubscribe = null;
 // database, esattamente come già accade per il resto dell'app senza autenticazione.
 // Cambiala pure con una password a piacere.
 // ==========================================
-const ADMIN_PASSWORD = "TigersAdmin2026";
+// L'accesso al Pannello Admin ora avviene tramite Google Sign-In (vedi ADMIN_ALLOWED_EMAILS
+// e le funzioni adminGoogleSignIn/adminSignOut più in basso), non più con una password fissa.
 let adminCurrentMatchId = null;
 
 function generateUserId() {
@@ -2055,6 +2296,18 @@ bonusImg.onerror = function() { this.src = PACK_BONUS_PLACEHOLDER; };
 
 if (lockedImg) {
 lockedImg.src = PACK_LOCKED_PLACEHOLDER;
+}
+
+const premiumImg = document.getElementById('pack-premium-img');
+if (premiumImg) {
+premiumImg.src = PACK_PREMIUM_IMAGE_PATH || PACK_PREMIUM_PLACEHOLDER;
+premiumImg.onerror = function() { this.src = PACK_PREMIUM_PLACEHOLDER; };
+}
+
+const codeImg = document.getElementById('pack-code-img');
+if (codeImg) {
+codeImg.src = PACK_CODE_IMAGE_PATH || PACK_CODE_PLACEHOLDER;
+codeImg.onerror = function() { this.src = PACK_CODE_PLACEHOLDER; };
 }
 }
 
@@ -2168,12 +2421,14 @@ timerDaily.innerText = "Il tuo pacchetto giornaliero è pronto!";
 const btnShop = document.getElementById('btn-shop');
 const missingBaseCards = BASE_PLAYERS.filter(p => !state.inventory[p.id]);
 
+if (btnShop) {
 if (missingBaseCards.length === 0) {
 btnShop.disabled = true;
 btnShop.innerText = "COLLEZIONE BASE COMPLETA";
 } else {
 btnShop.disabled = state.points < 5;
 btnShop.innerText = "ACQUISTA CON 5 PUNTI";
+}
 }
 }
 
@@ -2491,25 +2746,21 @@ alert("🏆 È iniziata una nuova stagione fantaTigers! Il punteggio di tutti è
 
 function openAdminPanel() {
 document.getElementById('admin-modal').classList.add('active');
+document.getElementById('admin-password-error').innerText = '';
+const user = fbAuth && fbAuth.currentUser;
+if (user && ADMIN_ALLOWED_EMAILS.includes(user.email)) {
+document.getElementById('admin-password-section').style.display = 'none';
+document.getElementById('admin-form-section').style.display = 'block';
+document.getElementById('admin-logged-as').innerText = '👤 ' + user.email;
+populateAdminForm();
+} else {
 document.getElementById('admin-password-section').style.display = 'block';
 document.getElementById('admin-form-section').style.display = 'none';
-document.getElementById('admin-password-input').value = '';
-document.getElementById('admin-password-error').innerText = '';
+}
 }
 
 function closeAdminPanel() {
 document.getElementById('admin-modal').classList.remove('active');
-}
-
-function checkAdminPassword() {
-const pwd = document.getElementById('admin-password-input').value;
-if (pwd === ADMIN_PASSWORD) {
-document.getElementById('admin-password-section').style.display = 'none';
-document.getElementById('admin-form-section').style.display = 'block';
-populateAdminForm();
-} else {
-document.getElementById('admin-password-error').innerText = 'Password errata, riprova.';
-}
 }
 
 // ---------- Pannello Admin: gestione form partita ----------
@@ -3155,6 +3406,16 @@ sealedImg.src = PACK_STREAK_IMAGE_PATH || PACK_STREAK_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_STREAK_PLACEHOLDER; };
 sealedTitle.innerText = "PACCHETTO STREAK";
 sealedCard.className = "pack-card streak";
+} else if (type === 'premium') {
+sealedImg.src = (typeof PACK_PREMIUM_IMAGE_PATH !== 'undefined' && PACK_PREMIUM_IMAGE_PATH) || PACK_PREMIUM_PLACEHOLDER;
+sealedImg.onerror = function() { this.src = PACK_PREMIUM_PLACEHOLDER; };
+sealedTitle.innerText = "PREMIUM PACK";
+sealedCard.className = "pack-card premium";
+} else if (type === 'code') {
+sealedImg.src = (typeof PACK_CODE_IMAGE_PATH !== 'undefined' && PACK_CODE_IMAGE_PATH) || PACK_CODE_PLACEHOLDER;
+sealedImg.onerror = function() { this.src = PACK_CODE_PLACEHOLDER; };
+sealedTitle.innerText = "CODE PACK";
+sealedCard.className = "pack-card code";
 } else {
 sealedImg.src = PACK_BONUS_IMAGE_PATH || PACK_BONUS_PLACEHOLDER;
 sealedImg.onerror = function() { this.src = PACK_BONUS_PLACEHOLDER; };
@@ -3621,6 +3882,191 @@ initMatchConfigSync();
 initSeasonSync();
 syncFantaScoreToCloud();
 };
+
+/* ===== TIGER CARDS v6 — GAMEPLAY / SOCIAL / PWA ===== */
+(function(){
+  const V6_KEY='tigerCardsState_v6';
+  const OLD_KEY='tigerCardsState_v5';
+  const logoPath=(typeof HEADER_LOGO_PATH!=='undefined'&&HEADER_LOGO_PATH)?HEADER_LOGO_PATH:(typeof LOGO_PLACEHOLDER!=='undefined'?LOGO_PLACEHOLDER:'');
+  const legacyOpenPack=window.openPack;
+  const legacyRenderCollection=window.renderCollection;
+  const legacyRenderLeaderboard=window.renderLeaderboard;
+  const legacySync=window.syncFantaScoreToCloud;
+  const friendNames=['Scout','Tifoso','Mister','Tiger'];
+  let lbFilter='global';
+  let deferredInstallPrompt=null;
+  let newsIndex=0;
+  const news=[
+    'Nuova stagione Tiger Cards: colleziona, mastera e scala la classifica.',
+    'Mastera una Base trovandola 5 volte per sbloccare la sua foil esclusiva.',
+    'Weekly Chest: 3 carte Base random + 2 Punti Tigers ogni 7 giorni.',
+    'Lucky Day: il prossimo Daily garantirà almeno una carta Base mancante.',
+    'Condividi le tue carte e sfida i tuoi amici tramite Codice Amico.'
+  ];
+  function ensureV6State(){
+    state.xp=state.xp||0; state.level=state.level||1; state.weeklyPoints=state.weeklyPoints||0;
+    state.friendCode=state.friendCode||('TGR-'+Math.random().toString(36).slice(2,6).toUpperCase()+Math.floor(10+Math.random()*90));
+    state.friends=Array.isArray(state.friends)?state.friends:[]; state.friendRequests=state.friendRequests||{};
+    state.tradeHistory=Array.isArray(state.tradeHistory)?state.tradeHistory:[]; state.seasonBadges=Array.isArray(state.seasonBadges)?state.seasonBadges:[];
+    state.luckyDayNextDaily=!!state.luckyDayNextDaily; state.weeklyChestAvailable=!!state.weeklyChestAvailable;
+    state.dailyCycleDay=state.dailyCycleDay||0; state.lastWeeklyChestDate=state.lastWeeklyChestDate||null;
+    state.stats.premiumPacksOpened=state.stats.premiumPacksOpened||0; state.stats.trades=state.stats.trades||0;
+    state.stats.socialShares=state.stats.socialShares||0;
+    localStorage.setItem(V6_KEY,JSON.stringify(state));
+  }
+  function xpForNext(){return 100+(state.level-1)*50}
+  function addXP(n){/* Livelli disattivati per ora su richiesta: nessun incremento di livello, nessun toast. */}
+  function toast(msg){let t=document.getElementById('v6-toast');if(!t){t=document.createElement('div');t.id='v6-toast';t.style.cssText='position:fixed;left:50%;bottom:95px;transform:translateX(-50%);z-index:3000;background:#fff;color:#071522;padding:10px 14px;border-radius:10px;font:800 .7rem var(--font-heading);box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:.2s;max-width:88%;text-align:center';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(()=>t.style.opacity='0',2200)}
+  function getFriendIds(){return new Set((state.friends||[]).map(x=>x.id||x))}
+  function publishFriendProfile(){if(!firebaseReady||!db)return; db.collection('friendProfiles').doc(state.fantaUserId).set({name:state.fantaUserName||'TigerFan',friendCode:state.friendCode,points:state.fantaTotalPoints||0,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{});}
+  window.openSideDrawer=function(){document.getElementById('side-drawer').classList.add('open');document.getElementById('drawer-scrim').classList.add('open')};
+  window.closeSideDrawer=function(){document.getElementById('side-drawer').classList.remove('open');document.getElementById('drawer-scrim').classList.remove('open')};
+  window.openProfilePage=function(){closeSideDrawer();document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));document.getElementById('profile-page').classList.add('active');renderProfilePage();document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'))};
+  window.editProfileName=function(){const n=prompt('Come vuoi chiamarti nella community?',state.fantaUserName||'TigerFan');if(n&&n.trim()){state.fantaUserName=n.trim().slice(0,18);saveState();publishFriendProfile();renderProfilePage();initFantaTigers();}};
+  window.copyFriendCode=function(){navigator.clipboard?.writeText(state.friendCode);toast('Codice amico copiato: '+state.friendCode)};
+  window.shareProfile=function(){const text='Sono '+state.fantaUserName+' su Tiger Cards! Il mio Codice Amico è '+state.friendCode+'.';shareText(text,'Il mio profilo Tiger Cards')};
+  window.shareText=function(text,title){state.stats.socialShares=(state.stats.socialShares||0)+1;saveState();if(navigator.share){navigator.share({title:title||'Tiger Cards',text:text}).catch(()=>{})}else{navigator.clipboard?.writeText(text);toast('Testo copiato per la condivisione!')}};
+  window.shareApp=function(){shareText('Scopri Tiger Cards, la collezione dei Volley Lab Settesoli Tigers!','Tiger Cards');closeSideDrawer()};
+  window.renderProfilePage=function(){ensureV6State();document.getElementById('profile-avatar').src=logoPath;document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-page-name').textContent=state.fantaUserName;document.getElementById('profile-friend-code').textContent=state.friendCode;document.getElementById('season-badges').innerHTML=(state.seasonBadges||[]).length?state.seasonBadges.map(b=>'<span class="season-badge">'+b+'</span>').join(''):'<span style="font-size:.7rem;color:var(--text-muted)">I tuoi podi fantaTigers appariranno qui.</span>';const f=(state.friends||[]);document.getElementById('friends-list').innerHTML=f.length?f.map(x=>'<div style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)">🤝 '+(x.name||x.id||x)+'</div>').join(''):'Nessun amico aggiunto.';document.getElementById('profile-page-stats').innerHTML='<div class="stat-tile"><div class="stat-tile-value">'+(state.points||0)+'</div><div class="stat-tile-label">Punti Tigers</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.fantaTotalPoints||0)+'</div><div class="stat-tile-label">Fanta PT</div></div><div class="stat-tile"><div class="stat-tile-value">'+(Object.values(state.inventory||{}).reduce((a,b)=>a+b,0))+'</div><div class="stat-tile-label">Carte Totali</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.stats.trades||0)+'</div><div class="stat-tile-label">Scambi</div></div>'};
+  window.openFriendsPanel=function(){ensureV6State();document.getElementById('friends-modal').classList.add('active');renderFriendsPanel();populateTradeSelects()};
+  window.closeFriendsPanel=function(){document.getElementById('friends-modal').classList.remove('active')};
+  function renderFriendsPanel(){const el=document.getElementById('friends-panel-list');const list=state.friends||[];el.innerHTML=list.length?list.map((x,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:8px;margin:5px 0"><span>🤝 '+(x.name||x.id)+'</span><button class="social-btn" onclick="removeFriend('+i+')">RIMUOVI</button></div>').join(''):'<div style="font-size:.7rem;color:var(--text-muted)">Aggiungi il primo amico.</div>';renderTradeInbox()}
+  window.removeFriend=function(i){state.friends.splice(i,1);saveState();renderFriendsPanel();renderProfilePage()};
+  window.addFriendByCode=async function(){const code=document.getElementById('friend-code-input').value.trim().toUpperCase();if(!code)return;if(code===state.friendCode){toast('Questo è il tuo codice.');return}if(!firebaseReady||!db){toast('Firebase non disponibile: impossibile cercare amici.');return}const snap=await db.collection('friendProfiles').where('friendCode','==',code).limit(1).get();if(snap.empty){toast('Codice amico non trovato.');return}const d=snap.docs[0].data(),id=snap.docs[0].id;if((state.friends||[]).some(x=>(x.id||x)===id)){toast('È già tuo amico.');return}state.friends.push({id,name:d.name||'TigerFan',friendCode:code});saveState();renderFriendsPanel();renderProfilePage();document.getElementById('friend-code-input').value='';toast('Amico aggiunto!')};
+  function populateTradeSelects(){const offer=document.getElementById('trade-offer-card'),want=document.getElementById('trade-want-card');offer.innerHTML='';want.innerHTML='';BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>offer.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Offro: '+p.name+' x'+state.inventory[p.id]+'</option>'));BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>want.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Cerco: '+p.name+'</option>'));if(!offer.options.length)offer.innerHTML='<option>Nessuna carta disponibile</option>';if(!want.options.length)want.innerHTML='<option>Nessuna carta disponibile</option>'}
+  window.sendTradeRequest=async function(){if(!firebaseReady||!db){toast('Firebase non disponibile.');return}if(!state.friends.length){toast('Aggiungi prima un amico.');return}const offer=+document.getElementById('trade-offer-card').value,want=+document.getElementById('trade-want-card').value;if(!offer||!want){toast('Seleziona due carte.');return}const target=state.friends[0];if(state.inventory[offer]<1){toast('Non possiedi la carta offerta.');return}await db.collection('trades').add({fromId:state.fantaUserId,fromName:state.fantaUserName,toId:target.id,offerCardId:offer,wantCardId:want,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});toast('Proposta inviata a '+target.name+'.');document.getElementById('trade-status').textContent='Proposta inviata.'};
+  async function renderTradeInbox(){const el=document.getElementById('trade-inbox');if(!firebaseReady||!db){el.innerHTML='';return}const snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();el.innerHTML='<div class="section-title">Proposte ricevute</div>';snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\')">RIFIUTA</button></div>';el.appendChild(box)})}
+  window.rejectTrade=async function(id){if(firebaseReady&&db)await db.collection('trades').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});renderFriendsPanel()};
+  window.acceptTrade=async function(id){if(!firebaseReady||!db)return;const ref=db.collection('trades').doc(id),snap=await ref.get();if(!snap.exists)return;const d=snap.data();if(d.status!=='pending')return;if((state.inventory[d.wantCardId]||0)<1){toast('Non possiedi la carta richiesta.');return}state.inventory[d.wantCardId]-=1;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp(),recipientApplied:true});saveState();toast('Scambio completato!');renderFriendsPanel();renderCollection()};
+  function listenTradeResults(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('trades').where('fromId','==',state.fantaUserId).where('status','==','accepted').limit(20).onSnapshot(snap=>{snap.docChanges().forEach(ch=>{if(ch.type!=='added'&&ch.type!=='modified')return;const d=ch.doc.data();if(d.senderApplied)return;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)-1;if(state.inventory[d.offerCardId]<0)state.inventory[d.offerCardId]=0;state.inventory[d.wantCardId]=(state.inventory[d.wantCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);localStorage.setItem(V6_KEY,JSON.stringify(state));ch.doc.ref.update({senderApplied:true}).catch(()=>{});toast('🤝 Scambio ricevuto: '+(BASE_PLAYERS.find(p=>p.id===d.wantCardId)?.name||'carta'));renderCollection();renderProfilePage();})})} 
+
+  function addMasterMarkup(item,card,count){if(card.type!=='base'||!count)return;const mastered=count>=5;if(mastered){const b=document.createElement('span');b.className='mastered-badge';b.textContent='MASTERED';item.appendChild(b)}else{const wrap=document.createElement('div');wrap.className='mastery-wrap';wrap.innerHTML='<div class="mastery-track"><div class="mastery-fill" style="width:'+Math.min(100,count/5*100)+'%"></div></div><div class="mastery-label">MASTER '+count+'/5</div>';item.appendChild(wrap)}}
+  window.renderCollection=function(){legacyRenderCollection();const grid=document.getElementById('collection-grid');grid.querySelectorAll('.card-item').forEach((item,i)=>{const name=item.querySelector('.card-name')?.textContent;if(!name||name==='???')return;const card=ALL_CARDS.find(c=>c.name===name);if(card)addMasterMarkup(item,card,state.inventory[card.id]||0);if(card&&card.type==='base'&&state.inventory[card.id]>=5)item.classList.add('mastered-card')});};
+  window.openPack=async function(type){ensureV6State();if(type==='premium'){if(state.points<15){toast('Servono 15 Punti Tigers.');return}state.points-=15;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.premiumPacksOpened=(state.stats.premiumPacksOpened||0)+1;const pulled=[];for(let i=0;i<5;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(10);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(20);saveState();checkTrophies();setupPackModal('premium','Premium Pack',pulled,'5 carte Base casuali. I doppioni valgono +1 Punto Tigers.');return}
+    if(type==='streakBonus'){if(!state.weeklyChestAvailable&&!state.streakBonusAvailable){return}state.weeklyChestAvailable=false;state.streakBonusAvailable=false;state.stats.streakCycleCount=0;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.points+=2;const pulled=[];for(let i=0;i<3;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(40);saveState();setupPackModal('streakBonus','Weekly Chest',pulled,'Weekly Chest: 3 carte Base random + 2 Punti Tigers.');return}
+    if(type==='daily'){
+      if(state.lastDailyDate===getTodayString())return;
+      const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const ys=yesterday.toISOString().slice(0,10);if(state.lastDailyDate===ys){state.stats.dailyStreak=(state.stats.dailyStreak||0)+1;state.stats.dailyCycleDay=(state.stats.dailyCycleDay||0)+1}else{state.stats.dailyStreak=1;state.stats.dailyCycleDay=1}state.stats.longestStreak=Math.max(state.stats.longestStreak||0,state.stats.dailyStreak);state.lastDailyDate=getTodayString();state.stats.packsOpened=(state.stats.packsOpened||0)+1;const pulled=[];let dup=0;let guaranteed=false;for(let i=0;i<3;i++){let p;if(state.luckyDayNextDaily&&!guaranteed){const missing=BASE_PLAYERS.filter(x=>!state.inventory[x.id]);p=missing.length?missing[Math.floor(Math.random()*missing.length)]:BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];guaranteed=true}else p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];const isDup=!!state.inventory[p.id];if(isDup){dup++;state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(8);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup})}state.luckyDayNextDaily=false;if(state.stats.dailyCycleDay===3)state.luckyDayNextDaily=true;if(state.stats.dailyCycleDay>=7){state.weeklyChestAvailable=true;state.stats.dailyCycleDay=0}saveState();checkTrophies();setupPackModal('daily','Pacchetto Daily',pulled,(guaranteed?'🍀 Lucky Day: almeno una carta mancante garantita. ':'')+(dup?'Doppioni convertiti in +'+dup+' Punti Tigers.':'Nessun doppione!'));return}
+    return legacyOpenPack(type);
+  };
+  // Code Pack (30 punti): eroga direttamente l'ultima Carta Special rilasciata,
+  // aggiungendola alla collezione. Nessun codice coinvolto: è un pacchetto come gli altri.
+  window.buyCodePack=function(){ensureV6State();if((state.points||0)<30){toast('Servono 30 Punti Tigers.');return}if(!SPECIAL_PLAYERS.length){toast('Nessuna carta Special disponibile al momento.');return}const sp=SPECIAL_PLAYERS[SPECIAL_PLAYERS.length-1];const isDup=!!state.inventory[sp.id];state.points-=30;state.inventory[sp.id]=(state.inventory[sp.id]||0)+1;saveState();checkTrophies();setupPackModal('code','Code Pack',[{player:sp,isDup}],isDup?'Doppione! '+sp.name+' era già nella tua collezione.':'⭐ '+sp.name+' aggiunta alla tua collezione!');toast('Code Pack riscattato: '+sp.name+'!')};
+  window.buySpecialTicket=window.buyCodePack; // alias di compatibilità
+
+  // ===== Negozio: tap sul pacchetto -> popup di conferma (solo se si hanno punti sufficienti) =====
+  const PACK_SHOP_CONFIG={
+    shop:{title:'Pacchetto Bonus',cost:5,desc:'Riceverai 1 Carta Base che non possiedi ancora.'},
+    premium:{title:'Premium Pack',cost:15,desc:'Riceverai 5 Carte Base casuali. I doppioni valgono +1 Punto Tigers.'},
+    code:{title:'Code Pack',cost:30,desc:'Riceverai subito l\'ultima Carta Special rilasciata, aggiunta alla tua collezione.'}
+  };
+  let pendingPackKind=null;
+  window.handlePackTap=function(kind){
+    ensureV6State();
+    const cfg=PACK_SHOP_CONFIG[kind];if(!cfg)return;
+    if(kind==='shop'&&BASE_PLAYERS.filter(p=>!state.inventory[p.id]).length===0){toast('Possiedi già tutte le carte Base!');return}
+    if((state.points||0)<cfg.cost){toast('Servono '+cfg.cost+' Punti Tigers.');return}
+    pendingPackKind=kind;
+    document.getElementById('pack-confirm-title').innerText=cfg.title;
+    document.getElementById('pack-confirm-text').innerText='Vuoi acquistare "'+cfg.title+'" per '+cfg.cost+' Punti Tigers? '+cfg.desc;
+    document.getElementById('pack-confirm-modal').classList.add('active');
+  };
+  window.closePackConfirm=function(){document.getElementById('pack-confirm-modal').classList.remove('active');pendingPackKind=null};
+  window.confirmPackPurchase=function(){
+    const kind=pendingPackKind;closePackConfirm();
+    if(kind==='shop')openPack('shop');
+    else if(kind==='premium')openPack('premium');
+    else if(kind==='code')buyCodePack();
+  };
+  function refreshPackShopHints(){
+    ensureV6State();
+    const noMissingBase=BASE_PLAYERS.filter(p=>!state.inventory[p.id]).length===0;
+    Object.keys(PACK_SHOP_CONFIG).forEach(kind=>{
+      const hint=document.getElementById('pack-tap-hint-'+kind);if(!hint)return;
+      const cfg=PACK_SHOP_CONFIG[kind];const enough=(state.points||0)>=cfg.cost;
+      if(kind==='shop'&&noMissingBase){hint.textContent='Collezione Base completa!';hint.classList.add('disabled');return}
+      hint.textContent=enough?'✨ TOCCA PER ACQUISTARE ✨':('Servono '+cfg.cost+' Punti Tigers');
+      hint.classList.toggle('disabled',!enough);
+    });
+  }
+  const oldUpdateUI=window.updateUI;window.updateUI=function(){oldUpdateUI();refreshPackShopHints()};
+  // 7-day streak presentation
+  window.renderStreakTracker=function(){const row=document.getElementById('streak-flames-row'),gift=document.getElementById('streak-gift-btn');if(!row||!gift)return;row.innerHTML='';for(let i=1;i<=7;i++){const s=document.createElement('span');s.className='streak-flame'+(i<=Math.min(7,state.stats.dailyCycleDay||0)?' lit':'');s.textContent=i===7?'🎁':'🔥';row.appendChild(s)}const active=!!state.weeklyChestAvailable;gift.disabled=!active;gift.classList.toggle('active',active);gift.title=active?'Apri Weekly Chest':'Completa 7 Daily'};
+
+  window.openStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.add('active')};
+  window.closeStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.remove('active')};
+  window.openFantaRulesModal=function(){document.getElementById('fanta-rules-modal').classList.add('active')};
+  window.closeFantaRulesModal=function(){document.getElementById('fanta-rules-modal').classList.remove('active')};
+  // Leaderboard filters
+  function ensureLeaderboardControls(){const sec=document.getElementById('fanta-section-leaderboard');if(!sec||document.getElementById('leaderboard-controls'))return;const controls=document.createElement('div');controls.id='leaderboard-controls';controls.className='leaderboard-controls';[['global','Globale'],['friends','Amici'],['weekly','Settimanale'],['season','Stagione'],['alltime','All Time']].forEach(x=>{const b=document.createElement('button');b.className='lb-filter'+(x[0]==='global'?' active':'');b.dataset.filter=x[0];b.textContent=x[1];b.onclick=()=>{lbFilter=x[0];controls.querySelectorAll('.lb-filter').forEach(y=>y.classList.toggle('active',y===b));renderLeaderboard()};controls.appendChild(b)});const table=sec.querySelector('.leaderboard-table');sec.insertBefore(controls,table)}
+  window.renderLeaderboard=function(){ensureLeaderboardControls();legacyRenderLeaderboard();const tbody=document.getElementById('leaderboard-body');if(lbFilter==='global')return;let rows=[...(cloudLeaderboardCache!==null?cloudLeaderboardCache:[])];const ids=getFriendIds();if(lbFilter==='friends')rows=rows.filter(x=>ids.has(x.id)||x.id===state.fantaUserId);if(lbFilter==='weekly')rows.sort((a,b)=>(b.weeklyPoints||0)-(a.weeklyPoints||0));else if(lbFilter==='season')rows.sort((a,b)=>(b.seasonPoints??b.points??0)-(a.seasonPoints??a.points??0));else if(lbFilter==='alltime')rows.sort((a,b)=>(b.allTimePoints??b.points??0)-(a.allTimePoints??a.points??0));tbody.innerHTML='';rows.forEach((x,i)=>{const tr=document.createElement('tr');if(x.id===state.fantaUserId)tr.className='current-user-row';tr.innerHTML='<td class="leaderboard-rank">'+(i+1)+'</td><td>'+(x.name||'Giocatore')+(x.id===state.fantaUserId?' <small style="color:var(--bright-blue)">(TU)</small>':'')+'</td><td class="leaderboard-points">'+(lbFilter==='weekly'?(x.weeklyPoints||0):(lbFilter==='alltime'?(x.allTimePoints??x.points??0):(x.seasonPoints??x.points??0)))+' pt</td>';tbody.appendChild(tr)})};
+  window.syncFantaScoreToCloud=function(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('fantaLeaderboard').doc(state.fantaUserId).set({name:state.fantaUserName||'Giocatore',points:state.fantaTotalPoints||0,seasonPoints:state.fantaTotalPoints||0,allTimePoints:state.fantaTotalPoints||0,weeklyPoints:state.weeklyPoints||0,friendCode:state.friendCode,level:state.level||1,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{});publishFriendProfile()};
+  // Better stats: replace vote list renderer with richer player cards (no dynamic form)
+  window.renderFantaVoteStatsList=function(){const listEl=document.getElementById('fanta-stats-votes-list');if(!listEl)return;listEl.innerHTML='';const rows=BASE_PLAYERS.map(p=>{let vals=[];if(cloudLeaderboardCache!==null){};return p}).map(p=>{let total=0,n=0;/* stats come from match history loaded by existing function; keep UI stable */return {p,total,n}});BASE_PLAYERS.forEach(p=>{const inv=state.inventory[p.id]||0;const d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:10px;padding:9px;border-bottom:1px solid rgba(255,255,255,.07)';d.innerHTML='<div style="width:38px;height:52px;border-radius:6px;overflow:hidden;background:#071522;flex:none"><img src="'+p.image+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2"></div><div style="flex:1"><div style="font:800 .75rem var(--font-heading)">'+p.name+'</div><div style="font-size:.6rem;color:var(--text-muted)">In collezione: '+inv+' · '+(inv>=5?'MASTERED':'Master '+inv+'/5')+'</div><div class="mastery-track" style="margin-top:5px"><div class="mastery-fill" style="width:'+Math.min(100,inv/5*100)+'%"></div></div></div>';listEl.appendChild(d)})};
+  // Admin UI: require a session token + rate limit. This is still not true server security on a static client; Firestore rules remain authoritative.
+  // ===== Accesso Pannello Admin via Google Sign-In =====
+  window.adminGoogleSignIn = async function(){
+    if (!firebaseReady || !fbAuth) { document.getElementById('admin-password-error').textContent = 'Firebase non disponibile: impossibile accedere.'; return; }
+    document.getElementById('admin-password-error').textContent = '';
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await fbAuth.signInWithPopup(provider);
+      const email = result.user && result.user.email;
+      if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) {
+        document.getElementById('admin-password-error').textContent = 'Account non autorizzato (' + (email || '—') + ').';
+        await fbAuth.signOut();
+        return;
+      }
+      document.getElementById('admin-password-section').style.display = 'none';
+      document.getElementById('admin-form-section').style.display = 'block';
+      document.getElementById('admin-logged-as').innerText = '👤 ' + email;
+      populateAdminForm();
+    } catch (e) {
+      document.getElementById('admin-password-error').textContent = 'Accesso annullato o non riuscito.';
+    }
+  };
+  window.adminSignOut = function(){
+    if (firebaseReady && fbAuth) fbAuth.signOut();
+    document.getElementById('admin-form-section').style.display = 'none';
+    document.getElementById('admin-password-section').style.display = 'block';
+    document.getElementById('admin-password-error').textContent = '';
+  };
+  // Se l'utente aveva già effettuato l'accesso Google in una sessione precedente e riapre
+  // il pannello Admin, e non è (più) autorizzato, lo riportiamo automaticamente alla schermata di login.
+  if (firebaseReady && fbAuth) {
+    fbAuth.onAuthStateChanged(function(user){
+      const adminModal = document.getElementById('admin-modal');
+      if (!adminModal || !adminModal.classList.contains('active')) return;
+      if (!user || !ADMIN_ALLOWED_EMAILS.includes(user.email)) {
+        document.getElementById('admin-form-section').style.display = 'none';
+        document.getElementById('admin-password-section').style.display = 'block';
+      }
+    });
+  }
+  // PWA
+  window.installPWA=function(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.then(()=>{deferredInstallPrompt=null})}else toast('Se il browser lo consente, usa “Aggiungi a schermata Home”.')};
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e});
+  if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  // News rotator
+  function startNews(){
+    const track=document.getElementById('news-marquee-track');if(!track)return;
+    const content=news.join('   •   ');
+    // Il contenuto viene duplicato per ottenere un loop di scorrimento continuo e senza scatti (translateX(-50%)).
+    track.textContent='';
+    track.innerHTML='<span>'+content+'</span><span aria-hidden="true" style="margin-left:60px">'+content+'</span>';
+    // Velocità proporzionale alla lunghezza del testo, cosi' il ritmo resta leggibile qualunque sia il numero di news.
+    const dur=Math.max(14,Math.round(content.length*0.16));
+    track.style.animationDuration=dur+'s';
+  }
+  // Shop dots
+  function startShop(){const sc=document.getElementById('pack-shop-track'),dots=[...document.querySelectorAll('.pack-shop-dot')];if(!sc)return;sc.addEventListener('scroll',()=>{const i=Math.round(sc.scrollLeft/sc.clientWidth);dots.forEach((d,n)=>d.classList.toggle('active',n===i))},{passive:true})}
+  // Override switchTab to include profile and redraws.
+  const oldSwitch=window.switchTab;window.switchTab=function(tabId,el){closeSideDrawer();if(tabId==='profile'){openProfilePage();return}oldSwitch(tabId,el);if(tabId==='collection')setTimeout(renderCollection,0);if(tabId==='fantaTigers'){ensureLeaderboardControls();renderLeaderboard()}};
+  // Save wrapper adds V6 persistence and XP cloud.
+  const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile()};
+  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();listenTradeResults();setTimeout(renderStreakTracker,50);});
+  // migration from v5 remains intact; v6 is additive.
+})();
 </script>
 </body>
 </html>
