@@ -2046,6 +2046,10 @@ let db = null;
 let firebaseReady = false;
 let fbAuth = null;
 let firebaseAuthPersistenceReady = Promise.resolve();
+let firebaseAuthReady = Promise.resolve(null);
+let firebaseAuthReadyResolve = null;
+let firebaseAuthInitialized = false;
+let firebaseAuthPersistenceReady = Promise.resolve();
 
 try {
 if (firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("INCOLLA_QUI") === -1) {
@@ -2054,14 +2058,26 @@ db = firebase.firestore();
 fbAuth = firebase.auth();
 
 // IMPORTANTE: la persistenza deve essere completata PRIMA di avviare
-// signInWithRedirect(). Se la impostiamo senza attenderne il completamento,
-// su alcuni browser Android il login Google riesce ma la sessione non viene
-// ripristinata quando l'app torna dalla pagina Google, causando un loop di login.
-// LOCAL mantiene la sessione anche dopo il ritorno alla Home e alla riapertura del pannello.
+// signInWithRedirect().
 firebaseAuthPersistenceReady = fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   .catch(function(e) {
     console.warn("Impossibile impostare la persistenza Firebase Auth:", e);
   });
+
+// Non usare currentUser immediatamente dopo il caricamento: Firebase può essere
+// ancora nella fase di ripristino della sessione salvata. Aspettiamo il primo
+// onAuthStateChanged prima di decidere se l'utente è davvero disconnesso.
+firebaseAuthReady = new Promise(function(resolve) {
+  firebaseAuthReadyResolve = resolve;
+});
+fbAuth.onAuthStateChanged(function(user) {
+  firebaseAuthInitialized = true;
+  if (firebaseAuthReadyResolve) {
+    firebaseAuthReadyResolve(user || null);
+    firebaseAuthReadyResolve = null;
+  }
+});
+
 firebaseReady = true;
 } else {
 console.warn("Firebase non configurato: la Classifica Globale resterà solo locale finché non compili firebaseConfig.");
@@ -2797,16 +2813,28 @@ alert("🏆 È iniziata una nuova stagione fantaTigers! Il punteggio di tutti è
 
 // ---------- Pannello Admin: apertura/chiusura e password ----------
 
-function openAdminPanel() {
-document.getElementById('admin-modal').classList.add('active');
-document.getElementById('admin-password-error').innerText = '';
-const user = fbAuth && fbAuth.currentUser;
-if (user && isAuthorizedAdmin(user)) {
-  finishAdminLogin(user);
-} else {
-  document.getElementById('admin-password-section').style.display = 'block';
-  document.getElementById('admin-form-section').style.display = 'none';
-}
+async function openAdminPanel() {
+  const modal = document.getElementById('admin-modal');
+  modal.classList.add('active');
+  document.getElementById('admin-password-error').innerText = '';
+
+  // Aspetta che Firebase abbia terminato il ripristino della sessione.
+  // Senza questa attesa, su Android currentUser può essere temporaneamente null
+  // anche se l'utente è già autenticato: era la causa del loop.
+  if (firebaseReady && fbAuth && !firebaseAuthInitialized) {
+    await firebaseAuthReady;
+  }
+
+  const user = fbAuth && fbAuth.currentUser;
+  if (user && isAuthorizedAdmin(user)) {
+    document.getElementById('admin-password-section').style.display = 'none';
+    document.getElementById('admin-form-section').style.display = 'block';
+    document.getElementById('admin-logged-as').innerText = '👤 ' + getAdminEmail(user);
+    populateAdminForm();
+  } else {
+    document.getElementById('admin-password-section').style.display = 'block';
+    document.getElementById('admin-form-section').style.display = 'none';
+  }
 }
 
 function closeAdminPanel() {
@@ -4261,24 +4289,18 @@ syncFantaScoreToCloud();
     }
 
     document.getElementById('admin-password-error').textContent = '';
+
+    // Non avviare OAuth finché la persistenza LOCAL non è stata applicata.
+    // Questo è particolarmente importante su Android.
+    await firebaseAuthPersistenceReady;
+
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
-    // Aspetta SEMPRE che Firebase abbia completato l'impostazione della
-    // persistenza prima di iniziare il flusso OAuth. È fondamentale su Android.
-    await firebaseAuthPersistenceReady;
-
-    // Su Android/PWA usiamo il redirect; la sessione LOCAL è già stata
-    // completamente configurata prima di partire.
-    if (shouldUseAuthRedirect()) {
-      try {
-        await fbAuth.signInWithRedirect(provider);
-      } catch (e) {
-        showAdminAuthError(e, 'Accesso non riuscito.');
-      }
-      return;
-    }
-
+    // Su Android/PWA proviamo prima il popup: evita il passaggio tra origini
+    // che può essere problematico quando il browser limita lo storage di terze
+    // parti durante signInWithRedirect(). Se il popup viene bloccato, usiamo
+    // automaticamente il redirect come fallback.
     try {
       const result = await fbAuth.signInWithPopup(provider);
       finishAdminLogin(result.user);
@@ -4348,7 +4370,7 @@ syncFantaScoreToCloud();
   // PWA
   window.installPWA=function(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.then(()=>{deferredInstallPrompt=null})}else toast('Se il browser lo consente, usa “Aggiungi a schermata Home”.')};
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e});
-  if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  // Nessun service worker: l'app usa manifest.json e non registra sw.js.
   // News rotator
   function startNews(){
     const track=document.getElementById('news-marquee-track');if(!track)return;
