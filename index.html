@@ -2045,6 +2045,7 @@ appId: "1:311565843395:web:5ebd065c1d0d384bc79b76"
 let db = null;
 let firebaseReady = false;
 let fbAuth = null;
+let firebaseAuthPersistenceReady = Promise.resolve();
 
 try {
 if (firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("INCOLLA_QUI") === -1) {
@@ -2052,12 +2053,15 @@ firebase.initializeApp(firebaseConfig);
 db = firebase.firestore();
 fbAuth = firebase.auth();
 
-// Mantiene la sessione Google anche dopo il ritorno dal redirect su Android/PWA.
-// Il dominio autorizzato resta quello configurato in Firebase (firebaseapp.com);
-// il dominio da cui viene aperta l'app deve essere aggiunto nella Console Firebase.
-fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e) {
-  console.warn("Impossibile impostare la persistenza Firebase Auth:", e);
-});
+// IMPORTANTE: la persistenza deve essere completata PRIMA di avviare
+// signInWithRedirect(). Se la impostiamo senza attenderne il completamento,
+// su alcuni browser Android il login Google riesce ma la sessione non viene
+// ripristinata quando l'app torna dalla pagina Google, causando un loop di login.
+// LOCAL mantiene la sessione anche dopo il ritorno alla Home e alla riapertura del pannello.
+firebaseAuthPersistenceReady = fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .catch(function(e) {
+    console.warn("Impossibile impostare la persistenza Firebase Auth:", e);
+  });
 firebaseReady = true;
 } else {
 console.warn("Firebase non configurato: la Classifica Globale resterà solo locale finché non compili firebaseConfig.");
@@ -2797,14 +2801,11 @@ function openAdminPanel() {
 document.getElementById('admin-modal').classList.add('active');
 document.getElementById('admin-password-error').innerText = '';
 const user = fbAuth && fbAuth.currentUser;
-if (user && ADMIN_ALLOWED_EMAILS.includes(user.email)) {
-document.getElementById('admin-password-section').style.display = 'none';
-document.getElementById('admin-form-section').style.display = 'block';
-document.getElementById('admin-logged-as').innerText = '👤 ' + user.email;
-populateAdminForm();
+if (user && isAuthorizedAdmin(user)) {
+  finishAdminLogin(user);
 } else {
-document.getElementById('admin-password-section').style.display = 'block';
-document.getElementById('admin-form-section').style.display = 'none';
+  document.getElementById('admin-password-section').style.display = 'block';
+  document.getElementById('admin-form-section').style.display = 'none';
 }
 }
 
@@ -4263,7 +4264,12 @@ syncFantaScoreToCloud();
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
-    // Su Android/PWA il redirect è più affidabile del popup.
+    // Aspetta SEMPRE che Firebase abbia completato l'impostazione della
+    // persistenza prima di iniziare il flusso OAuth. È fondamentale su Android.
+    await firebaseAuthPersistenceReady;
+
+    // Su Android/PWA usiamo il redirect; la sessione LOCAL è già stata
+    // completamente configurata prima di partire.
     if (shouldUseAuthRedirect()) {
       try {
         await fbAuth.signInWithRedirect(provider);
@@ -4298,6 +4304,10 @@ syncFantaScoreToCloud();
     if (!firebaseReady || !fbAuth) return;
 
     try {
+      // Anche il recupero del redirect deve avvenire dopo che la persistenza
+      // è stata inizializzata. In questo modo Firebase può ripristinare
+      // correttamente l'utente quando si torna dalla schermata Google.
+      await firebaseAuthPersistenceReady;
       const result = await fbAuth.getRedirectResult();
 
       if (!result || !result.user) return;
@@ -4316,18 +4326,20 @@ syncFantaScoreToCloud();
     document.getElementById('admin-password-section').style.display = 'block';
     document.getElementById('admin-password-error').textContent = '';
   };
-  // Se l'utente aveva già effettuato l'accesso Google in una sessione precedente e riapre
-  // il pannello Admin, e non è (più) autorizzato, lo riportiamo automaticamente alla schermata di login.
+  // Mantiene l'interfaccia sincronizzata con lo stato Auth reale.
+  // Firebase garantisce che onAuthStateChanged venga chiamato dopo il ripristino
+  // dello stato di autenticazione, quindi non mostriamo il login per un istante
+  // mentre currentUser sta ancora venendo inizializzato.
   if (firebaseReady && fbAuth) {
     fbAuth.onAuthStateChanged(function(user){
       const adminModal = document.getElementById('admin-modal');
-      if (!adminModal || !adminModal.classList.contains('active')) return;
+      if (!adminModal) return;
 
       if (user && isAuthorizedAdmin(user)) {
-        document.getElementById('admin-password-section').style.display = 'none';
-        document.getElementById('admin-form-section').style.display = 'block';
-        document.getElementById('admin-logged-as').innerText = '👤 ' + getAdminEmail(user);
-      } else {
+        if (adminModal.classList.contains('active')) {
+          finishAdminLogin(user);
+        }
+      } else if (adminModal.classList.contains('active')) {
         document.getElementById('admin-form-section').style.display = 'none';
         document.getElementById('admin-password-section').style.display = 'block';
       }
