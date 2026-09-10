@@ -2004,6 +2004,7 @@ Descrizione trofeo
 </div>
 
 <div id="friends-tab-scambi" class="friends-tab-panel" style="display:none">
+<select id="trade-friend-select" class="filter-select compact"></select>
 <select id="trade-offer-card" class="filter-select compact"></select>
 <select id="trade-want-card" class="filter-select compact"></select>
 <button class="btn btn-orange compact-btn" onclick="sendTradeRequest()">INVIA PROPOSTA</button>
@@ -4060,8 +4061,51 @@ syncFantaScoreToCloud();
       });
     });
   }
-  function populateTradeSelects(){const offer=document.getElementById('trade-offer-card'),want=document.getElementById('trade-want-card');offer.innerHTML='';want.innerHTML='';BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>offer.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Offro: '+p.name+' x'+state.inventory[p.id]+'</option>'));BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>want.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Cerco: '+p.name+'</option>'));if(!offer.options.length)offer.innerHTML='<option>Nessuna carta disponibile</option>';if(!want.options.length)want.innerHTML='<option>Nessuna carta disponibile</option>'}
-  window.sendTradeRequest=async function(){if(!firebaseReady||!db){toast('Firebase non disponibile.');return}if(!state.friends.length){toast('Aggiungi prima un amico.');return}const offer=+document.getElementById('trade-offer-card').value,want=+document.getElementById('trade-want-card').value;if(!offer||!want){toast('Seleziona due carte.');return}const target=state.friends[0];if(state.inventory[offer]<1){toast('Non possiedi la carta offerta.');return}await db.collection('trades').add({fromId:state.fantaUserId,fromName:state.fantaUserName,toId:target.id,offerCardId:offer,wantCardId:want,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});toast('Proposta inviata a '+target.name+'.');document.getElementById('trade-status').textContent='Proposta inviata.'};
+  function populateTradeSelects(){
+    const friendSel=document.getElementById('trade-friend-select'),offer=document.getElementById('trade-offer-card'),want=document.getElementById('trade-want-card');
+    friendSel.innerHTML='';
+    const friends=state.friends||[];
+    if(!friends.length){
+      friendSel.innerHTML='<option>Nessun amico disponibile</option>';
+    } else {
+      friends.forEach(f=>friendSel.insertAdjacentHTML('beforeend','<option value="'+f.id+'">Con: '+(f.name||'TigerFan')+'</option>'));
+    }
+    offer.innerHTML='';want.innerHTML='';
+    // "Offro": solo le carte Base che possiedi davvero.
+    BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>offer.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Offro: '+p.name+' x'+state.inventory[p.id]+'</option>'));
+    // "Cerco": TUTTE le carte Base esistenti nell'app (niente Special), non solo quelle già possedute.
+    BASE_PLAYERS.forEach(p=>want.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Cerco: '+p.name+'</option>'));
+    if(!offer.options.length)offer.innerHTML='<option value="">Nessuna carta disponibile</option>';
+    if(!want.options.length)want.innerHTML='<option value="">Nessuna carta disponibile</option>';
+  }
+  window.sendTradeRequest=async function(){
+    const statusEl=document.getElementById('trade-status');
+    statusEl.textContent='';
+    if(!firebaseReady||!db){statusEl.textContent='Firebase non disponibile.';return}
+    if(!state.friends||!state.friends.length){statusEl.textContent='Aggiungi prima un amico nella tab Amici.';return}
+    const friendId=document.getElementById('trade-friend-select').value;
+    const target=state.friends.find(f=>f.id===friendId);
+    if(!target){statusEl.textContent='Seleziona un amico con cui scambiare.';return}
+    const offer=+document.getElementById('trade-offer-card').value,want=+document.getElementById('trade-want-card').value;
+    if(!offer||!want){statusEl.textContent='Seleziona entrambe le carte.';return}
+    if(offer===want){statusEl.textContent='Le due carte devono essere diverse.';return}
+    if((state.inventory[offer]||0)<1){statusEl.textContent='Non possiedi la carta offerta.';return}
+    // Limite: 1 scambio inviato al giorno per utente, indipendentemente dal numero di amici.
+    try{
+      const todayStart=new Date();todayStart.setHours(0,0,0,0);
+      const sentSnap=await db.collection('trades').where('fromId','==',state.fantaUserId).limit(50).get();
+      const alreadySentToday=sentSnap.docs.some(doc=>{const d=doc.data();return d.createdAt&&d.createdAt.toDate&&d.createdAt.toDate()>=todayStart});
+      if(alreadySentToday){statusEl.textContent='Hai già effettuato uno scambio oggi. Riprova domani.';return}
+    }catch(e){console.error('Errore controllo limite scambi:',e);statusEl.textContent='Errore di connessione. Riprova tra poco.';return}
+    try{
+      await db.collection('trades').add({fromId:state.fantaUserId,fromName:state.fantaUserName,toId:target.id,toName:target.name||'TigerFan',offerCardId:offer,wantCardId:want,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      toast('Proposta inviata a '+(target.name||'TigerFan')+'.');
+      statusEl.textContent='Proposta inviata! Potrai inviarne un\'altra domani.';
+    }catch(e){
+      console.error('Errore invio proposta scambio:',e);
+      statusEl.textContent='Errore durante l\'invio. Riprova tra poco.';
+    }
+  };
   async function renderTradeInbox(){const el=document.getElementById('trade-inbox');if(!firebaseReady||!db){el.innerHTML='';return}const snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div>';snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\')">RIFIUTA</button></div>';el.appendChild(box)})}
   window.rejectTrade=async function(id){if(firebaseReady&&db)await db.collection('trades').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});renderFriendsPanel()};
   window.acceptTrade=async function(id){if(!firebaseReady||!db)return;const ref=db.collection('trades').doc(id),snap=await ref.get();if(!snap.exists)return;const d=snap.data();if(d.status!=='pending')return;if((state.inventory[d.wantCardId]||0)<1){toast('Non possiedi la carta richiesta.');return}state.inventory[d.wantCardId]-=1;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp(),recipientApplied:true});saveState();toast('Scambio completato!');renderFriendsPanel();renderCollection()};
