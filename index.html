@@ -2030,6 +2030,9 @@ Descrizione trofeo
 // (Impostazioni progetto > Le tue app > SDK di configurazione).
 // Finché non lo compili, l'app funziona comunque ma la classifica resta solo locale.
 // ==========================================
+// IMPORTANTE: authDomain deve restare quello del progetto Firebase.
+// L'hostname da cui apri questa pagina (es. il-tuo-utente.github.io)
+// deve essere presente in Firebase Console > Authentication > Settings > Authorized domains.
 const firebaseConfig = {
 apiKey: "AIzaSyCzSudf8vs35ORViJr6qjSIL9JNAvBV-wo",
 authDomain: "tiger-cards-cec56.firebaseapp.com",
@@ -2048,6 +2051,13 @@ if (firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("INCOLLA_QUI") === -1
 firebase.initializeApp(firebaseConfig);
 db = firebase.firestore();
 fbAuth = firebase.auth();
+
+// Mantiene la sessione Google anche dopo il ritorno dal redirect su Android/PWA.
+// Il dominio autorizzato resta quello configurato in Firebase (firebaseapp.com);
+// il dominio da cui viene aperta l'app deve essere aggiunto nella Console Firebase.
+fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e) {
+  console.warn("Impossibile impostare la persistenza Firebase Auth:", e);
+});
 firebaseReady = true;
 } else {
 console.warn("Firebase non configurato: la Classifica Globale resterà solo locale finché non compili firebaseConfig.");
@@ -4181,55 +4191,125 @@ syncFantaScoreToCloud();
   // alla pagina, senza un vero errore utile): in quei casi usiamo il flusso a redirect, molto più
   // affidabile. Su desktop resta il popup, più comodo, con fallback automatico al redirect se blocca.
   function shouldUseAuthRedirect(){
-    const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    const isStandalone =
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      window.navigator.standalone === true;
     const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     return isStandalone || isMobileUA;
   }
+
+  function getAdminEmail(user){
+    return user && user.email ? user.email.trim().toLowerCase() : '';
+  }
+
+  function isAuthorizedAdmin(user){
+    const email = getAdminEmail(user);
+    return !!email && ADMIN_ALLOWED_EMAILS.some(function(x){
+      return String(x).trim().toLowerCase() === email;
+    });
+  }
+
+  function showAdminAuthError(e, prefix){
+    const el = document.getElementById('admin-password-error');
+    if (!el) return;
+
+    const code = e && e.code ? e.code : 'errore';
+    const hostname = window.location.hostname || '(dominio sconosciuto)';
+
+    if (code === 'auth/unauthorized-domain') {
+      el.innerHTML =
+        'Dominio non autorizzato: <b>' + hostname + '</b>.<br>' +
+        'Apri Firebase Console → Authentication → Settings → Authorized domains ' +
+        'e aggiungi esattamente questo dominio, poi riprova.';
+      console.error('Firebase auth/unauthorized-domain. Hostname da autorizzare:', hostname, e);
+      return;
+    }
+
+    if (code === 'auth/operation-not-supported-in-this-environment') {
+      el.textContent = 'Questo ambiente non supporta il login Google. Apri l’app tramite HTTPS (GitHub Pages) e riprova.';
+      return;
+    }
+
+    el.textContent = (prefix || 'Accesso Google non riuscito.') + ' (' + code + ').';
+    console.error('Errore Firebase Authentication:', e);
+  }
+
+  function finishAdminLogin(user){
+    const email = getAdminEmail(user);
+
+    if (!isAuthorizedAdmin(user)) {
+      document.getElementById('admin-password-error').textContent =
+        'Account non autorizzato (' + (email || '—') + ').';
+      if (fbAuth) fbAuth.signOut().catch(function(){});
+      return false;
+    }
+
+    document.getElementById('admin-password-error').textContent = '';
+    document.getElementById('admin-password-section').style.display = 'none';
+    document.getElementById('admin-form-section').style.display = 'block';
+    document.getElementById('admin-logged-as').innerText = '👤 ' + email;
+    populateAdminForm();
+    return true;
+  }
+
   window.adminGoogleSignIn = async function(){
-    if (!firebaseReady || !fbAuth) { document.getElementById('admin-password-error').textContent = 'Firebase non disponibile: impossibile accedere.'; return; }
+    if (!firebaseReady || !fbAuth) {
+      document.getElementById('admin-password-error').textContent =
+        'Firebase non disponibile: impossibile accedere.';
+      return;
+    }
+
     document.getElementById('admin-password-error').textContent = '';
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    // Su Android/PWA il redirect è più affidabile del popup.
     if (shouldUseAuthRedirect()) {
-      try { await fbAuth.signInWithRedirect(provider); }
-      catch (e) { document.getElementById('admin-password-error').textContent = 'Accesso non riuscito. Riprova (' + (e && e.code ? e.code : 'errore') + ').'; }
-      return; // Il browser sta per ricaricare la pagina: il risultato si gestisce in handleAdminRedirectResult().
+      try {
+        await fbAuth.signInWithRedirect(provider);
+      } catch (e) {
+        showAdminAuthError(e, 'Accesso non riuscito.');
+      }
+      return;
     }
+
     try {
       const result = await fbAuth.signInWithPopup(provider);
-      const email = result.user && result.user.email;
-      if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) {
-        document.getElementById('admin-password-error').textContent = 'Account non autorizzato (' + (email || '—') + ').';
-        await fbAuth.signOut();
-        return;
-      }
-      document.getElementById('admin-password-section').style.display = 'none';
-      document.getElementById('admin-form-section').style.display = 'block';
-      document.getElementById('admin-logged-as').innerText = '👤 ' + email;
-      populateAdminForm();
+      finishAdminLogin(result.user);
     } catch (e) {
-      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
-        try { await fbAuth.signInWithRedirect(provider); return; } catch (e2) { /* mostra errore sotto */ }
+      if (e && (
+        e.code === 'auth/popup-blocked' ||
+        e.code === 'auth/operation-not-supported-in-this-environment'
+      )) {
+        try {
+          await fbAuth.signInWithRedirect(provider);
+          return;
+        } catch (e2) {
+          showAdminAuthError(e2, 'Accesso non riuscito.');
+          return;
+        }
       }
-      document.getElementById('admin-password-error').textContent = 'Accesso annullato o non riuscito.';
+
+      showAdminAuthError(e, 'Accesso annullato o non riuscito.');
     }
   };
+
   async function handleAdminRedirectResult(){
     if (!firebaseReady || !fbAuth) return;
+
     try {
       const result = await fbAuth.getRedirectResult();
-      if (!result || !result.user) return; // nessun redirect di login in corso
-      const email = result.user.email;
-      openAdminPanel();
-      if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) {
-        document.getElementById('admin-password-error').textContent = 'Account non autorizzato (' + (email || '—') + ').';
-        fbAuth.signOut();
-      }
+
+      if (!result || !result.user) return;
+
+      finishAdminLogin(result.user);
     } catch (e) {
       console.error('Errore risultato redirect Google:', e);
       openAdminPanel();
-      document.getElementById('admin-password-error').textContent = 'Accesso Google non riuscito. Riprova (' + (e && e.code ? e.code : 'errore') + ').';
+      showAdminAuthError(e, 'Accesso Google non riuscito.');
     }
   }
+
   window.adminSignOut = function(){
     if (firebaseReady && fbAuth) fbAuth.signOut();
     document.getElementById('admin-form-section').style.display = 'none';
@@ -4242,7 +4322,12 @@ syncFantaScoreToCloud();
     fbAuth.onAuthStateChanged(function(user){
       const adminModal = document.getElementById('admin-modal');
       if (!adminModal || !adminModal.classList.contains('active')) return;
-      if (!user || !ADMIN_ALLOWED_EMAILS.includes(user.email)) {
+
+      if (user && isAuthorizedAdmin(user)) {
+        document.getElementById('admin-password-section').style.display = 'none';
+        document.getElementById('admin-form-section').style.display = 'block';
+        document.getElementById('admin-logged-as').innerText = '👤 ' + getAdminEmail(user);
+      } else {
         document.getElementById('admin-form-section').style.display = 'none';
         document.getElementById('admin-password-section').style.display = 'block';
       }
