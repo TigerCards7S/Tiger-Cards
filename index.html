@@ -1439,6 +1439,19 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 .fanta-rules-btn:active{transform:scale(.95)}
 .leaderboard-controls{display:flex;gap:6px;overflow-x:auto;margin:8px 0 12px}.lb-filter{white-space:nowrap;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#0a1b29;color:var(--text-muted);font:700 .65rem var(--font-heading)}.lb-filter.active{background:#fff;color:#071522;border-color:#fff}.friends-mini{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:9px;border:1px dashed rgba(101,217,255,.2);border-radius:9px;font-size:.68rem;color:var(--text-muted)}
 .modal{backdrop-filter:blur(6px);background:rgba(2,10,16,.74)}.modal > .options-menu-box,.modal > div:not(.bottom-back-popup):not(.flash-overlay){box-shadow:0 18px 45px rgba(0,0,0,.55)}.modal.sheet-modal{align-items:flex-end!important}.modal.sheet-modal > .options-menu-box{border-radius:20px 20px 0 0!important;margin:0!important;max-width:none!important;width:100%!important;border-color:rgba(101,217,255,.22)!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;animation:sheetUp .25s ease}.modal-close-x{position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:1.1rem}.social-row{display:flex;gap:8px;margin-top:10px}.social-btn{flex:1;border:1px solid rgba(101,217,255,.25);background:rgba(101,217,255,.08);color:#fff;border-radius:9px;padding:9px;font:800 .65rem var(--font-heading)}
+.friends-sheet{gap:8px!important;max-height:80vh;overflow-y:auto}
+.friends-tabs{display:flex;gap:8px}
+.friends-tab-btn{flex:1;padding:9px 6px;border-radius:10px;border:1px solid rgba(101,217,255,.22);background:rgba(101,217,255,.06);color:var(--text-muted);font:800 .68rem var(--font-heading);text-transform:uppercase;letter-spacing:.3px;cursor:pointer;transition:all .15s ease}
+.friends-tab-btn.active{background:linear-gradient(135deg,var(--bright-blue),var(--primary-blue));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(79,134,196,.35)}
+.friends-tab-panel{display:flex;flex-direction:column;gap:6px;text-align:left}
+.friends-subsection-title{font:800 .68rem var(--font-heading);text-transform:uppercase;letter-spacing:.3px;color:var(--bright-blue);margin-top:6px}
+.code-input-group.row{flex-direction:row;gap:8px}
+.code-input-group.row .code-input{flex:1}
+.code-input-group.row .compact-btn{width:auto;max-width:none;flex:none;padding:11px 16px}
+.compact-btn{padding:10px 14px!important;font-size:.78rem!important}
+.code-message.compact{margin-top:0;min-height:0}
+.code-message.compact:empty{display:none}
+.filter-select.compact{margin-bottom:6px;padding:9px 14px}
 @keyframes sheetUp{from{transform:translateY(100%);opacity:.5}to{transform:translateY(0);opacity:1}}
 @keyframes packShakePro{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-4deg) scale(1.03)}30%{transform:rotate(4deg) scale(1.06)}45%{transform:rotate(-3deg) scale(1.08)}60%{transform:rotate(2deg) scale(1.09)}75%{transform:rotate(0) scale(1.12)}}
 .pack-opening-stage .sealed-pack-wrapper.burst .pack-card{animation:packShakePro .55s ease both}.reveal-flash-title{font:900 .75rem var(--font-heading);color:#fff;letter-spacing:1px;text-transform:uppercase}.card-reveal-container-pro{perspective:1000px}.pulled-card{box-shadow:0 20px 50px rgba(0,0,0,.55);border:2px solid #fff!important}.pulled-card.is-special{border-color:#ffd86a!important;box-shadow:0 0 28px rgba(255,216,106,.28),0 20px 50px rgba(0,0,0,.55)}
@@ -1974,7 +1987,32 @@ Descrizione trofeo
   <button class="drawer-btn danger" onclick="openResetConfirmation();closeSideDrawer()">♻️ Reset App</button>
 </aside>
 <div id="profile-page" class="tab-content"><div class="profile-page"><div class="profile-card"><img id="profile-avatar" class="profile-avatar" src="" alt="Logo Tigers"><div class="profile-name" id="profile-page-name">TigerFan</div><div class="friend-code">CODICE AMICO <strong id="profile-friend-code">------</strong> <button class="social-btn" style="flex:none;padding:5px 7px" onclick="copyFriendCode()">COPIA</button></div><div class="profile-actions"><button class="btn" onclick="editProfileName()">MODIFICA NOME</button><button class="btn btn-orange" onclick="shareProfile()">CONDIVIDI</button></div></div><div class="profile-section"><div class="section-title">🏅 Badge stagione</div><div id="season-badges" class="badge-grid"><span style="font-size:.7rem;color:var(--text-muted)">I tuoi podi fantaTigers appariranno qui.</span></div></div><div class="profile-section"><div class="section-title">🤝 Amici</div><div id="friends-list" style="font-size:.72rem;color:var(--text-muted)">Nessun amico aggiunto.</div><button class="btn" style="margin-top:10px;font-size:.75rem;padding:10px" onclick="openFriendsPanel()">GESTISCI AMICI & SCAMBI</button></div><div class="profile-section"><div class="section-title">📈 Panoramica</div><div id="profile-page-stats" class="profile-stats-grid"></div></div></div></div>
-<div id="friends-modal" class="modal sheet-modal"><div class="options-menu-box"><button class="modal-close-x" onclick="closeFriendsPanel()">×</button><h3 style="color:var(--bright-blue);text-transform:uppercase;margin-bottom:8px">Amici & Scambi</h3><p style="font-size:.7rem;color:var(--text-muted);line-height:1.4">Usa il codice amico dell'altra persona. Non servono account.</p><div class="code-input-group"><input id="friend-code-input" class="code-input" maxlength="12" placeholder="CODICE AMICO"><button class="btn" onclick="addFriendByCode()">AGGIUNGI AMICO</button></div><div id="friends-panel-list" style="margin-top:14px"></div><hr style="border-color:rgba(255,255,255,.1);margin:14px 0"><div class="section-title">Scambio carta</div><select id="trade-offer-card" class="filter-select"></select><select id="trade-want-card" class="filter-select"></select><button class="btn btn-orange" onclick="sendTradeRequest()">INVIA PROPOSTA</button><div id="trade-status" class="code-message"></div><div id="trade-inbox" style="margin-top:12px"></div><button class="btn" style="margin-top:12px" onclick="closeFriendsPanel()">CHIUDI</button></div></div>
+<div id="friends-modal" class="modal sheet-modal"><div class="options-menu-box friends-sheet"><button class="modal-close-x" onclick="closeFriendsPanel()">×</button><h3 style="color:var(--bright-blue);text-transform:uppercase;margin-bottom:0">Amici & Scambi</h3>
+
+<div class="friends-tabs">
+<button class="friends-tab-btn active" id="friends-tab-btn-amici" onclick="switchFriendsTab('amici')">🤝 Amici</button>
+<button class="friends-tab-btn" id="friends-tab-btn-scambi" onclick="switchFriendsTab('scambi')">🔄 Scambi</button>
+</div>
+
+<div id="friends-tab-amici" class="friends-tab-panel">
+<div class="code-input-group row"><input id="friend-code-input" class="code-input" maxlength="14" placeholder="CODICE AMICO"><button class="btn compact-btn" onclick="addFriendByCode()">INVIA</button></div>
+<div id="friend-request-status" class="code-message compact"></div>
+<div class="friends-subsection-title">📥 Richieste ricevute</div>
+<div id="friend-requests-inbox"></div>
+<div class="friends-subsection-title">👥 I tuoi amici</div>
+<div id="friends-panel-list"></div>
+</div>
+
+<div id="friends-tab-scambi" class="friends-tab-panel" style="display:none">
+<select id="trade-offer-card" class="filter-select compact"></select>
+<select id="trade-want-card" class="filter-select compact"></select>
+<button class="btn btn-orange compact-btn" onclick="sendTradeRequest()">INVIA PROPOSTA</button>
+<div id="trade-status" class="code-message compact"></div>
+<div id="trade-inbox"></div>
+</div>
+
+<button class="btn compact-btn" style="margin-top:2px" onclick="closeFriendsPanel()">CHIUDI</button>
+</div></div>
 
 
 <!-- ========================================== -->
@@ -2028,7 +2066,7 @@ firebaseReady = false;
 // (vedi le istruzioni fornite insieme a questo aggiornamento).
 // ==========================================
 const ADMIN_ALLOWED_EMAILS = [
-"INSERISCI_QUI_LA_TUA_EMAIL_GMAIL@gmail.com"
+"davidefuscodf@gmail.com"
 ];
 
 // ==========================================
@@ -2065,7 +2103,7 @@ const MOCK_LEADERBOARD = [
 const HEADER_LOGO_PATH = "app_img/logo.png";
 const PACK_DAILY_IMAGE_PATH = "app_img/base_pack.png";
 const PACK_BONUS_IMAGE_PATH = "app_img/bonus_pack.png";
-const PACK_SPECIAL_IMAGE_PATH = "app_img/special_pack.png";
+const PACK_SPECIAL_IMAGE_PATH = "app_img/special_card.png";
 // Immagine del "Pacchetto Streak" (bonus dei 5 giorni consecutivi): cambia questo
 // percorso per usare la tua grafica, esattamente come per gli altri pacchetti.
 const PACK_STREAK_IMAGE_PATH = "app_img/streak_pack.png";
@@ -3928,14 +3966,103 @@ syncFantaScoreToCloud();
   window.shareText=function(text,title){state.stats.socialShares=(state.stats.socialShares||0)+1;saveState();if(navigator.share){navigator.share({title:title||'Tiger Cards',text:text}).catch(()=>{})}else{navigator.clipboard?.writeText(text);toast('Testo copiato per la condivisione!')}};
   window.shareApp=function(){shareText('Scopri Tiger Cards, la collezione dei Volley Lab Settesoli Tigers!','Tiger Cards');closeSideDrawer()};
   window.renderProfilePage=function(){ensureV6State();document.getElementById('profile-avatar').src=logoPath;document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-page-name').textContent=state.fantaUserName;document.getElementById('profile-friend-code').textContent=state.friendCode;document.getElementById('season-badges').innerHTML=(state.seasonBadges||[]).length?state.seasonBadges.map(b=>'<span class="season-badge">'+b+'</span>').join(''):'<span style="font-size:.7rem;color:var(--text-muted)">I tuoi podi fantaTigers appariranno qui.</span>';const f=(state.friends||[]);document.getElementById('friends-list').innerHTML=f.length?f.map(x=>'<div style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)">🤝 '+(x.name||x.id||x)+'</div>').join(''):'Nessun amico aggiunto.';document.getElementById('profile-page-stats').innerHTML='<div class="stat-tile"><div class="stat-tile-value">'+(state.points||0)+'</div><div class="stat-tile-label">Punti Tigers</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.fantaTotalPoints||0)+'</div><div class="stat-tile-label">Fanta PT</div></div><div class="stat-tile"><div class="stat-tile-value">'+(Object.values(state.inventory||{}).reduce((a,b)=>a+b,0))+'</div><div class="stat-tile-label">Carte Totali</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.stats.trades||0)+'</div><div class="stat-tile-label">Scambi</div></div>'};
-  window.openFriendsPanel=function(){ensureV6State();document.getElementById('friends-modal').classList.add('active');renderFriendsPanel();populateTradeSelects()};
+  window.openFriendsPanel=function(){ensureV6State();document.getElementById('friends-modal').classList.add('active');switchFriendsTab('amici');renderFriendsPanel();populateTradeSelects()};
   window.closeFriendsPanel=function(){document.getElementById('friends-modal').classList.remove('active')};
-  function renderFriendsPanel(){const el=document.getElementById('friends-panel-list');const list=state.friends||[];el.innerHTML=list.length?list.map((x,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:8px;margin:5px 0"><span>🤝 '+(x.name||x.id)+'</span><button class="social-btn" onclick="removeFriend('+i+')">RIMUOVI</button></div>').join(''):'<div style="font-size:.7rem;color:var(--text-muted)">Aggiungi il primo amico.</div>';renderTradeInbox()}
+  window.switchFriendsTab=function(tab){
+    document.getElementById('friends-tab-amici').style.display = tab==='amici' ? 'flex' : 'none';
+    document.getElementById('friends-tab-scambi').style.display = tab==='scambi' ? 'flex' : 'none';
+    document.getElementById('friends-tab-btn-amici').classList.toggle('active', tab==='amici');
+    document.getElementById('friends-tab-btn-scambi').classList.toggle('active', tab==='scambi');
+    if (tab==='scambi') { populateTradeSelects(); renderTradeInbox(); }
+  };
+  function renderFriendsPanel(){const el=document.getElementById('friends-panel-list');const list=state.friends||[];el.innerHTML=list.length?list.map((x,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:8px;margin:5px 0"><span>🤝 '+(x.name||x.id)+'</span><button class="social-btn" onclick="removeFriend('+i+')">RIMUOVI</button></div>').join(''):'<div style="font-size:.7rem;color:var(--text-muted)">Nessun amico ancora. Invia una richiesta con il codice qui sopra.</div>';renderFriendRequestsInbox();renderTradeInbox()}
   window.removeFriend=function(i){state.friends.splice(i,1);saveState();renderFriendsPanel();renderProfilePage()};
-  window.addFriendByCode=async function(){const code=document.getElementById('friend-code-input').value.trim().toUpperCase();if(!code)return;if(code===state.friendCode){toast('Questo è il tuo codice.');return}if(!firebaseReady||!db){toast('Firebase non disponibile: impossibile cercare amici.');return}const snap=await db.collection('friendProfiles').where('friendCode','==',code).limit(1).get();if(snap.empty){toast('Codice amico non trovato.');return}const d=snap.docs[0].data(),id=snap.docs[0].id;if((state.friends||[]).some(x=>(x.id||x)===id)){toast('È già tuo amico.');return}state.friends.push({id,name:d.name||'TigerFan',friendCode:code});saveState();renderFriendsPanel();renderProfilePage();document.getElementById('friend-code-input').value='';toast('Amico aggiunto!')};
+  window.addFriendByCode=async function(){
+    const input=document.getElementById('friend-code-input');
+    const statusEl=document.getElementById('friend-request-status');
+    const code=input.value.trim().toUpperCase().replace(/\s+/g,'');
+    statusEl.textContent='';
+    if(!code)return;
+    if(code===state.friendCode){toast('Questo è il tuo codice.');return}
+    if(!firebaseReady||!db){statusEl.textContent='Firebase non disponibile: impossibile cercare amici.';return}
+    let snap;
+    try{
+      snap=await db.collection('friendProfiles').where('friendCode','==',code).limit(1).get();
+    }catch(e){
+      console.error('Errore ricerca codice amico:',e);
+      statusEl.textContent='Errore di connessione durante la ricerca. Riprova tra poco.';
+      return;
+    }
+    if(snap.empty){statusEl.textContent='Codice amico non trovato. Controlla che sia corretto e che l\'amico abbia aperto l\'app almeno una volta con connessione attiva.';return}
+    const d=snap.docs[0].data(),targetId=snap.docs[0].id;
+    if(targetId===state.fantaUserId){toast('Questo è il tuo codice.');return}
+    if((state.friends||[]).some(x=>(x.id||x)===targetId)){statusEl.textContent='È già tuo amico.';return}
+    try{
+      const existing=await db.collection('friendRequests').where('fromId','==',state.fantaUserId).where('toId','==',targetId).where('status','==','pending').limit(1).get();
+      if(!existing.empty){statusEl.textContent='Richiesta già inviata, in attesa di risposta.';return}
+      await db.collection('friendRequests').add({fromId:state.fantaUserId,fromName:state.fantaUserName||'TigerFan',fromFriendCode:state.friendCode,toId:targetId,toName:d.name||'TigerFan',status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      statusEl.textContent='';
+      input.value='';
+      toast('Richiesta di amicizia inviata a '+(d.name||'TigerFan')+'!');
+    }catch(e){
+      console.error('Errore invio richiesta amicizia:',e);
+      statusEl.textContent='Errore durante l\'invio della richiesta. Riprova tra poco.';
+    }
+  };
+  async function renderFriendRequestsInbox(){
+    const el=document.getElementById('friend-requests-inbox');if(!el)return;
+    if(!firebaseReady||!db||!state.fantaUserId){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Nessuna richiesta.</div>';return}
+    let snap;
+    try{snap=await db.collection('friendRequests').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();}
+    catch(e){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Impossibile caricare le richieste.</div>';return}
+    if(snap.empty){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Nessuna richiesta in sospeso.</div>';return}
+    el.innerHTML='';
+    snap.docs.forEach(doc=>{
+      const d=doc.data();
+      const box=document.createElement('div');
+      box.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid rgba(255,216,106,.3);border-radius:9px;margin:5px 0;font-size:.72rem';
+      box.innerHTML='<span>👋 <b>'+(d.fromName||'TigerFan')+'</b> vuole aggiungerti</span><div style="display:flex;gap:6px"><button class="social-btn" onclick="acceptFriendRequest(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectFriendRequest(\''+doc.id+'\')">RIFIUTA</button></div>';
+      el.appendChild(box);
+    });
+  }
+  window.acceptFriendRequest=async function(id){
+    if(!firebaseReady||!db)return;
+    const ref=db.collection('friendRequests').doc(id);
+    let snap;
+    try{snap=await ref.get();}catch(e){toast('Errore di connessione.');return}
+    if(!snap.exists)return;
+    const d=snap.data();
+    if(d.status!=='pending')return;
+    if(!(state.friends||[]).some(x=>(x.id||x)===d.fromId)){state.friends=state.friends||[];state.friends.push({id:d.fromId,name:d.fromName||'TigerFan',friendCode:d.fromFriendCode||''})}
+    try{await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){toast('Errore durante l\'accettazione.');return}
+    saveState();
+    toast('Ora sei amico di '+(d.fromName||'TigerFan')+'!');
+    renderFriendsPanel();renderProfilePage();
+  };
+  window.rejectFriendRequest=async function(id){
+    if(!firebaseReady||!db)return;
+    try{await db.collection('friendRequests').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){}
+    renderFriendsPanel();
+  };
+  function listenFriendRequestResults(){
+    if(!firebaseReady||!db||!state.fantaUserId)return;
+    db.collection('friendRequests').where('fromId','==',state.fantaUserId).where('status','==','accepted').limit(20).onSnapshot(snap=>{
+      snap.docChanges().forEach(ch=>{
+        if(ch.type!=='added'&&ch.type!=='modified')return;
+        const d=ch.doc.data();
+        if(d.senderApplied)return;
+        state.friends=state.friends||[];
+        if(!state.friends.some(x=>(x.id||x)===d.toId))state.friends.push({id:d.toId,name:d.toName||'TigerFan'});
+        localStorage.setItem(V6_KEY,JSON.stringify(state));
+        ch.doc.ref.update({senderApplied:true}).catch(()=>{});
+        toast('🤝 '+(d.toName||'TigerFan')+' ha accettato la tua richiesta di amicizia!');
+        renderFriendsPanel();renderProfilePage();
+      });
+    });
+  }
   function populateTradeSelects(){const offer=document.getElementById('trade-offer-card'),want=document.getElementById('trade-want-card');offer.innerHTML='';want.innerHTML='';BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>offer.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Offro: '+p.name+' x'+state.inventory[p.id]+'</option>'));BASE_PLAYERS.filter(p=>state.inventory[p.id]>0).forEach(p=>want.insertAdjacentHTML('beforeend','<option value="'+p.id+'">Cerco: '+p.name+'</option>'));if(!offer.options.length)offer.innerHTML='<option>Nessuna carta disponibile</option>';if(!want.options.length)want.innerHTML='<option>Nessuna carta disponibile</option>'}
   window.sendTradeRequest=async function(){if(!firebaseReady||!db){toast('Firebase non disponibile.');return}if(!state.friends.length){toast('Aggiungi prima un amico.');return}const offer=+document.getElementById('trade-offer-card').value,want=+document.getElementById('trade-want-card').value;if(!offer||!want){toast('Seleziona due carte.');return}const target=state.friends[0];if(state.inventory[offer]<1){toast('Non possiedi la carta offerta.');return}await db.collection('trades').add({fromId:state.fantaUserId,fromName:state.fantaUserName,toId:target.id,offerCardId:offer,wantCardId:want,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});toast('Proposta inviata a '+target.name+'.');document.getElementById('trade-status').textContent='Proposta inviata.'};
-  async function renderTradeInbox(){const el=document.getElementById('trade-inbox');if(!firebaseReady||!db){el.innerHTML='';return}const snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();el.innerHTML='<div class="section-title">Proposte ricevute</div>';snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\')">RIFIUTA</button></div>';el.appendChild(box)})}
+  async function renderTradeInbox(){const el=document.getElementById('trade-inbox');if(!firebaseReady||!db){el.innerHTML='';return}const snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div>';snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\')">RIFIUTA</button></div>';el.appendChild(box)})}
   window.rejectTrade=async function(id){if(firebaseReady&&db)await db.collection('trades').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});renderFriendsPanel()};
   window.acceptTrade=async function(id){if(!firebaseReady||!db)return;const ref=db.collection('trades').doc(id),snap=await ref.get();if(!snap.exists)return;const d=snap.data();if(d.status!=='pending')return;if((state.inventory[d.wantCardId]||0)<1){toast('Non possiedi la carta richiesta.');return}state.inventory[d.wantCardId]-=1;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp(),recipientApplied:true});saveState();toast('Scambio completato!');renderFriendsPanel();renderCollection()};
   function listenTradeResults(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('trades').where('fromId','==',state.fantaUserId).where('status','==','accepted').limit(20).onSnapshot(snap=>{snap.docChanges().forEach(ch=>{if(ch.type!=='added'&&ch.type!=='modified')return;const d=ch.doc.data();if(d.senderApplied)return;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)-1;if(state.inventory[d.offerCardId]<0)state.inventory[d.offerCardId]=0;state.inventory[d.wantCardId]=(state.inventory[d.wantCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);localStorage.setItem(V6_KEY,JSON.stringify(state));ch.doc.ref.update({senderApplied:true}).catch(()=>{});toast('🤝 Scambio ricevuto: '+(BASE_PLAYERS.find(p=>p.id===d.wantCardId)?.name||'carta'));renderCollection();renderProfilePage();})})} 
@@ -4005,11 +4132,25 @@ syncFantaScoreToCloud();
   window.renderFantaVoteStatsList=function(){const listEl=document.getElementById('fanta-stats-votes-list');if(!listEl)return;listEl.innerHTML='';const rows=BASE_PLAYERS.map(p=>{let vals=[];if(cloudLeaderboardCache!==null){};return p}).map(p=>{let total=0,n=0;/* stats come from match history loaded by existing function; keep UI stable */return {p,total,n}});BASE_PLAYERS.forEach(p=>{const inv=state.inventory[p.id]||0;const d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:10px;padding:9px;border-bottom:1px solid rgba(255,255,255,.07)';d.innerHTML='<div style="width:38px;height:52px;border-radius:6px;overflow:hidden;background:#071522;flex:none"><img src="'+p.image+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2"></div><div style="flex:1"><div style="font:800 .75rem var(--font-heading)">'+p.name+'</div><div style="font-size:.6rem;color:var(--text-muted)">In collezione: '+inv+' · '+(inv>=5?'MASTERED':'Master '+inv+'/5')+'</div><div class="mastery-track" style="margin-top:5px"><div class="mastery-fill" style="width:'+Math.min(100,inv/5*100)+'%"></div></div></div>';listEl.appendChild(d)})};
   // Admin UI: require a session token + rate limit. This is still not true server security on a static client; Firestore rules remain authoritative.
   // ===== Accesso Pannello Admin via Google Sign-In =====
+  // Su mobile e nelle PWA installate (display-mode: standalone) i popup di login vengono spesso
+  // bloccati o chiusi immediatamente dal sistema operativo (schermata bianca e ritorno istantaneo
+  // alla pagina, senza un vero errore utile): in quei casi usiamo il flusso a redirect, molto più
+  // affidabile. Su desktop resta il popup, più comodo, con fallback automatico al redirect se blocca.
+  function shouldUseAuthRedirect(){
+    const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    return isStandalone || isMobileUA;
+  }
   window.adminGoogleSignIn = async function(){
     if (!firebaseReady || !fbAuth) { document.getElementById('admin-password-error').textContent = 'Firebase non disponibile: impossibile accedere.'; return; }
     document.getElementById('admin-password-error').textContent = '';
+    const provider = new firebase.auth.GoogleAuthProvider();
+    if (shouldUseAuthRedirect()) {
+      try { await fbAuth.signInWithRedirect(provider); }
+      catch (e) { document.getElementById('admin-password-error').textContent = 'Accesso non riuscito. Riprova (' + (e && e.code ? e.code : 'errore') + ').'; }
+      return; // Il browser sta per ricaricare la pagina: il risultato si gestisce in handleAdminRedirectResult().
+    }
     try {
-      const provider = new firebase.auth.GoogleAuthProvider();
       const result = await fbAuth.signInWithPopup(provider);
       const email = result.user && result.user.email;
       if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) {
@@ -4022,9 +4163,29 @@ syncFantaScoreToCloud();
       document.getElementById('admin-logged-as').innerText = '👤 ' + email;
       populateAdminForm();
     } catch (e) {
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
+        try { await fbAuth.signInWithRedirect(provider); return; } catch (e2) { /* mostra errore sotto */ }
+      }
       document.getElementById('admin-password-error').textContent = 'Accesso annullato o non riuscito.';
     }
   };
+  async function handleAdminRedirectResult(){
+    if (!firebaseReady || !fbAuth) return;
+    try {
+      const result = await fbAuth.getRedirectResult();
+      if (!result || !result.user) return; // nessun redirect di login in corso
+      const email = result.user.email;
+      openAdminPanel();
+      if (!email || !ADMIN_ALLOWED_EMAILS.includes(email)) {
+        document.getElementById('admin-password-error').textContent = 'Account non autorizzato (' + (email || '—') + ').';
+        fbAuth.signOut();
+      }
+    } catch (e) {
+      console.error('Errore risultato redirect Google:', e);
+      openAdminPanel();
+      document.getElementById('admin-password-error').textContent = 'Accesso Google non riuscito. Riprova (' + (e && e.code ? e.code : 'errore') + ').';
+    }
+  }
   window.adminSignOut = function(){
     if (firebaseReady && fbAuth) fbAuth.signOut();
     document.getElementById('admin-form-section').style.display = 'none';
@@ -4064,7 +4225,7 @@ syncFantaScoreToCloud();
   const oldSwitch=window.switchTab;window.switchTab=function(tabId,el){closeSideDrawer();if(tabId==='profile'){openProfilePage();return}oldSwitch(tabId,el);if(tabId==='collection')setTimeout(renderCollection,0);if(tabId==='fantaTigers'){ensureLeaderboardControls();renderLeaderboard()}};
   // Save wrapper adds V6 persistence and XP cloud.
   const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile()};
-  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();listenTradeResults();setTimeout(renderStreakTracker,50);});
+  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();listenTradeResults();listenFriendRequestResults();handleAdminRedirectResult();setTimeout(renderStreakTracker,50);});
   // migration from v5 remains intact; v6 is additive.
 })();
 </script>
