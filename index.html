@@ -2353,7 +2353,7 @@ const totalOwnedCount = Object.values(state.inventory).reduce((a, b) => a + b, 0
 if (totalOwnedCount > 0 && (state.stats.packsOpened || 0) === 0) {
 state.stats.packsOpened = Math.ceil(totalOwnedCount / 3);
 }
-state.points = 999;
+
 checkTrophiesQuiet();
 initImages();
 setupHomeCarouselTouch();
