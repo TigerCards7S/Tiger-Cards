@@ -1490,7 +1490,7 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 <span class="streak-tracker-label">Streak Daily · 7 Giorni <button class="info-mini-btn" onclick="openStreakInfoModal()" aria-label="Info Streak">i</button></span>
 <div class="streak-flames" id="streak-flames-row"></div>
 </div>
-<button id="streak-gift-btn" class="streak-gift-btn" onclick="openPack('streakBonus')" disabled aria-label="Apri Weekly Chest">🎁</button>
+<button id="streak-gift-btn" class="streak-gift-btn" onclick="openPack('streakBonus')" disabled aria-label="Apri Pacchetto Streak">🎁</button>
 </div>
 
 <div class="carousel-wrapper" id="home-carousel-wrapper">
@@ -1543,29 +1543,29 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 
 <div class="pack-shop-slide">
 <div class="pack-container">
-<div id="pack-tile-shop" class="pack-card bonus tappable" onclick="handlePackTap('shop')">
-<span class="pack-badge-top">Pacchetto Bonus</span>
-<img id="pack-bonus-img" class="pack-logo-img" src="" alt="Pacchetto Bonus">
-<div>
-<div class="pack-title" style="color: var(--accent-orange);">Pacchetto Bonus</div>
-<div class="pack-desc">Contiene 1 Carta Mancante | Costo: 5 Punti</div>
-</div>
-</div>
-<p id="pack-tap-hint-shop" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
-</div>
-</div>
-
-<div class="pack-shop-slide">
-<div class="pack-container">
 <div id="pack-tile-premium" class="pack-card premium tappable" onclick="handlePackTap('premium')">
 <span class="pack-badge-top">Pacchetto Premium</span>
 <img id="pack-premium-img" class="pack-logo-img" src="" alt="Premium Pack">
 <div>
 <div class="pack-title" style="color: var(--brand-silver); text-shadow: 0 0 10px rgba(200,210,220,.65);">Premium Pack</div>
-<div class="pack-desc">Contiene 5 Carte Base casuali | Costo: 15 Punti</div>
+<div class="pack-desc">Contiene 5 Carte Base casuali | Costo: 10 Punti</div>
 </div>
 </div>
 <p id="pack-tap-hint-premium" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
+</div>
+</div>
+
+<div class="pack-shop-slide">
+<div class="pack-container">
+<div id="pack-tile-shop" class="pack-card bonus tappable" onclick="handlePackTap('shop')">
+<span class="pack-badge-top">Pacchetto Bonus</span>
+<img id="pack-bonus-img" class="pack-logo-img" src="" alt="Pacchetto Bonus">
+<div>
+<div class="pack-title" style="color: var(--accent-orange);">Pacchetto Bonus</div>
+<div class="pack-desc">Contiene 1 Carta Mancante | Costo: 12 Punti</div>
+</div>
+</div>
+<p id="pack-tap-hint-shop" class="pack-tap-hint">✨ TOCCA PER ACQUISTARE ✨</p>
 </div>
 </div>
 
@@ -1774,10 +1774,10 @@ SCHIERA / MODIFICA CARTA
 <h3 class="modal-title-modern">🔥 Streak Daily — Premi</h3>
 <p class="modal-sub-modern">Apri il Pacchetto Daily ogni giorno senza saltarne uno per far crescere la streak.</p>
 <div class="profile-section">
-<div class="streak-info-row"><span class="streak-info-day">Giorni 1-2</span><span class="streak-info-desc">Pacchetto Daily: 3 Carte Base casuali. Ogni doppione trovato si converte in +1 Punto Tigers.</span></div>
-<div class="streak-info-row"><span class="streak-info-day">Giorno 3</span><span class="streak-info-desc">🍀 Lucky Day: il Daily successivo ti garantisce almeno 1 Carta Mancante.</span></div>
-<div class="streak-info-row"><span class="streak-info-day">Giorni 4-6</span><span class="streak-info-desc">Pacchetto Daily normale, come i giorni 1-2.</span></div>
-<div class="streak-info-row"><span class="streak-info-day">Giorno 7</span><span class="streak-info-desc">🎁 Sblocchi la Weekly Chest: 3 Carte Base casuali + 2 Punti Tigers bonus.</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorni 1-2</span><span class="streak-info-desc">Pacchetto Daily: 3 Carte Base casuali. Ogni doppione trovato vale +1 Punto Tigers (la carta resta comunque tua, utile per la Mastery).</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorno 3</span><span class="streak-info-desc">Pacchetto Daily normale. 🍀 Da oggi si attiva il Lucky Day: il Daily di domani conterrà almeno 1 Carta Mancante garantita.</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorni 4-6</span><span class="streak-info-desc">Pacchetto Daily normale (il giorno 4 include la carta garantita dal Lucky Day).</span></div>
+<div class="streak-info-row"><span class="streak-info-day">Giorno 7</span><span class="streak-info-desc">🎁 Pacchetto Daily normale + si sblocca il Pacchetto Streak: 3 Carte Base extra + 2 Punti Tigers bonus fissi.</span></div>
 </div>
 <p style="font-size: 0.68rem; color: var(--text-muted); margin-top: 10px;">Se salti un giorno la streak riparte da 1.</p>
 <button class="btn" style="width: 100%; margin-top: 10px; font-size: 0.8rem; padding: 10px;" onclick="closeStreakInfoModal()">Ho Capito</button>
@@ -2235,6 +2235,20 @@ title: "OSSERVATORE",
 icon: "📦",
 description: "Apri almeno 15 pacchetti totali.",
 check: (st, uniqueBase, uniqueSpec) => (st.stats.packsOpened || 0) >= 15
+},
+{
+id: "gambler",
+title: "Amante del gambling",
+icon: "🎰",
+description: "Apri il tuo primo Premium Pack.",
+check: (st, uniqueBase, uniqueSpec) => (st.stats.premiumPacksOpened || 0) >= 1
+},
+{
+id: "hacker",
+title: "Hacker",
+icon: "💻",
+description: "Apri il tuo primo Code Pack.",
+check: (st, uniqueBase, uniqueSpec) => (st.stats.codePacksOpened || 0) >= 1
 }
 ];
 
@@ -2339,7 +2353,7 @@ const totalOwnedCount = Object.values(state.inventory).reduce((a, b) => a + b, 0
 if (totalOwnedCount > 0 && (state.stats.packsOpened || 0) === 0) {
 state.stats.packsOpened = Math.ceil(totalOwnedCount / 3);
 }
-
+state.points = 999;
 checkTrophiesQuiet();
 initImages();
 setupHomeCarouselTouch();
@@ -3441,12 +3455,12 @@ checkTrophies();
 setupPackModal('streakBonus', "🔥 Bonus Streak 5 Giorni!", pulled, duplicatesCount > 0 ? `Trovati ${duplicatesCount} doppioni! Convertiti in +${duplicatesCount} Punti Tigers!` : "Tutte carte nuove aggiunte alla collezione!");
 
 } else if (type === 'shop') {
-if (state.points < 5) return;
+if (state.points < 12) return;
 
 const missingBaseCards = BASE_PLAYERS.filter(p => !state.inventory[p.id]);
 if (missingBaseCards.length === 0) return;
 
-state.points -= 5;
+state.points -= 12;
 state.stats.packsOpened = (state.stats.packsOpened || 0) + 1;
 state.stats.bonusPacksOpened = (state.stats.bonusPacksOpened || 0) + 1;
 
@@ -3976,7 +3990,7 @@ syncFantaScoreToCloud();
   const news=[
     'Nuova stagione Tiger Cards: colleziona, mastera e scala la classifica.',
     'Mastera una Base trovandola 5 volte per sbloccare la sua foil esclusiva.',
-    'Weekly Chest: 3 carte Base random + 2 Punti Tigers ogni 7 giorni.',
+    'Pacchetto Streak: 3 carte Base extra + 2 Punti Tigers al 7° giorno di fila.',
     'Lucky Day: il prossimo Daily garantirà almeno una carta Base mancante.',
     'Condividi le tue carte e sfida i tuoi amici tramite Codice Amico.'
   ];
@@ -3987,7 +4001,7 @@ syncFantaScoreToCloud();
     state.tradeHistory=Array.isArray(state.tradeHistory)?state.tradeHistory:[]; state.seasonBadges=Array.isArray(state.seasonBadges)?state.seasonBadges:[];
     state.luckyDayNextDaily=!!state.luckyDayNextDaily; state.weeklyChestAvailable=!!state.weeklyChestAvailable;
     state.dailyCycleDay=state.dailyCycleDay||0; state.lastWeeklyChestDate=state.lastWeeklyChestDate||null;
-    state.stats.premiumPacksOpened=state.stats.premiumPacksOpened||0; state.stats.trades=state.stats.trades||0;
+    state.stats.premiumPacksOpened=state.stats.premiumPacksOpened||0; state.stats.codePacksOpened=state.stats.codePacksOpened||0; state.stats.trades=state.stats.trades||0;
     state.stats.socialShares=state.stats.socialShares||0;
     localStorage.setItem(V6_KEY,JSON.stringify(state));
   }
@@ -4151,8 +4165,8 @@ syncFantaScoreToCloud();
 
   function addMasterMarkup(item,card,count){if(card.type!=='base'||!count)return;const mastered=count>=5;if(mastered){const b=document.createElement('span');b.className='mastered-badge';b.textContent='MASTERED';item.appendChild(b)}else{const wrap=document.createElement('div');wrap.className='mastery-wrap';wrap.innerHTML='<div class="mastery-track"><div class="mastery-fill" style="width:'+Math.min(100,count/5*100)+'%"></div></div><div class="mastery-label">MASTER '+count+'/5</div>';item.appendChild(wrap)}}
   window.renderCollection=function(){legacyRenderCollection();const grid=document.getElementById('collection-grid');grid.querySelectorAll('.card-item').forEach((item,i)=>{const name=item.querySelector('.card-name')?.textContent;if(!name||name==='???')return;const card=ALL_CARDS.find(c=>c.name===name);if(card)addMasterMarkup(item,card,state.inventory[card.id]||0);if(card&&card.type==='base'&&state.inventory[card.id]>=5)item.classList.add('mastered-card')});};
-  window.openPack=async function(type){ensureV6State();if(type==='premium'){if(state.points<15){toast('Servono 15 Punti Tigers.');return}state.points-=15;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.premiumPacksOpened=(state.stats.premiumPacksOpened||0)+1;const pulled=[];for(let i=0;i<5;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(10);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(20);saveState();checkTrophies();setupPackModal('premium','Premium Pack',pulled,'5 carte Base casuali. I doppioni valgono +1 Punto Tigers.');return}
-    if(type==='streakBonus'){if(!state.weeklyChestAvailable&&!state.streakBonusAvailable){return}state.weeklyChestAvailable=false;state.streakBonusAvailable=false;state.stats.streakCycleCount=0;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.points+=2;const pulled=[];for(let i=0;i<3;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(40);saveState();setupPackModal('streakBonus','Weekly Chest',pulled,'Weekly Chest: 3 carte Base random + 2 Punti Tigers.');return}
+  window.openPack=async function(type){ensureV6State();if(type==='premium'){if(state.points<10){toast('Servono 10 Punti Tigers.');return}state.points-=10;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.premiumPacksOpened=(state.stats.premiumPacksOpened||0)+1;const pulled=[];for(let i=0;i<5;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(10);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(20);saveState();checkTrophies();setupPackModal('premium','Premium Pack',pulled,'5 carte Base casuali. I doppioni valgono +1 Punto Tigers.');return}
+    if(type==='streakBonus'){if(!state.weeklyChestAvailable&&!state.streakBonusAvailable){return}state.weeklyChestAvailable=false;state.streakBonusAvailable=false;state.stats.streakCycleCount=0;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.points+=2;const pulled=[];for(let i=0;i<3;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(40);saveState();setupPackModal('streakBonus','Pacchetto Streak',pulled,'Pacchetto Streak: 3 carte Base extra + 2 Punti Tigers bonus.');return}
     if(type==='daily'){
       if(state.lastDailyDate===getTodayString())return;
       const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const ys=yesterday.toISOString().slice(0,10);if(state.lastDailyDate===ys){state.stats.dailyStreak=(state.stats.dailyStreak||0)+1;state.stats.dailyCycleDay=(state.stats.dailyCycleDay||0)+1}else{state.stats.dailyStreak=1;state.stats.dailyCycleDay=1}state.stats.longestStreak=Math.max(state.stats.longestStreak||0,state.stats.dailyStreak);state.lastDailyDate=getTodayString();state.stats.packsOpened=(state.stats.packsOpened||0)+1;const pulled=[];let dup=0;let guaranteed=false;for(let i=0;i<3;i++){let p;if(state.luckyDayNextDaily&&!guaranteed){const missing=BASE_PLAYERS.filter(x=>!state.inventory[x.id]);p=missing.length?missing[Math.floor(Math.random()*missing.length)]:BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];guaranteed=true}else p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];const isDup=!!state.inventory[p.id];if(isDup){dup++;state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(8);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup})}state.luckyDayNextDaily=false;if(state.stats.dailyCycleDay===3)state.luckyDayNextDaily=true;if(state.stats.dailyCycleDay>=7){state.weeklyChestAvailable=true;state.stats.dailyCycleDay=0}saveState();checkTrophies();setupPackModal('daily','Pacchetto Daily',pulled,(guaranteed?'🍀 Lucky Day: almeno una carta mancante garantita. ':'')+(dup?'Doppioni convertiti in +'+dup+' Punti Tigers.':'Nessun doppione!'));return}
@@ -4160,13 +4174,13 @@ syncFantaScoreToCloud();
   };
   // Code Pack (30 punti): eroga direttamente l'ultima Carta Special rilasciata,
   // aggiungendola alla collezione. Nessun codice coinvolto: è un pacchetto come gli altri.
-  window.buyCodePack=function(){ensureV6State();if((state.points||0)<30){toast('Servono 30 Punti Tigers.');return}if(!SPECIAL_PLAYERS.length){toast('Nessuna carta Special disponibile al momento.');return}const sp=SPECIAL_PLAYERS[SPECIAL_PLAYERS.length-1];const isDup=!!state.inventory[sp.id];state.points-=30;state.inventory[sp.id]=(state.inventory[sp.id]||0)+1;saveState();checkTrophies();setupPackModal('code','Code Pack',[{player:sp,isDup}],isDup?'Doppione! '+sp.name+' era già nella tua collezione.':'⭐ '+sp.name+' aggiunta alla tua collezione!');toast('Code Pack riscattato: '+sp.name+'!')};
+  window.buyCodePack=function(){ensureV6State();if((state.points||0)<30){toast('Servono 30 Punti Tigers.');return}if(!SPECIAL_PLAYERS.length){toast('Nessuna carta Special disponibile al momento.');return}const sp=SPECIAL_PLAYERS[SPECIAL_PLAYERS.length-1];const isDup=!!state.inventory[sp.id];state.points-=30;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.codePacksOpened=(state.stats.codePacksOpened||0)+1;state.inventory[sp.id]=(state.inventory[sp.id]||0)+1;saveState();checkTrophies();setupPackModal('code','Code Pack',[{player:sp,isDup}],isDup?'Doppione! '+sp.name+' era già nella tua collezione.':'⭐ '+sp.name+' aggiunta alla tua collezione!');toast('Code Pack riscattato: '+sp.name+'!')};
   window.buySpecialTicket=window.buyCodePack; // alias di compatibilità
 
   // ===== Negozio: tap sul pacchetto -> popup di conferma (solo se si hanno punti sufficienti) =====
   const PACK_SHOP_CONFIG={
-    shop:{title:'Pacchetto Bonus',cost:5,desc:'Riceverai 1 Carta Base che non possiedi ancora.'},
-    premium:{title:'Premium Pack',cost:15,desc:'Riceverai 5 Carte Base casuali. I doppioni valgono +1 Punto Tigers.'},
+    shop:{title:'Pacchetto Bonus',cost:12,desc:'Riceverai 1 Carta Base che non possiedi ancora.'},
+    premium:{title:'Premium Pack',cost:10,desc:'Riceverai 5 Carte Base casuali. I doppioni valgono +1 Punto Tigers.'},
     code:{title:'Code Pack',cost:30,desc:'Riceverai subito l\'ultima Carta Special rilasciata, aggiunta alla tua collezione.'}
   };
   let pendingPackKind=null;
@@ -4200,7 +4214,7 @@ syncFantaScoreToCloud();
   }
   const oldUpdateUI=window.updateUI;window.updateUI=function(){oldUpdateUI();refreshPackShopHints()};
   // 7-day streak presentation
-  window.renderStreakTracker=function(){const row=document.getElementById('streak-flames-row'),gift=document.getElementById('streak-gift-btn');if(!row||!gift)return;row.innerHTML='';for(let i=1;i<=7;i++){const s=document.createElement('span');s.className='streak-flame'+(i<=Math.min(7,state.stats.dailyCycleDay||0)?' lit':'');s.textContent=i===7?'🎁':'🔥';row.appendChild(s)}const active=!!state.weeklyChestAvailable;gift.disabled=!active;gift.classList.toggle('active',active);gift.title=active?'Apri Weekly Chest':'Completa 7 Daily'};
+  window.renderStreakTracker=function(){const row=document.getElementById('streak-flames-row'),gift=document.getElementById('streak-gift-btn');if(!row||!gift)return;row.innerHTML='';for(let i=1;i<=7;i++){const s=document.createElement('span');s.className='streak-flame'+(i<=Math.min(7,state.stats.dailyCycleDay||0)?' lit':'');s.textContent=i===7?'🎁':'🔥';row.appendChild(s)}const active=!!state.weeklyChestAvailable;gift.disabled=!active;gift.classList.toggle('active',active);gift.title=active?'Apri Pacchetto Streak':'Completa 7 Daily'};
 
   window.openStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.add('active')};
   window.closeStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.remove('active')};
