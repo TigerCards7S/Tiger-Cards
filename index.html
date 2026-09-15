@@ -142,6 +142,7 @@ text-transform: uppercase;
 }
 
 .hamburger-btn {
+position: relative;
 background: none;
 border: none;
 color: var(--text-main);
@@ -348,6 +349,9 @@ transform: scale(1.12);
 
 .info-mini-btn{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:rgba(101,217,255,.18);border:1px solid var(--bright-blue);color:var(--bright-blue);font:800 .6rem/1 var(--font-heading);font-style:italic;cursor:pointer;vertical-align:middle;margin-left:4px;padding:0}
 .info-mini-btn:active{transform:scale(.9)}
+.lucky-day-badge{margin:0 14px 14px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(76,217,100,.18),rgba(76,217,100,.06));border:1px solid rgba(76,217,100,.4);color:#8ff5a8;font:800 .68rem/1.3 var(--font-heading);text-align:center;box-shadow:0 0 16px rgba(76,217,100,.18);animation:luckyDayPulse 2.2s ease-in-out infinite}
+@keyframes luckyDayPulse{0%,100%{opacity:.85}50%{opacity:1}}
+.social-alert-dot{position:absolute;top:7px;right:8px;width:10px;height:10px;border-radius:50%;background:var(--danger-red);box-shadow:0 0 7px rgba(239,68,68,.85);display:none;animation:luckyDayPulse 1.6s ease-in-out infinite}
 
 .streak-gift-btn {
 width: 52px;
@@ -656,6 +660,59 @@ mix-blend-mode: color-dodge;
 opacity: 0.8;
 animation: foilShimmer2 4.6s linear infinite;
 animation-delay: -1.6s;
+z-index: 3;
+}
+
+/* ========================================== */
+/* EFFETTO FOIL "MASTERY" — SOLO CARTE BASE MASTERIZZATE (5/5 copie) */
+/* Volutamente diverso da quello delle Special: righe diagonali ambrate che */
+/* scorrono + un bagliore pulsante, invece del riflesso arcobaleno delle Special. */
+/* ========================================== */
+@keyframes masteryFoilSweep {
+0% { background-position: -60% 40%; }
+100% { background-position: 160% 40%; }
+}
+@keyframes masteryFoilGlow {
+0%, 100% { opacity: 0.45; }
+50% { opacity: 0.85; }
+}
+
+.card-item.mastered-card { position: relative; overflow: hidden; }
+.fullscreen-card-container.mastered-view { position: relative; }
+
+.card-item.mastered-card .card-img-wrapper::after,
+.fullscreen-card-container.mastered-view::after {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+border-radius: inherit;
+background: repeating-linear-gradient(
+128deg,
+transparent 0px,
+transparent 9px,
+rgba(255, 179, 71, 0.4) 9px,
+rgba(255, 224, 130, 0.55) 13px,
+rgba(255, 179, 71, 0.4) 17px,
+transparent 21px,
+transparent 34px
+);
+background-size: 240% 240%;
+mix-blend-mode: color-dodge;
+animation: masteryFoilSweep 3.1s linear infinite;
+z-index: 3;
+}
+
+.card-item.mastered-card .card-img-wrapper::before,
+.fullscreen-card-container.mastered-view::before {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+border-radius: inherit;
+background: radial-gradient(circle at 50% 28%, rgba(255, 179, 71, 0.5), transparent 65%);
+mix-blend-mode: screen;
+animation: masteryFoilGlow 2.4s ease-in-out infinite;
 z-index: 3;
 }
 
@@ -1470,6 +1527,7 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 </div>
 <button class="hamburger-btn" onclick="openSideDrawer()" aria-label="Menu">
 <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+<span class="social-alert-dot" id="hamburger-alert-dot"></span>
 </button>
 </header>
 
@@ -1485,6 +1543,7 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 
 <div id="tab-home" class="tab-content active">
 <div class="news-strip" id="news-strip"><span class="news-label">TIGER NEWS</span><span class="news-dot"></span><div class="news-marquee"><div class="news-marquee-track" id="news-marquee-track">Benvenuto nella tua nuova stagione di collezionismo.</div></div></div>
+<div id="lucky-day-badge" class="lucky-day-badge" style="display:none">🍀 Lucky Day attivo: il prossimo Daily garantisce una Carta Mancante!</div>
 <div class="streak-tracker-banner">
 <div class="streak-tracker-info">
 <span class="streak-tracker-label">Streak Daily · 7 Giorni <button class="info-mini-btn" onclick="openStreakInfoModal()" aria-label="Info Streak">i</button></span>
@@ -1979,8 +2038,9 @@ Descrizione trofeo
   <div class="drawer-head"><img id="drawer-logo" src="" alt="Tigers"><div><div class="drawer-title">Tiger Cards</div><div class="drawer-sub">Il tuo spazio Tigers</div></div></div>
   <button class="drawer-btn primary" onclick="openProfilePage()">👤 Profilo & Codice Amico</button>
   <button class="drawer-btn" onclick="openTrophiesModal();closeSideDrawer()">🏆 Trofei & Badge</button>
-  <button class="drawer-btn" onclick="openFriendsPanel();closeSideDrawer()">🤝 Amici & Scambi</button>
+  <button class="drawer-btn" style="position:relative" onclick="openFriendsPanel();closeSideDrawer()">🤝 Amici & Scambi<span class="social-alert-dot" id="drawer-alert-dot"></span></button>
   <button class="drawer-btn" onclick="openProfileStatsModal();closeSideDrawer()">📊 Statistiche</button>
+  <button class="drawer-btn" id="daily-reminder-btn" onclick="toggleDailyReminders()">🔔 Promemoria Daily Pack</button>
   <button class="drawer-btn" onclick="shareApp()">📣 Condividi Tiger Cards</button>
   <button class="drawer-btn" onclick="installPWA()">📲 Installa App</button>
   <button class="drawer-btn" onclick="openAdminPanel();closeSideDrawer()">⚙️ Area Admin</button>
@@ -1995,7 +2055,7 @@ Descrizione trofeo
 </div>
 
 <div id="friends-tab-amici" class="friends-tab-panel">
-<div class="code-input-group row"><input id="friend-code-input" class="code-input" maxlength="14" placeholder="CODICE AMICO"><button class="btn compact-btn" onclick="addFriendByCode()">INVIA</button></div>
+<div class="code-input-group row"><input id="friend-code-input" class="code-input" maxlength="14" placeholder="CODICE AMICO"><button class="btn compact-btn" id="friend-request-btn" onclick="addFriendByCode()">INVIA</button></div>
 <div id="friend-request-status" class="code-message compact"></div>
 <div class="friends-subsection-title">📥 Richieste ricevute</div>
 <div id="friend-requests-inbox"></div>
@@ -2007,7 +2067,7 @@ Descrizione trofeo
 <select id="trade-friend-select" class="filter-select compact"></select>
 <select id="trade-offer-card" class="filter-select compact"></select>
 <select id="trade-want-card" class="filter-select compact"></select>
-<button class="btn btn-orange compact-btn" onclick="sendTradeRequest()">INVIA PROPOSTA</button>
+<button class="btn btn-orange compact-btn" id="send-trade-btn" onclick="sendTradeRequest()">INVIA PROPOSTA</button>
 <div id="trade-status" class="code-message compact"></div>
 <div id="trade-inbox"></div>
 </div>
@@ -2084,6 +2144,57 @@ console.warn("Firebase non configurato: la Classifica Globale resterà solo loca
 } catch (e) {
 console.error("Errore inizializzazione Firebase:", e);
 firebaseReady = false;
+}
+
+// ==========================================
+// IDENTITÀ FIREBASE (login anonimo automatico)
+// Le regole Firestore richiedono un utente autenticato per ogni operazione online
+// (classifica, amici, scambi): qui stabiliamo un'identità Firebase stabile per
+// ognuno, sostituendo il vecchio ID locale generato a caso. Finché questa identità
+// non è pronta (firebaseIdentityReady=false), le funzioni online restano in attesa
+// invece di scrivere con un ID che le regole rifiuterebbero comunque.
+// NOTA MIGRAZIONE: chi aveva già dati online (classifica/amici) sotto il vecchio ID
+// locale li troverà "orfani": è il costo una tantum di questo irrobustimento.
+// ==========================================
+let firebaseIdentityReady = false;
+async function bootstrapFirebaseIdentity(){
+if (!firebaseReady || !fbAuth) return;
+try {
+await firebaseAuthPersistenceReady;
+let user = await firebaseAuthReady;
+if (!user) {
+const cred = await fbAuth.signInAnonymously();
+user = cred.user;
+}
+if (user && user.uid) {
+if (state.fantaUserId !== user.uid) { state.fantaUserId = user.uid; saveState(); }
+firebaseIdentityReady = true;
+initFantaCloudSync();
+initMatchConfigSync();
+initSeasonSync();
+publishFriendProfile();
+syncFantaScoreToCloud();
+listenTradeResults();
+listenFriendRequestResults();
+listenSocialBadges();
+renderFriendsPanel();
+}
+} catch (e) {
+console.error("Errore login anonimo Firebase:", e);
+}
+}
+// Se l'utente diventa admin (login Google collegato) o torna anonimo, l'identità
+// resta quella dell'utente corrente: aggiorniamo fantaUserId di conseguenza.
+if (firebaseReady && fbAuth) {
+fbAuth.onAuthStateChanged(function(user){
+if (user && user.uid && state.fantaUserId !== user.uid) {
+state.fantaUserId = user.uid;
+saveState();
+firebaseIdentityReady = true;
+publishFriendProfile();
+syncFantaScoreToCloud();
+}
+});
 }
 
 // ==========================================
@@ -2249,6 +2360,13 @@ title: "Hacker",
 icon: "💻",
 description: "Apri il tuo primo Code Pack.",
 check: (st, uniqueBase, uniqueSpec) => (st.stats.codePacksOpened || 0) >= 1
+},
+{
+id: "collezionista",
+title: "Collezionista",
+icon: "🏆",
+description: "Masterizza (5 copie) tutte le carte Base.",
+check: (st, uniqueBase, uniqueSpec) => BASE_PLAYERS.every(p => (st.inventory[p.id] || 0) >= 5)
 }
 ];
 
@@ -2263,10 +2381,8 @@ packsOpened: 0,
 bonusPacksOpened: 0,
 duplicatesFound: 0,
 dailyStreak: 0,
-longestStreak: 0,
-streakCycleCount: 0
+longestStreak: 0
 },
-streakBonusAvailable: false,
 firstOpenDate: null,
 // DATI FANTATIGERS
 fantaUserId: null,
@@ -2325,8 +2441,6 @@ if (!state.stats) state.stats = { packsOpened: 0, bonusPacksOpened: 0, duplicate
 if (state.stats.duplicatesFound === undefined) state.stats.duplicatesFound = 0;
 if (state.stats.dailyStreak === undefined) state.stats.dailyStreak = 0;
 if (state.stats.longestStreak === undefined) state.stats.longestStreak = 0;
-if (state.stats.streakCycleCount === undefined) state.stats.streakCycleCount = 0;
-if (state.streakBonusAvailable === undefined) state.streakBonusAvailable = false;
 
 // La prima volta che questa versione dell'app viene aperta su un dispositivo,
 // registriamo la data odierna come "data di inizio". Per chi gioca già da prima
@@ -2460,25 +2574,15 @@ const day = String(now.getDate()).padStart(2, '0');
 return `${year}-${month}-${day}`;
 }
 
-// Disegna la striscia di 5 fiammelle (grigie finché non raggiunte, colorate una per
-// ogni giorno consecutivo) e attiva/disattiva il pulsante regalo del Pacchetto Streak.
-function renderStreakTracker() {
-const flamesRow = document.getElementById('streak-flames-row');
-const giftBtn = document.getElementById('streak-gift-btn');
-if (!flamesRow || !giftBtn) return;
-
-const cycle = Math.min(5, state.stats.streakCycleCount || 0);
-flamesRow.innerHTML = '';
-for (let i = 1; i <= 5; i++) {
-const span = document.createElement('span');
-span.className = 'streak-flame' + (i <= cycle ? ' lit' : '');
-span.innerText = '🔥';
-flamesRow.appendChild(span);
-}
-
-const isActive = !!state.streakBonusAvailable;
-giftBtn.disabled = !isActive;
-giftBtn.classList.toggle('active', isActive);
+// Identificatore di settimana ISO (es. "2026-W37"), usato per capire quando
+// azzerare il punteggio fantaTigers "Settimanale" senza bisogno di un server.
+function getISOWeekId(date) {
+const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+const dayNum = (d.getUTCDay() + 6) % 7; // lunedì=0 ... domenica=6
+d.setUTCDate(d.getUTCDate() - dayNum + 3);
+const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+const weekNum = 1 + Math.round(((d - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+return d.getUTCFullYear() + '-W' + String(weekNum).padStart(2, '0');
 }
 
 function updateUI() {
@@ -2781,8 +2885,11 @@ listEl.appendChild(div);
 // Cosi' quando l'admin salva data/voti dal pannello, TUTTI i dispositivi (compreso il
 // tuo) ricevono l'aggiornamento automaticamente, senza bisogno di modificare il file
 // HTML o rifare il deploy su GitHub Pages.
+let matchConfigSyncStarted = false;
 function initMatchConfigSync() {
 if (!firebaseReady || !db) return;
+if (matchConfigSyncStarted) return;
+matchConfigSyncStarted = true;
 db.collection('meta').doc('currentMatch').onSnapshot(function(doc) {
 if (!doc.exists) return;
 const data = doc.data();
@@ -2804,8 +2911,11 @@ console.error("Errore sincronizzazione configurazione partita:", err);
 // ripubblica sul cloud, cosi' il "reset stagionale" fatto dall'admin si applica
 // automaticamente a ogni utente quando riapre l'app (il database viene comunque
 // azzerato subito per tutti dall'azione admin stessa).
+let seasonSyncStarted = false;
 function initSeasonSync() {
 if (!firebaseReady || !db) return;
+if (seasonSyncStarted) return;
+seasonSyncStarted = true;
 db.collection('meta').doc('currentSeason').onSnapshot(function(doc) {
 if (!doc.exists) return;
 const remoteSeasonNumber = doc.data().seasonNumber;
@@ -3105,6 +3215,12 @@ const fantaMatchKey = CURRENT_MATCH_CONFIG.matchId + '_' + CURRENT_MATCH_CONFIG.
 if (CURRENT_MATCH_CONFIG.votesPublished && state.fantaDeployedCardId && !state.fantaProcessedMatches[fantaMatchKey]) {
 const vote = CURRENT_MATCH_CONFIG.playerVotes[state.fantaDeployedCardId] || 0;
 state.fantaTotalPoints = Math.round((state.fantaTotalPoints + vote) * 10) / 10;
+// All Time: si somma sempre, non si azzera mai (nemmeno al cambio stagione).
+state.fantaAllTimePoints = Math.round(((state.fantaAllTimePoints || 0) + vote) * 10) / 10;
+// Settimanale: si azzera automaticamente ogni volta che si entra in una nuova settimana ISO.
+const currentWeekId = getISOWeekId(new Date());
+if (state.fantaWeeklyWeekId !== currentWeekId) { state.fantaWeeklyWeekId = currentWeekId; state.fantaWeeklyPoints = 0; }
+state.fantaWeeklyPoints = Math.round(((state.fantaWeeklyPoints || 0) + vote) * 10) / 10;
 state.fantaProcessedMatches[fantaMatchKey] = true;
 
 // Registriamo questo schieramento nello storico personale (solo sul tuo dispositivo,
@@ -3369,92 +3485,7 @@ if (tabId === 'fantaTigers') renderFantaSection();
 }
 
 function openPack(type) {
-if (type === 'daily') {
-if (state.lastDailyDate === getTodayString()) return;
-
-// Calcola lo streak di giorni consecutivi PRIMA di aggiornare lastDailyDate.
-// dailyStreak/longestStreak sono le statistiche "storiche" mostrate nel profilo
-// (non si azzerano mai per il bonus). streakCycleCount è invece un contatore
-// interno dedicato SOLO al bonus dei 5 giorni: cresce insieme allo streak, ma
-// si azzera a parte ogni volta che raggiunge 5, ricominciando da zero.
-const yesterday = new Date();
-yesterday.setDate(yesterday.getDate() - 1);
-const yesterdayStr = yesterday.getFullYear() + '-' + String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + String(yesterday.getDate()).padStart(2, '0');
-if (state.lastDailyDate === yesterdayStr) {
-state.stats.dailyStreak = (state.stats.dailyStreak || 0) + 1;
-state.stats.streakCycleCount = (state.stats.streakCycleCount || 0) + 1;
-} else {
-state.stats.dailyStreak = 1;
-state.stats.streakCycleCount = 1;
-}
-if (state.stats.dailyStreak > (state.stats.longestStreak || 0)) {
-state.stats.longestStreak = state.stats.dailyStreak;
-}
-
-// Raggiunti i 5 giorni di fila: sblocca il pacchetto bonus extra. Le fiammelle
-// restano tutte accese finché non apri effettivamente il Pacchetto Streak: il
-// reset avviene più sotto, nel branch 'streakBonus'.
-if (state.stats.streakCycleCount >= 5) {
-state.streakBonusAvailable = true;
-}
-
-state.lastDailyDate = getTodayString();
-state.stats.packsOpened = (state.stats.packsOpened || 0) + 1;
-
-let pulled = [];
-let duplicatesCount = 0;
-
-for (let i = 0; i < 3; i++) {
-const randomIndex = Math.floor(Math.random() * BASE_PLAYERS.length);
-const player = BASE_PLAYERS[randomIndex];
-const isDup = !!state.inventory[player.id];
-
-if (isDup) {
-duplicatesCount++;
-state.points++;
-state.stats.duplicatesFound = (state.stats.duplicatesFound || 0) + 1;
-}
-
-state.inventory[player.id] = (state.inventory[player.id] || 0) + 1;
-pulled.push({ player, isDup });
-}
-
-checkTrophies();
-setupPackModal('daily', "Pacchetto Daily", pulled, duplicatesCount > 0 ? `Trovati ${duplicatesCount} doppioni! Convertiti in +${duplicatesCount} Punti Tigers!` : "Tutte carte nuove aggiunte alla collezione!");
-
-} else if (type === 'streakBonus') {
-// Pacchetto extra sbloccato al raggiungimento di 5 giorni di streak consecutivi.
-// Stessa meccanica del pacchetto daily (3 carte base casuali), ma è un'apertura
-// aggiuntiva indipendente: non tocca lastDailyDate, quindi non consuma né
-// sostituisce il pacchetto daily del giorno.
-if (!state.streakBonusAvailable) return;
-state.streakBonusAvailable = false;
-// Le fiammelle si azzerano solo ora, ad apertura del pacchetto avvenuta.
-state.stats.streakCycleCount = 0;
-state.stats.packsOpened = (state.stats.packsOpened || 0) + 1;
-
-let pulled = [];
-let duplicatesCount = 0;
-
-for (let i = 0; i < 3; i++) {
-const randomIndex = Math.floor(Math.random() * BASE_PLAYERS.length);
-const player = BASE_PLAYERS[randomIndex];
-const isDup = !!state.inventory[player.id];
-
-if (isDup) {
-duplicatesCount++;
-state.points++;
-state.stats.duplicatesFound = (state.stats.duplicatesFound || 0) + 1;
-}
-
-state.inventory[player.id] = (state.inventory[player.id] || 0) + 1;
-pulled.push({ player, isDup });
-}
-
-checkTrophies();
-setupPackModal('streakBonus', "🔥 Bonus Streak 5 Giorni!", pulled, duplicatesCount > 0 ? `Trovati ${duplicatesCount} doppioni! Convertiti in +${duplicatesCount} Punti Tigers!` : "Tutte carte nuove aggiunte alla collezione!");
-
-} else if (type === 'shop') {
+if (type === 'shop') {
 if (state.points < 12) return;
 
 const missingBaseCards = BASE_PLAYERS.filter(p => !state.inventory[p.id]);
@@ -3891,8 +3922,7 @@ inventory: {},
 usedCodes: {},
 lastDailyDate: null,
 unlockedTrophies: {},
-stats: { packsOpened: 0, bonusPacksOpened: 0, duplicatesFound: 0, dailyStreak: 0, longestStreak: 0, streakCycleCount: 0 },
-streakBonusAvailable: false,
+stats: { packsOpened: 0, bonusPacksOpened: 0, duplicatesFound: 0, dailyStreak: 0, longestStreak: 0 },
 firstOpenDate: getTodayString(),
 fantaUserId: generateUserId(),
 fantaUserName: "TigerFan_" + Math.floor(1000 + Math.random() * 9000),
@@ -3952,9 +3982,13 @@ this.src = card.type === 'special' ? (BACK_CARD_SPECIAL_PATH || BACK_CARD_SPECIA
 };
 const container = document.getElementById('fullscreen-container');
 container.classList.toggle('special-view', card.type === 'special');
+container.classList.toggle('mastered-view', card.type === 'base' && (state.inventory[card.id] || 0) >= 5);
 if (card.type === 'special') {
 container.style.border = '2px solid var(--text-gold)';
 container.style.boxShadow = '0 0 25px rgba(255, 215, 0, 0.4)';
+} else if ((state.inventory[card.id] || 0) >= 5) {
+container.style.border = '2px solid #ffb347';
+container.style.boxShadow = '0 0 25px rgba(255, 179, 71, 0.4)';
 } else {
 container.style.border = '2px solid var(--bright-blue)';
 container.style.boxShadow = '0 0 25px rgba(79, 134, 196, 0.4)';
@@ -3968,10 +4002,6 @@ document.getElementById('fullscreen-modal').classList.remove('active');
 
 window.onload = function() {
 loadState();
-initFantaCloudSync();
-initMatchConfigSync();
-initSeasonSync();
-syncFantaScoreToCloud();
 };
 
 /* ===== TIGER CARDS v6 — GAMEPLAY / SOCIAL / PWA ===== */
@@ -3995,7 +4025,7 @@ syncFantaScoreToCloud();
     'Condividi le tue carte e sfida i tuoi amici tramite Codice Amico.'
   ];
   function ensureV6State(){
-    state.xp=state.xp||0; state.level=state.level||1; state.weeklyPoints=state.weeklyPoints||0;
+    state.xp=state.xp||0; state.level=state.level||1; state.fantaWeeklyPoints=state.fantaWeeklyPoints||0; state.fantaAllTimePoints=state.fantaAllTimePoints||0; state.dailyRemindersEnabled=state.dailyRemindersEnabled||false;
     state.friendCode=state.friendCode||('TGR-'+Math.random().toString(36).slice(2,6).toUpperCase()+Math.floor(10+Math.random()*90));
     state.friends=Array.isArray(state.friends)?state.friends:[]; state.friendRequests=state.friendRequests||{};
     state.tradeHistory=Array.isArray(state.tradeHistory)?state.tradeHistory:[]; state.seasonBadges=Array.isArray(state.seasonBadges)?state.seasonBadges:[];
@@ -4019,6 +4049,47 @@ syncFantaScoreToCloud();
   window.shareText=function(text,title){state.stats.socialShares=(state.stats.socialShares||0)+1;saveState();if(navigator.share){navigator.share({title:title||'Tiger Cards',text:text}).catch(()=>{})}else{navigator.clipboard?.writeText(text);toast('Testo copiato per la condivisione!')}};
   window.shareApp=function(){shareText('Scopri Tiger Cards, la collezione dei Volley Lab Settesoli Tigers!','Tiger Cards');closeSideDrawer()};
   window.renderProfilePage=function(){ensureV6State();document.getElementById('profile-avatar').src=logoPath;document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-page-name').textContent=state.fantaUserName;document.getElementById('profile-friend-code').textContent=state.friendCode;document.getElementById('season-badges').innerHTML=(state.seasonBadges||[]).length?state.seasonBadges.map(b=>'<span class="season-badge">'+b+'</span>').join(''):'<span style="font-size:.7rem;color:var(--text-muted)">I tuoi podi fantaTigers appariranno qui.</span>';const f=(state.friends||[]);document.getElementById('friends-list').innerHTML=f.length?f.map(x=>'<div style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)">🤝 '+(x.name||x.id||x)+'</div>').join(''):'Nessun amico aggiunto.';document.getElementById('profile-page-stats').innerHTML='<div class="stat-tile"><div class="stat-tile-value">'+(state.points||0)+'</div><div class="stat-tile-label">Punti Tigers</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.fantaTotalPoints||0)+'</div><div class="stat-tile-label">Fanta PT</div></div><div class="stat-tile"><div class="stat-tile-value">'+(Object.values(state.inventory||{}).reduce((a,b)=>a+b,0))+'</div><div class="stat-tile-label">Carte Totali</div></div><div class="stat-tile"><div class="stat-tile-value">'+(state.stats.trades||0)+'</div><div class="stat-tile-label">Scambi</div></div>'};
+    // ===== Pallino di notifica su hamburger + voce menu: richieste amicizia/scambi in sospeso =====
+  let pendingFriendReqCount=0, pendingTradeCount=0;
+  function updateSocialAlertDots(){
+    const show=(pendingFriendReqCount+pendingTradeCount)>0;
+    ['hamburger-alert-dot','drawer-alert-dot'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=show?'block':'none'});
+  }
+  function listenSocialBadges(){
+    if(!firebaseReady||!db||!state.fantaUserId)return;
+    db.collection('friendRequests').where('toId','==',state.fantaUserId).where('status','==','pending').onSnapshot(snap=>{pendingFriendReqCount=snap.size;updateSocialAlertDots()},()=>{});
+    db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').onSnapshot(snap=>{pendingTradeCount=snap.size;updateSocialAlertDots()},()=>{});
+  }
+  // ===== Promemoria Daily Pack (Notification API, senza service worker/push): =====
+  // funziona quando l'app è aperta o in una scheda in background; non garantito ad
+  // app completamente chiusa (per quello servirebbe una Cloud Function a pagamento,
+  // volutamente non usata).
+  function refreshDailyReminderBtnLabel(){
+    const btn=document.getElementById('daily-reminder-btn');if(!btn)return;
+    if(typeof Notification==='undefined'){btn.textContent='🔔 Promemoria non supportati su questo browser';return}
+    if(state.dailyRemindersEnabled&&Notification.permission==='granted')btn.textContent='🔕 Disattiva promemoria Daily Pack';
+    else btn.textContent='🔔 Attiva promemoria Daily Pack';
+  }
+  window.toggleDailyReminders=async function(){
+    if(typeof Notification==='undefined'){toast('Il tuo browser non supporta le notifiche.');return}
+    if(state.dailyRemindersEnabled){state.dailyRemindersEnabled=false;saveState();refreshDailyReminderBtnLabel();toast('Promemoria disattivati.');return}
+    const perm=Notification.permission==='granted'?'granted':await Notification.requestPermission();
+    if(perm!=='granted'){toast('Permesso notifiche negato.');return}
+    state.dailyRemindersEnabled=true;saveState();refreshDailyReminderBtnLabel();toast('Promemoria attivati! Ti avviseremo quando il Daily Pack è pronto (se tieni l\'app aperta o in background).');
+    checkDailyReminder();
+  };
+  function checkDailyReminder(){
+    if(!state.dailyRemindersEnabled||typeof Notification==='undefined'||Notification.permission!=='granted')return;
+    const today=getTodayString();
+    if(state.lastDailyDate===today)return; // Daily già aperto oggi, niente da ricordare.
+    if(state.lastReminderNotifDate===today)return; // Già notificato oggi.
+    try{
+      new Notification('🐯 Tiger Cards',{body:'Il tuo Pacchetto Daily di oggi è pronto! Aprilo per continuare la streak.',icon:'app_img/icon-192.png',tag:'daily-pack-reminder'});
+      state.lastReminderNotifDate=today;saveState();
+    }catch(e){console.error('Errore invio notifica promemoria:',e)}
+  }
+  setInterval(checkDailyReminder,5*60*1000);
+
   window.openFriendsPanel=function(){ensureV6State();document.getElementById('friends-modal').classList.add('active');switchFriendsTab('amici');renderFriendsPanel();populateTradeSelects()};
   window.closeFriendsPanel=function(){document.getElementById('friends-modal').classList.remove('active')};
   window.switchFriendsTab=function(tab){
@@ -4032,24 +4103,30 @@ syncFantaScoreToCloud();
   window.removeFriend=function(i){state.friends.splice(i,1);saveState();renderFriendsPanel();renderProfilePage()};
   window.addFriendByCode=async function(){
     const input=document.getElementById('friend-code-input');
+    const btn=document.getElementById('friend-request-btn');
     const statusEl=document.getElementById('friend-request-status');
     const code=input.value.trim().toUpperCase().replace(/\s+/g,'');
     statusEl.textContent='';
     if(!code)return;
     if(code===state.friendCode){toast('Questo è il tuo codice.');return}
     if(!firebaseReady||!db){statusEl.textContent='Firebase non disponibile: impossibile cercare amici.';return}
+    if(!firebaseIdentityReady){statusEl.textContent='Connessione in corso, riprova tra un istante.';return}
+    const originalLabel=btn.textContent;
+    btn.disabled=true;btn.textContent='RICERCA...';statusEl.textContent='';
     let snap;
     try{
       snap=await db.collection('friendProfiles').where('friendCode','==',code).limit(1).get();
     }catch(e){
       console.error('Errore ricerca codice amico:',e);
       statusEl.textContent='Errore di connessione durante la ricerca. Riprova tra poco.';
+      btn.disabled=false;btn.textContent=originalLabel;
       return;
     }
-    if(snap.empty){statusEl.textContent='Codice amico non trovato. Controlla che sia corretto e che l\'amico abbia aperto l\'app almeno una volta con connessione attiva.';return}
+    if(snap.empty){statusEl.textContent='Codice amico non trovato. Controlla che sia corretto e che l\'amico abbia aperto l\'app almeno una volta con connessione attiva.';btn.disabled=false;btn.textContent=originalLabel;return}
     const d=snap.docs[0].data(),targetId=snap.docs[0].id;
-    if(targetId===state.fantaUserId){toast('Questo è il tuo codice.');return}
-    if((state.friends||[]).some(x=>(x.id||x)===targetId)){statusEl.textContent='È già tuo amico.';return}
+    if(targetId===state.fantaUserId){toast('Questo è il tuo codice.');btn.disabled=false;btn.textContent=originalLabel;return}
+    if((state.friends||[]).some(x=>(x.id||x)===targetId)){statusEl.textContent='È già tuo amico.';btn.disabled=false;btn.textContent=originalLabel;return}
+    btn.textContent='INVIO...';
     try{
       const existing=await db.collection('friendRequests').where('fromId','==',state.fantaUserId).where('toId','==',targetId).where('status','==','pending').limit(1).get();
       if(!existing.empty){statusEl.textContent='Richiesta già inviata, in attesa di risposta.';return}
@@ -4060,11 +4137,14 @@ syncFantaScoreToCloud();
     }catch(e){
       console.error('Errore invio richiesta amicizia:',e);
       statusEl.textContent='Errore durante l\'invio della richiesta. Riprova tra poco.';
+    }finally{
+      btn.disabled=false;btn.textContent=originalLabel;
     }
   };
   async function renderFriendRequestsInbox(){
     const el=document.getElementById('friend-requests-inbox');if(!el)return;
-    if(!firebaseReady||!db||!state.fantaUserId){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Nessuna richiesta.</div>';return}
+    el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Caricamento...</div>';
+    if(!firebaseReady||!db||!state.fantaUserId||!firebaseIdentityReady){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Connessione in corso...</div>';return}
     let snap;
     try{snap=await db.collection('friendRequests').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();}
     catch(e){el.innerHTML='<div style="font-size:.7rem;color:var(--text-muted)">Impossibile caricare le richieste.</div>';return}
@@ -4074,26 +4154,28 @@ syncFantaScoreToCloud();
       const d=doc.data();
       const box=document.createElement('div');
       box.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid rgba(255,216,106,.3);border-radius:9px;margin:5px 0;font-size:.72rem';
-      box.innerHTML='<span>👋 <b>'+(d.fromName||'TigerFan')+'</b> vuole aggiungerti</span><div style="display:flex;gap:6px"><button class="social-btn" onclick="acceptFriendRequest(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectFriendRequest(\''+doc.id+'\')">RIFIUTA</button></div>';
+      box.innerHTML='<span>👋 <b>'+(d.fromName||'TigerFan')+'</b> vuole aggiungerti</span><div style="display:flex;gap:6px"><button class="social-btn" onclick="acceptFriendRequest(\''+doc.id+'\',this)">ACCETTA</button><button class="social-btn" onclick="rejectFriendRequest(\''+doc.id+'\',this)">RIFIUTA</button></div>';
       el.appendChild(box);
     });
   }
-  window.acceptFriendRequest=async function(id){
+  window.acceptFriendRequest=async function(id,btn){
     if(!firebaseReady||!db)return;
+    const row=btn&&btn.closest('div[style]');if(btn){btn.disabled=true;if(row)row.querySelectorAll('button').forEach(b=>b.disabled=true);btn.textContent='...'}
     const ref=db.collection('friendRequests').doc(id);
     let snap;
-    try{snap=await ref.get();}catch(e){toast('Errore di connessione.');return}
+    try{snap=await ref.get();}catch(e){toast('Errore di connessione.');if(btn){btn.disabled=false;btn.textContent='ACCETTA'}return}
     if(!snap.exists)return;
     const d=snap.data();
     if(d.status!=='pending')return;
     if(!(state.friends||[]).some(x=>(x.id||x)===d.fromId)){state.friends=state.friends||[];state.friends.push({id:d.fromId,name:d.fromName||'TigerFan',friendCode:d.fromFriendCode||''})}
-    try{await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){toast('Errore durante l\'accettazione.');return}
+    try{await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){toast('Errore durante l\'accettazione.');if(btn){btn.disabled=false;btn.textContent='ACCETTA'}return}
     saveState();
     toast('Ora sei amico di '+(d.fromName||'TigerFan')+'!');
     renderFriendsPanel();renderProfilePage();
   };
-  window.rejectFriendRequest=async function(id){
+  window.rejectFriendRequest=async function(id,btn){
     if(!firebaseReady||!db)return;
+    const row=btn&&btn.closest('div[style]');if(btn){btn.disabled=true;if(row)row.querySelectorAll('button').forEach(b=>b.disabled=true);btn.textContent='...'}
     try{await db.collection('friendRequests').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});}catch(e){}
     renderFriendsPanel();
   };
@@ -4132,8 +4214,10 @@ syncFantaScoreToCloud();
   }
   window.sendTradeRequest=async function(){
     const statusEl=document.getElementById('trade-status');
+    const btn=document.getElementById('send-trade-btn');
     statusEl.textContent='';
     if(!firebaseReady||!db){statusEl.textContent='Firebase non disponibile.';return}
+    if(!firebaseIdentityReady){statusEl.textContent='Connessione in corso, riprova tra un istante.';return}
     if(!state.friends||!state.friends.length){statusEl.textContent='Aggiungi prima un amico nella tab Amici.';return}
     const friendId=document.getElementById('trade-friend-select').value;
     const target=state.friends.find(f=>f.id===friendId);
@@ -4142,13 +4226,16 @@ syncFantaScoreToCloud();
     if(!offer||!want){statusEl.textContent='Seleziona entrambe le carte.';return}
     if(offer===want){statusEl.textContent='Le due carte devono essere diverse.';return}
     if((state.inventory[offer]||0)<1){statusEl.textContent='Non possiedi la carta offerta.';return}
+    const originalLabel=btn.textContent;
+    btn.disabled=true;btn.textContent='VERIFICA...';
     // Limite: 1 scambio inviato al giorno per utente, indipendentemente dal numero di amici.
     try{
       const todayStart=new Date();todayStart.setHours(0,0,0,0);
       const sentSnap=await db.collection('trades').where('fromId','==',state.fantaUserId).limit(50).get();
       const alreadySentToday=sentSnap.docs.some(doc=>{const d=doc.data();return d.createdAt&&d.createdAt.toDate&&d.createdAt.toDate()>=todayStart});
-      if(alreadySentToday){statusEl.textContent='Hai già effettuato uno scambio oggi. Riprova domani.';return}
-    }catch(e){console.error('Errore controllo limite scambi:',e);statusEl.textContent='Errore di connessione. Riprova tra poco.';return}
+      if(alreadySentToday){statusEl.textContent='Hai già effettuato uno scambio oggi. Riprova domani.';btn.disabled=false;btn.textContent=originalLabel;return}
+    }catch(e){console.error('Errore controllo limite scambi:',e);statusEl.textContent='Errore di connessione. Riprova tra poco.';btn.disabled=false;btn.textContent=originalLabel;return}
+    btn.textContent='INVIO...';
     try{
       await db.collection('trades').add({fromId:state.fantaUserId,fromName:state.fantaUserName,toId:target.id,toName:target.name||'TigerFan',offerCardId:offer,wantCardId:want,status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
       toast('Proposta inviata a '+(target.name||'TigerFan')+'.');
@@ -4156,20 +4243,22 @@ syncFantaScoreToCloud();
     }catch(e){
       console.error('Errore invio proposta scambio:',e);
       statusEl.textContent='Errore durante l\'invio. Riprova tra poco.';
+    }finally{
+      btn.disabled=false;btn.textContent=originalLabel;
     }
   };
-  async function renderTradeInbox(){const el=document.getElementById('trade-inbox');if(!firebaseReady||!db){el.innerHTML='';return}const snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get();el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div>';snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\')">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\')">RIFIUTA</button></div>';el.appendChild(box)})}
-  window.rejectTrade=async function(id){if(firebaseReady&&db)await db.collection('trades').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});renderFriendsPanel()};
-  window.acceptTrade=async function(id){if(!firebaseReady||!db)return;const ref=db.collection('trades').doc(id),snap=await ref.get();if(!snap.exists)return;const d=snap.data();if(d.status!=='pending')return;if((state.inventory[d.wantCardId]||0)<1){toast('Non possiedi la carta richiesta.');return}state.inventory[d.wantCardId]-=1;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp(),recipientApplied:true});saveState();toast('Scambio completato!');renderFriendsPanel();renderCollection()};
-  function listenTradeResults(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('trades').where('fromId','==',state.fantaUserId).where('status','==','accepted').limit(20).onSnapshot(snap=>{snap.docChanges().forEach(ch=>{if(ch.type!=='added'&&ch.type!=='modified')return;const d=ch.doc.data();if(d.senderApplied)return;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)-1;if(state.inventory[d.offerCardId]<0)state.inventory[d.offerCardId]=0;state.inventory[d.wantCardId]=(state.inventory[d.wantCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);localStorage.setItem(V6_KEY,JSON.stringify(state));ch.doc.ref.update({senderApplied:true}).catch(()=>{});toast('🤝 Scambio ricevuto: '+(BASE_PLAYERS.find(p=>p.id===d.wantCardId)?.name||'carta'));renderCollection();renderProfilePage();})})} 
+  async function renderTradeInbox(){const el=document.getElementById('trade-inbox');el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div><div style="font-size:.7rem;color:var(--text-muted)">Caricamento...</div>';if(!firebaseReady||!db||!firebaseIdentityReady){el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div><div style="font-size:.7rem;color:var(--text-muted)">Connessione in corso...</div>';return}let snap;try{snap=await db.collection('trades').where('toId','==',state.fantaUserId).where('status','==','pending').limit(10).get()}catch(e){el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div><div style="font-size:.7rem;color:var(--text-muted)">Impossibile caricare le proposte.</div>';return}el.innerHTML='<div class="friends-subsection-title">📬 Proposte ricevute</div>';if(!snap.docs.length){el.insertAdjacentHTML('beforeend','<div style="font-size:.7rem;color:var(--text-muted)">Nessuna proposta in sospeso.</div>');return}snap.docs.forEach(doc=>{const d=doc.data(),off=BASE_PLAYERS.find(p=>p.id===d.offerCardId),want=BASE_PLAYERS.find(p=>p.id===d.wantCardId);const box=document.createElement('div');box.style.cssText='padding:9px;border:1px solid rgba(101,217,255,.18);border-radius:9px;margin:6px 0;font-size:.68rem';box.innerHTML='<b>'+d.fromName+'</b> offre <b>'+off?.name+'</b> per <b>'+want?.name+'</b><div style="display:flex;gap:6px;margin-top:7px"><button class="social-btn" onclick="acceptTrade(\''+doc.id+'\',this)">ACCETTA</button><button class="social-btn" onclick="rejectTrade(\''+doc.id+'\',this)">RIFIUTA</button></div>';el.appendChild(box)})}
+  window.rejectTrade=async function(id,btn){if(btn){btn.disabled=true;const row=btn.closest('div[style]');if(row)row.querySelectorAll('button').forEach(b=>b.disabled=true);btn.textContent='...'}if(firebaseReady&&db)await db.collection('trades').doc(id).update({status:'rejected',closedAt:firebase.firestore.FieldValue.serverTimestamp()});renderFriendsPanel()};
+  window.acceptTrade=async function(id,btn){if(!firebaseReady||!db)return;if(btn){btn.disabled=true;const row=btn.closest('div[style]');if(row)row.querySelectorAll('button').forEach(b=>b.disabled=true);btn.textContent='...'}const ref=db.collection('trades').doc(id),snap=await ref.get();if(!snap.exists)return;const d=snap.data();if(d.status!=='pending')return;if((state.inventory[d.wantCardId]||0)<1){toast('Non possiedi la carta richiesta.');if(btn){btn.disabled=false;btn.textContent='ACCETTA'}return}state.inventory[d.wantCardId]-=1;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);await ref.update({status:'accepted',closedAt:firebase.firestore.FieldValue.serverTimestamp(),recipientApplied:true});saveState();checkTrophies();toast('Scambio completato!');renderFriendsPanel();renderCollection()};
+  function listenTradeResults(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('trades').where('fromId','==',state.fantaUserId).where('status','==','accepted').limit(20).onSnapshot(snap=>{snap.docChanges().forEach(ch=>{if(ch.type!=='added'&&ch.type!=='modified')return;const d=ch.doc.data();if(d.senderApplied)return;state.inventory[d.offerCardId]=(state.inventory[d.offerCardId]||0)-1;if(state.inventory[d.offerCardId]<0)state.inventory[d.offerCardId]=0;state.inventory[d.wantCardId]=(state.inventory[d.wantCardId]||0)+1;state.stats.trades=(state.stats.trades||0)+1;addXP(25);localStorage.setItem(V6_KEY,JSON.stringify(state));checkTrophies();ch.doc.ref.update({senderApplied:true}).catch(()=>{});toast('🤝 Scambio ricevuto: '+(BASE_PLAYERS.find(p=>p.id===d.wantCardId)?.name||'carta'));renderCollection();renderProfilePage();})})} 
 
   function addMasterMarkup(item,card,count){if(card.type!=='base'||!count)return;const mastered=count>=5;if(mastered){const b=document.createElement('span');b.className='mastered-badge';b.textContent='MASTERED';item.appendChild(b)}else{const wrap=document.createElement('div');wrap.className='mastery-wrap';wrap.innerHTML='<div class="mastery-track"><div class="mastery-fill" style="width:'+Math.min(100,count/5*100)+'%"></div></div><div class="mastery-label">MASTER '+count+'/5</div>';item.appendChild(wrap)}}
   window.renderCollection=function(){legacyRenderCollection();const grid=document.getElementById('collection-grid');grid.querySelectorAll('.card-item').forEach((item,i)=>{const name=item.querySelector('.card-name')?.textContent;if(!name||name==='???')return;const card=ALL_CARDS.find(c=>c.name===name);if(card)addMasterMarkup(item,card,state.inventory[card.id]||0);if(card&&card.type==='base'&&state.inventory[card.id]>=5)item.classList.add('mastered-card')});};
   window.openPack=async function(type){ensureV6State();if(type==='premium'){if(state.points<10){toast('Servono 10 Punti Tigers.');return}state.points-=10;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.premiumPacksOpened=(state.stats.premiumPacksOpened||0)+1;const pulled=[];for(let i=0;i<5;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(10);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(20);saveState();checkTrophies();setupPackModal('premium','Premium Pack',pulled,'5 carte Base casuali. I doppioni valgono +1 Punto Tigers.');return}
-    if(type==='streakBonus'){if(!state.weeklyChestAvailable&&!state.streakBonusAvailable){return}state.weeklyChestAvailable=false;state.streakBonusAvailable=false;state.stats.streakCycleCount=0;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.points+=2;const pulled=[];for(let i=0;i<3;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(40);saveState();setupPackModal('streakBonus','Pacchetto Streak',pulled,'Pacchetto Streak: 3 carte Base extra + 2 Punti Tigers bonus.');return}
+    if(type==='streakBonus'){if(!state.weeklyChestAvailable){return}state.weeklyChestAvailable=false;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.points+=2;const pulled=[];for(let i=0;i<3;i++){const p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)],dup=!!state.inventory[p.id];if(dup){state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup:dup})}addXP(40);saveState();checkTrophies();setupPackModal('streakBonus','Pacchetto Streak',pulled,'Pacchetto Streak: 3 carte Base extra + 2 Punti Tigers bonus.');return}
     if(type==='daily'){
       if(state.lastDailyDate===getTodayString())return;
-      const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const ys=yesterday.toISOString().slice(0,10);if(state.lastDailyDate===ys){state.stats.dailyStreak=(state.stats.dailyStreak||0)+1;state.stats.dailyCycleDay=(state.stats.dailyCycleDay||0)+1}else{state.stats.dailyStreak=1;state.stats.dailyCycleDay=1}state.stats.longestStreak=Math.max(state.stats.longestStreak||0,state.stats.dailyStreak);state.lastDailyDate=getTodayString();state.stats.packsOpened=(state.stats.packsOpened||0)+1;const pulled=[];let dup=0;let guaranteed=false;for(let i=0;i<3;i++){let p;if(state.luckyDayNextDaily&&!guaranteed){const missing=BASE_PLAYERS.filter(x=>!state.inventory[x.id]);p=missing.length?missing[Math.floor(Math.random()*missing.length)]:BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];guaranteed=true}else p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];const isDup=!!state.inventory[p.id];if(isDup){dup++;state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(8);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup})}state.luckyDayNextDaily=false;if(state.stats.dailyCycleDay===3)state.luckyDayNextDaily=true;if(state.stats.dailyCycleDay>=7){state.weeklyChestAvailable=true;state.stats.dailyCycleDay=0}saveState();checkTrophies();setupPackModal('daily','Pacchetto Daily',pulled,(guaranteed?'🍀 Lucky Day: almeno una carta mancante garantita. ':'')+(dup?'Doppioni convertiti in +'+dup+' Punti Tigers.':'Nessun doppione!'));return}
+      const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const ys=yesterday.toISOString().slice(0,10);if(state.lastDailyDate===ys){state.stats.dailyStreak=(state.stats.dailyStreak||0)+1;state.stats.dailyCycleDay=(state.stats.dailyCycleDay||0)+1}else{state.stats.dailyStreak=1;state.stats.dailyCycleDay=1}state.stats.longestStreak=Math.max(state.stats.longestStreak||0,state.stats.dailyStreak);state.lastDailyDate=getTodayString();state.stats.packsOpened=(state.stats.packsOpened||0)+1;const pulled=[];let dup=0;let guaranteed=false;for(let i=0;i<3;i++){let p;if(state.luckyDayNextDaily&&!guaranteed){const missing=BASE_PLAYERS.filter(x=>!state.inventory[x.id]);p=missing.length?missing[Math.floor(Math.random()*missing.length)]:BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];guaranteed=true}else p=BASE_PLAYERS[Math.floor(Math.random()*BASE_PLAYERS.length)];const isDup=!!state.inventory[p.id];if(isDup){dup++;state.points++;state.stats.duplicatesFound=(state.stats.duplicatesFound||0)+1}else addXP(8);state.inventory[p.id]=(state.inventory[p.id]||0)+1;pulled.push({player:p,isDup})}state.luckyDayNextDaily=false;if(state.stats.dailyCycleDay===3)state.luckyDayNextDaily=true;if(state.stats.dailyCycleDay>=7){state.weeklyChestAvailable=true;state.stats.dailyCycleDay=0}state.lastReminderNotifDate=null;saveState();checkTrophies();setupPackModal('daily','Pacchetto Daily',pulled,(guaranteed?'🍀 Lucky Day: almeno una carta mancante garantita. ':'')+(dup?'Doppioni convertiti in +'+dup+' Punti Tigers.':'Nessun doppione!'));return}
     return legacyOpenPack(type);
   };
   // Code Pack (30 punti): eroga direttamente l'ultima Carta Special rilasciata,
@@ -4214,7 +4303,7 @@ syncFantaScoreToCloud();
   }
   const oldUpdateUI=window.updateUI;window.updateUI=function(){oldUpdateUI();refreshPackShopHints()};
   // 7-day streak presentation
-  window.renderStreakTracker=function(){const row=document.getElementById('streak-flames-row'),gift=document.getElementById('streak-gift-btn');if(!row||!gift)return;row.innerHTML='';for(let i=1;i<=7;i++){const s=document.createElement('span');s.className='streak-flame'+(i<=Math.min(7,state.stats.dailyCycleDay||0)?' lit':'');s.textContent=i===7?'🎁':'🔥';row.appendChild(s)}const active=!!state.weeklyChestAvailable;gift.disabled=!active;gift.classList.toggle('active',active);gift.title=active?'Apri Pacchetto Streak':'Completa 7 Daily'};
+  window.renderStreakTracker=function(){const row=document.getElementById('streak-flames-row'),gift=document.getElementById('streak-gift-btn');if(!row||!gift)return;row.innerHTML='';for(let i=1;i<=7;i++){const s=document.createElement('span');s.className='streak-flame'+(i<=Math.min(7,state.stats.dailyCycleDay||0)?' lit':'');s.textContent=i===7?'🎁':'🔥';row.appendChild(s)}const active=!!state.weeklyChestAvailable;gift.disabled=!active;gift.classList.toggle('active',active);gift.title=active?'Apri Pacchetto Streak':'Completa 7 Daily';const luckyBadge=document.getElementById('lucky-day-badge');if(luckyBadge)luckyBadge.style.display=state.luckyDayNextDaily?'block':'none'};
 
   window.openStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.add('active')};
   window.closeStreakInfoModal=function(){document.getElementById('streak-info-modal').classList.remove('active')};
@@ -4223,7 +4312,16 @@ syncFantaScoreToCloud();
   // Leaderboard filters
   function ensureLeaderboardControls(){const sec=document.getElementById('fanta-section-leaderboard');if(!sec||document.getElementById('leaderboard-controls'))return;const controls=document.createElement('div');controls.id='leaderboard-controls';controls.className='leaderboard-controls';[['global','Globale'],['friends','Amici'],['weekly','Settimanale'],['season','Stagione'],['alltime','All Time']].forEach(x=>{const b=document.createElement('button');b.className='lb-filter'+(x[0]==='global'?' active':'');b.dataset.filter=x[0];b.textContent=x[1];b.onclick=()=>{lbFilter=x[0];controls.querySelectorAll('.lb-filter').forEach(y=>y.classList.toggle('active',y===b));renderLeaderboard()};controls.appendChild(b)});const table=sec.querySelector('.leaderboard-table');sec.insertBefore(controls,table)}
   window.renderLeaderboard=function(){ensureLeaderboardControls();legacyRenderLeaderboard();const tbody=document.getElementById('leaderboard-body');if(lbFilter==='global')return;let rows=[...(cloudLeaderboardCache!==null?cloudLeaderboardCache:[])];const ids=getFriendIds();if(lbFilter==='friends')rows=rows.filter(x=>ids.has(x.id)||x.id===state.fantaUserId);if(lbFilter==='weekly')rows.sort((a,b)=>(b.weeklyPoints||0)-(a.weeklyPoints||0));else if(lbFilter==='season')rows.sort((a,b)=>(b.seasonPoints??b.points??0)-(a.seasonPoints??a.points??0));else if(lbFilter==='alltime')rows.sort((a,b)=>(b.allTimePoints??b.points??0)-(a.allTimePoints??a.points??0));tbody.innerHTML='';rows.forEach((x,i)=>{const tr=document.createElement('tr');if(x.id===state.fantaUserId)tr.className='current-user-row';tr.innerHTML='<td class="leaderboard-rank">'+(i+1)+'</td><td>'+(x.name||'Giocatore')+(x.id===state.fantaUserId?' <small style="color:var(--bright-blue)">(TU)</small>':'')+'</td><td class="leaderboard-points">'+(lbFilter==='weekly'?(x.weeklyPoints||0):(lbFilter==='alltime'?(x.allTimePoints??x.points??0):(x.seasonPoints??x.points??0)))+' pt</td>';tbody.appendChild(tr)})};
-  window.syncFantaScoreToCloud=function(){if(!firebaseReady||!db||!state.fantaUserId)return;db.collection('fantaLeaderboard').doc(state.fantaUserId).set({name:state.fantaUserName||'Giocatore',points:state.fantaTotalPoints||0,seasonPoints:state.fantaTotalPoints||0,allTimePoints:state.fantaTotalPoints||0,weeklyPoints:state.weeklyPoints||0,friendCode:state.friendCode,level:state.level||1,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{});publishFriendProfile()};
+  window.syncFantaScoreToCloud=function(){
+    if(!firebaseReady||!db||!state.fantaUserId)return;
+    // Rinfresca il bucket settimanale anche se non è appena arrivato un voto (es. utente che riapre
+    // l'app in una nuova settimana ISO dopo un periodo di inattività): evita di sincronizzare un
+    // valore "Settimanale" ormai vecchio di una settimana passata.
+    const currentWeekId=getISOWeekId(new Date());
+    if(state.fantaWeeklyWeekId!==currentWeekId){state.fantaWeeklyWeekId=currentWeekId;state.fantaWeeklyPoints=0;saveState()}
+    db.collection('fantaLeaderboard').doc(state.fantaUserId).set({name:state.fantaUserName||'Giocatore',points:state.fantaTotalPoints||0,seasonPoints:state.fantaTotalPoints||0,allTimePoints:state.fantaAllTimePoints||0,weeklyPoints:state.fantaWeeklyPoints||0,friendCode:state.friendCode,level:state.level||1,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{});
+    publishFriendProfile();
+  };
   // Better stats: replace vote list renderer with richer player cards (no dynamic form)
   window.renderFantaVoteStatsList=function(){const listEl=document.getElementById('fanta-stats-votes-list');if(!listEl)return;listEl.innerHTML='';const rows=BASE_PLAYERS.map(p=>{let vals=[];if(cloudLeaderboardCache!==null){};return p}).map(p=>{let total=0,n=0;/* stats come from match history loaded by existing function; keep UI stable */return {p,total,n}});BASE_PLAYERS.forEach(p=>{const inv=state.inventory[p.id]||0;const d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:10px;padding:9px;border-bottom:1px solid rgba(255,255,255,.07)';d.innerHTML='<div style="width:38px;height:52px;border-radius:6px;overflow:hidden;background:#071522;flex:none"><img src="'+p.image+'" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=.2"></div><div style="flex:1"><div style="font:800 .75rem var(--font-heading)">'+p.name+'</div><div style="font-size:.6rem;color:var(--text-muted)">In collezione: '+inv+' · '+(inv>=5?'MASTERED':'Master '+inv+'/5')+'</div><div class="mastery-track" style="margin-top:5px"><div class="mastery-fill" style="width:'+Math.min(100,inv/5*100)+'%"></div></div></div>';listEl.appendChild(d)})};
   // Admin UI: require a session token + rate limit. This is still not true server security on a static client; Firestore rules remain authoritative.
@@ -4306,31 +4404,56 @@ syncFantaScoreToCloud();
     // Non avviare OAuth finché la persistenza LOCAL non è stata applicata.
     // Questo è particolarmente importante su Android.
     await firebaseAuthPersistenceReady;
+    await firebaseAuthReady;
 
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
-    // Su Android/PWA proviamo prima il popup: evita il passaggio tra origini
-    // che può essere problematico quando il browser limita lo storage di terze
-    // parti durante signInWithRedirect(). Se il popup viene bloccato, usiamo
-    // automaticamente il redirect come fallback.
-    try {
-      const result = await fbAuth.signInWithPopup(provider);
-      finishAdminLogin(result.user);
-    } catch (e) {
+    // Se l'utente ha già un'identità anonima (il caso normale: ogni giocatore ne ha
+    // una per punti/amici/scambi), COLLEGHIAMO l'account Google a quella identità
+    // invece di sostituirla: così l'admin non perde i propri dati di gioco quando
+    // accede al pannello. Se quell'account Google risulta già collegato a un'altra
+    // identità (es. login precedente da un dispositivo diverso), passiamo
+    // automaticamente a quella identità esistente.
+    const currentUser = fbAuth.currentUser;
+    const shouldLink = currentUser && currentUser.isAnonymous;
+
+    async function afterPopupOrRedirectFail(e) {
       if (e && (
         e.code === 'auth/popup-blocked' ||
         e.code === 'auth/operation-not-supported-in-this-environment'
       )) {
         try {
-          await fbAuth.signInWithRedirect(provider);
-          return;
+          if (shouldLink) await currentUser.linkWithRedirect(provider);
+          else await fbAuth.signInWithRedirect(provider);
+          return true;
         } catch (e2) {
           showAdminAuthError(e2, 'Accesso non riuscito.');
-          return;
+          return true;
         }
       }
+      return false;
+    }
 
+    try {
+      const result = shouldLink
+        ? await currentUser.linkWithPopup(provider)
+        : await fbAuth.signInWithPopup(provider);
+      finishAdminLogin(result.user);
+    } catch (e) {
+      if (e && e.code === 'auth/credential-already-in-use') {
+        // Questo account Google è già collegato a un'altra identità Firebase
+        // (es. hai già fatto l'accesso admin da un altro dispositivo/sessione):
+        // passiamo a quella identità esistente invece di fallire.
+        try {
+          const result2 = await fbAuth.signInWithCredential(e.credential);
+          finishAdminLogin(result2.user);
+        } catch (e2) {
+          showAdminAuthError(e2, 'Accesso non riuscito.');
+        }
+        return;
+      }
+      if (await afterPopupOrRedirectFail(e)) return;
       showAdminAuthError(e, 'Accesso annullato o non riuscito.');
     }
   };
@@ -4349,6 +4472,18 @@ syncFantaScoreToCloud();
 
       finishAdminLogin(result.user);
     } catch (e) {
+      if (e && e.code === 'auth/credential-already-in-use' && e.credential) {
+        try {
+          const result2 = await fbAuth.signInWithCredential(e.credential);
+          finishAdminLogin(result2.user);
+          return;
+        } catch (e2) {
+          console.error('Errore accesso con credenziale esistente:', e2);
+          openAdminPanel();
+          showAdminAuthError(e2, 'Accesso non riuscito.');
+          return;
+        }
+      }
       console.error('Errore risultato redirect Google:', e);
       openAdminPanel();
       showAdminAuthError(e, 'Accesso Google non riuscito.');
@@ -4401,7 +4536,7 @@ syncFantaScoreToCloud();
   const oldSwitch=window.switchTab;window.switchTab=function(tabId,el){closeSideDrawer();if(tabId==='profile'){openProfilePage();return}oldSwitch(tabId,el);if(tabId==='collection')setTimeout(renderCollection,0);if(tabId==='fantaTigers'){ensureLeaderboardControls();renderLeaderboard()}};
   // Save wrapper adds V6 persistence and XP cloud.
   const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile()};
-  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();listenTradeResults();listenFriendRequestResults();handleAdminRedirectResult();setTimeout(renderStreakTracker,50);});
+  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();bootstrapFirebaseIdentity();handleAdminRedirectResult();refreshDailyReminderBtnLabel();checkDailyReminder();setTimeout(renderStreakTracker,50);});
   // migration from v5 remains intact; v6 is additive.
 })();
 </script>
