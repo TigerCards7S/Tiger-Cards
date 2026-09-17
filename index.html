@@ -36,7 +36,6 @@
 --text-muted: #94a3b8;
 --text-gold: #ffd700;
 --border-blue: #1e3a5f;
---border-orange: #ff7300;
 --border-gold: #ffd700;
 --brand-silver: #c8d2dc;
 --matrix-green: #39ff6a;
@@ -481,7 +480,6 @@ margin-bottom: 10px;
 font-size: 0.85rem;
 }
 
-.filter-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
 
 .filter-select {
 width: 100%;
@@ -1437,13 +1435,11 @@ line-height: 1.2;
   --text-muted:#91a9b8;
   --text-gold:#ffd86a;
   --border-blue:rgba(101,217,255,.28);
-  --border-orange:#f28a2b;
   --border-gold:#ffd86a;
   --brand-silver:#d8e7ef;
   --success-green:#55d6a2;
   --danger-red:#ff6b6b;
   --tiger-white:#ffffff;
-  --tiger-cyan:#65d9ff;
 }
 body{background-color:var(--bg-main);background-image:radial-gradient(circle at 50% -10%,rgba(101,217,255,.18),transparent 38%),linear-gradient(135deg,rgba(255,255,255,.018) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.018) 50%,rgba(255,255,255,.018) 75%,transparent 75%);background-size:auto,42px 42px;}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.055;background:repeating-linear-gradient(125deg,transparent 0 70px,#fff 71px 74px,transparent 75px 140px);z-index:-1}
@@ -1469,9 +1465,7 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 .news-strip{margin:0 14px 14px;border:1px solid rgba(101,217,255,.25);border-radius:12px;background:linear-gradient(90deg,rgba(101,217,255,.09),rgba(255,255,255,.03));padding:9px 0 9px 11px;display:flex;align-items:center;gap:9px;overflow:hidden}.news-dot{width:7px;height:7px;border-radius:50%;background:var(--bright-blue);box-shadow:0 0 9px var(--bright-blue);flex:none}.news-label{font:800 .55rem var(--font-heading);letter-spacing:.7px;color:var(--bright-blue);white-space:nowrap;flex:none}
 .news-marquee{flex:1;min-width:0;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
 .news-marquee-track{display:inline-block;white-space:nowrap;font-size:.7rem;font-weight:700;padding-right:60px;will-change:transform;animation:newsMarqueeScroll 18s linear infinite}
-.news-marquee-track.paused{animation-play-state:paused}
 @keyframes newsMarqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.brand-hero{margin:0 14px 14px;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(101,217,255,.08));display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}.brand-hero:after{content:"";position:absolute;right:-45px;top:-55px;width:170px;height:170px;border:18px solid rgba(101,217,255,.07);transform:rotate(25deg)}.brand-hero img{width:48px;height:48px;border-radius:50%;background:#fff;padding:4px}.brand-hero strong{display:block;font:800 .95rem var(--font-heading);letter-spacing:.7px}.brand-hero span{display:block;color:var(--text-muted);font-size:.65rem;margin-top:2px}
 .side-drawer{position:fixed;top:0;bottom:0;left:0;width:min(84vw,350px);background:linear-gradient(180deg,#071522,#0b2639);z-index:1000;transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);box-shadow:16px 0 40px rgba(0,0,0,.5);padding:calc(18px + env(safe-area-inset-top)) 16px 22px;overflow:auto}.side-drawer.open{transform:translateX(0)}.drawer-scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:999;display:none}.drawer-scrim.open{display:block}.drawer-head{display:flex;align-items:center;gap:11px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}.drawer-head img{width:50px;height:50px;border-radius:50%;background:#fff;padding:4px}.drawer-title{font:800 1.1rem var(--font-heading)}.drawer-sub{font-size:.65rem;color:var(--text-muted)}.drawer-btn{width:100%;padding:13px 12px;margin:4px 0;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:11px;color:#fff;text-align:left;font:700 .82rem var(--font-heading)}.drawer-btn.primary{border-color:rgba(101,217,255,.35);color:var(--bright-blue)}.drawer-btn.danger{color:var(--danger-red)}
 .profile-page{padding:0 14px 20px}.profile-card{background:linear-gradient(145deg,#12364d,#071927);border:1px solid rgba(101,217,255,.28);border-radius:18px;padding:18px;position:relative;overflow:hidden}.profile-card:after{content:"TIGER";position:absolute;right:-12px;bottom:-17px;font:900 5rem/1 var(--font-display);color:rgba(255,255,255,.025);transform:rotate(-12deg)}.profile-avatar{width:72px;height:72px;border-radius:50%;background:#fff;padding:6px;border:2px solid var(--bright-blue);box-shadow:0 0 20px rgba(101,217,255,.25)}.profile-name{font:800 1.3rem var(--font-heading);margin-top:8px}.friend-code{margin-top:7px;display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:8px;background:rgba(0,0,0,.22);border:1px dashed rgba(255,255,255,.22);font:700 .7rem monospace;color:#fff}.profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.profile-section{margin-top:12px;background:rgba(13,33,50,.8);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:13px}.section-title{font:800 .8rem var(--font-heading);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}.badge-grid{display:flex;gap:7px;flex-wrap:wrap}.season-badge{padding:7px 9px;border-radius:8px;background:linear-gradient(135deg,#ffd86a,#8f6716);color:#0a0b0c;font:900 .58rem var(--font-heading);box-shadow:0 0 12px rgba(255,216,106,.18)}
 .pack-shop-wrapper{position:relative;width:100%;max-width:340px;margin:0 auto;overflow:hidden;padding:10px 0 5px 0}.pack-shop-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}.pack-shop-track::-webkit-scrollbar{display:none}.pack-shop-slide{min-width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:0 10px;scroll-snap-align:center}.pack-shop-dots{display:flex;justify-content:center;gap:8px;margin-top:10px;margin-bottom:4px}.pack-shop-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s ease}.pack-shop-dot.active{background:var(--bright-blue);transform:scale(1.25);box-shadow:0 0 8px var(--bright-blue)}
@@ -1494,8 +1488,8 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 .fanta-rules-list li b{color:#fff}
 .fanta-rules-btn{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--bright-blue);background:rgba(101,217,255,.12);border:1px solid rgba(101,217,255,.35);border-radius:20px;padding:6px 12px;cursor:pointer}
 .fanta-rules-btn:active{transform:scale(.95)}
-.leaderboard-controls{display:flex;gap:6px;overflow-x:auto;margin:8px 0 12px}.lb-filter{white-space:nowrap;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#0a1b29;color:var(--text-muted);font:700 .65rem var(--font-heading)}.lb-filter.active{background:#fff;color:#071522;border-color:#fff}.friends-mini{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:9px;border:1px dashed rgba(101,217,255,.2);border-radius:9px;font-size:.68rem;color:var(--text-muted)}
-.modal{backdrop-filter:blur(6px);background:rgba(2,10,16,.74)}.modal > .options-menu-box,.modal > div:not(.bottom-back-popup):not(.flash-overlay){box-shadow:0 18px 45px rgba(0,0,0,.55)}.modal.sheet-modal{align-items:flex-end!important}.modal.sheet-modal > .options-menu-box{border-radius:20px 20px 0 0!important;margin:0!important;max-width:none!important;width:100%!important;border-color:rgba(101,217,255,.22)!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;animation:sheetUp .25s ease}.modal-close-x{position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:1.1rem}.social-row{display:flex;gap:8px;margin-top:10px}.social-btn{flex:1;border:1px solid rgba(101,217,255,.25);background:rgba(101,217,255,.08);color:#fff;border-radius:9px;padding:9px;font:800 .65rem var(--font-heading)}
+.leaderboard-controls{display:flex;gap:6px;overflow-x:auto;margin:8px 0 12px}.lb-filter{white-space:nowrap;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#0a1b29;color:var(--text-muted);font:700 .65rem var(--font-heading)}.lb-filter.active{background:#fff;color:#071522;border-color:#fff}
+.modal{backdrop-filter:blur(6px);background:rgba(2,10,16,.74)}.modal > .options-menu-box,.modal > div:not(.bottom-back-popup):not(.flash-overlay){box-shadow:0 18px 45px rgba(0,0,0,.55)}.modal.sheet-modal{align-items:flex-end!important}.modal.sheet-modal > .options-menu-box{border-radius:20px 20px 0 0!important;margin:0!important;max-width:none!important;width:100%!important;border-color:rgba(101,217,255,.22)!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;animation:sheetUp .25s ease}.modal-close-x{position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#fff;font-size:1.1rem}.social-btn{flex:1;border:1px solid rgba(101,217,255,.25);background:rgba(101,217,255,.08);color:#fff;border-radius:9px;padding:9px;font:800 .65rem var(--font-heading)}
 .friends-sheet{gap:8px!important;max-height:80vh;overflow-y:auto}
 .friends-tabs{display:flex;gap:8px}
 .friends-tab-btn{flex:1;padding:9px 6px;border-radius:10px;border:1px solid rgba(101,217,255,.22);background:rgba(101,217,255,.06);color:var(--text-muted);font:800 .68rem var(--font-heading);text-transform:uppercase;letter-spacing:.3px;cursor:pointer;transition:all .15s ease}
@@ -1511,7 +1505,7 @@ header h1{background:linear-gradient(90deg,#fff 15%,var(--bright-blue));-webkit-
 .filter-select.compact{margin-bottom:6px;padding:9px 14px}
 @keyframes sheetUp{from{transform:translateY(100%);opacity:.5}to{transform:translateY(0);opacity:1}}
 @keyframes packShakePro{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-4deg) scale(1.03)}30%{transform:rotate(4deg) scale(1.06)}45%{transform:rotate(-3deg) scale(1.08)}60%{transform:rotate(2deg) scale(1.09)}75%{transform:rotate(0) scale(1.12)}}
-.pack-opening-stage .sealed-pack-wrapper.burst .pack-card{animation:packShakePro .55s ease both}.reveal-flash-title{font:900 .75rem var(--font-heading);color:#fff;letter-spacing:1px;text-transform:uppercase}.card-reveal-container-pro{perspective:1000px}.pulled-card{box-shadow:0 20px 50px rgba(0,0,0,.55);border:2px solid #fff!important}.pulled-card.is-special{border-color:#ffd86a!important;box-shadow:0 0 28px rgba(255,216,106,.28),0 20px 50px rgba(0,0,0,.55)}
+.pack-opening-stage .sealed-pack-wrapper.burst .pack-card{animation:packShakePro .55s ease both}.pulled-card{box-shadow:0 20px 50px rgba(0,0,0,.55);border:2px solid #fff!important}.pulled-card.is-special{border-color:#ffd86a!important;box-shadow:0 0 28px rgba(255,216,106,.28),0 20px 50px rgba(0,0,0,.55)}
 @media(max-width:380px){.cards-grid{gap:7px}.card-name{font-size:.57rem}}
 </style>
 </head>
@@ -1864,17 +1858,6 @@ SCHIERA / MODIFICA CARTA
 </div>
 
 <!-- Modal Menu Opzioni -->
-<div id="menu-modal" class="modal">
-<div class="options-menu-box">
-<h3 style="color: var(--bright-blue); font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px;">Menu</h3>
-<button class="options-btn" style="background: rgba(79, 134, 196, 0.15); border-color: var(--bright-blue); color: var(--bright-blue);" onclick="openTrophiesModal()">🏆 Trofei & Titoli</button>
-<button class="options-btn" style="background: rgba(200, 210, 220, 0.12); border-color: var(--brand-silver); color: var(--brand-silver);" onclick="closeMenuModal(); openProfileStatsModal();">📊 Le Mie Statistiche</button>
-<button class="options-btn" style="background: rgba(255, 115, 0, 0.15); border-color: var(--accent-orange); color: var(--accent-orange);" onclick="closeMenuModal(); openAdminPanel();">⚙️ Pannello Admin fantaTigers</button>
-<button class="options-btn" style="background: rgba(239, 68, 68, 0.15); border-color: var(--danger-red); color: var(--danger-red);" onclick="openResetConfirmation()">Reset Applicazione</button>
-<button class="options-btn" onclick="closeMenuModal()">Chiudi</button>
-</div>
-</div>
-
 <!-- Modal Le Mie Statistiche (profilo generale) -->
 <div id="profile-stats-modal" class="modal" style="z-index: 255;">
 <div class="modal-card-modern">
@@ -3838,16 +3821,7 @@ grid.appendChild(item);
 });
 }
 
-function openMenuModal() {
-document.getElementById('menu-modal').classList.add('active');
-}
-
-function closeMenuModal() {
-document.getElementById('menu-modal').classList.remove('active');
-}
-
 function openTrophiesModal() {
-closeMenuModal();
 renderTrophiesList();
 document.getElementById('trophies-modal').classList.add('active');
 }
@@ -3902,7 +3876,6 @@ document.getElementById('trophy-detail-modal').classList.remove('active');
 }
 
 function openResetConfirmation() {
-closeMenuModal();
 document.getElementById('reset-modal').classList.add('active');
 }
 
@@ -4035,7 +4008,6 @@ loadState();
     state.stats.socialShares=state.stats.socialShares||0;
     localStorage.setItem(V6_KEY,JSON.stringify(state));
   }
-  function xpForNext(){return 100+(state.level-1)*50}
   function addXP(n){/* Livelli disattivati per ora su richiesta: nessun incremento di livello, nessun toast. */}
   function toast(msg){let t=document.getElementById('v6-toast');if(!t){t=document.createElement('div');t.id='v6-toast';t.style.cssText='position:fixed;left:50%;bottom:95px;transform:translateX(-50%);z-index:3000;background:#fff;color:#071522;padding:10px 14px;border-radius:10px;font:800 .7rem var(--font-heading);box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:.2s;max-width:88%;text-align:center';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(()=>t.style.opacity='0',2200)}
   function getFriendIds(){return new Set((state.friends||[]).map(x=>x.id||x))}
@@ -4264,7 +4236,6 @@ loadState();
   // Code Pack (30 punti): eroga direttamente l'ultima Carta Special rilasciata,
   // aggiungendola alla collezione. Nessun codice coinvolto: è un pacchetto come gli altri.
   window.buyCodePack=function(){ensureV6State();if((state.points||0)<30){toast('Servono 30 Punti Tigers.');return}if(!SPECIAL_PLAYERS.length){toast('Nessuna carta Special disponibile al momento.');return}const sp=SPECIAL_PLAYERS[SPECIAL_PLAYERS.length-1];const isDup=!!state.inventory[sp.id];state.points-=30;state.stats.packsOpened=(state.stats.packsOpened||0)+1;state.stats.codePacksOpened=(state.stats.codePacksOpened||0)+1;state.inventory[sp.id]=(state.inventory[sp.id]||0)+1;saveState();checkTrophies();setupPackModal('code','Code Pack',[{player:sp,isDup}],isDup?'Doppione! '+sp.name+' era già nella tua collezione.':'⭐ '+sp.name+' aggiunta alla tua collezione!');toast('Code Pack riscattato: '+sp.name+'!')};
-  window.buySpecialTicket=window.buyCodePack; // alias di compatibilità
 
   // ===== Negozio: tap sul pacchetto -> popup di conferma (solo se si hanno punti sufficienti) =====
   const PACK_SHOP_CONFIG={
@@ -4418,19 +4389,28 @@ loadState();
     const currentUser = fbAuth.currentUser;
     const shouldLink = currentUser && currentUser.isAnonymous;
 
+    async function doRedirect() {
+      try {
+        if (shouldLink) await currentUser.linkWithRedirect(provider);
+        else await fbAuth.signInWithRedirect(provider);
+      } catch (e2) {
+        showAdminAuthError(e2, 'Accesso non riuscito.');
+      }
+    }
+
+    // Su mobile e nelle PWA installate (standalone) evitiamo del tutto il popup:
+    // in quegli ambienti il sistema spesso lo blocca/chiude in silenzio (schermata
+    // bianca e ritorno immediato, senza un errore utile da intercettare) invece di
+    // restituire un codice di errore riconoscibile. Il redirect è più affidabile.
+    if (shouldUseAuthRedirect()) { await doRedirect(); return; }
+
     async function afterPopupOrRedirectFail(e) {
       if (e && (
         e.code === 'auth/popup-blocked' ||
         e.code === 'auth/operation-not-supported-in-this-environment'
       )) {
-        try {
-          if (shouldLink) await currentUser.linkWithRedirect(provider);
-          else await fbAuth.signInWithRedirect(provider);
-          return true;
-        } catch (e2) {
-          showAdminAuthError(e2, 'Accesso non riuscito.');
-          return true;
-        }
+        await doRedirect();
+        return true;
       }
       return false;
     }
