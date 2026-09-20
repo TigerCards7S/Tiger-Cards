@@ -2152,6 +2152,9 @@ user = cred.user;
 if (user && user.uid) {
 if (state.fantaUserId !== user.uid) { state.fantaUserId = user.uid; saveState(); }
 firebaseIdentityReady = true;
+// Prima di tutto il resto: recupera l'eventuale partita salvata in cloud da un
+// altro dispositivo con lo stesso account.
+if (typeof pullCloudSave === 'function') await pullCloudSave();
 initFantaCloudSync();
 initMatchConfigSync();
 initSeasonSync();
@@ -3897,7 +3900,8 @@ lastDailyDate: null,
 unlockedTrophies: {},
 stats: { packsOpened: 0, bonusPacksOpened: 0, duplicatesFound: 0, dailyStreak: 0, longestStreak: 0 },
 firstOpenDate: getTodayString(),
-fantaUserId: generateUserId(),
+// L'identità resta quella di Firebase: è legata all'account, non alla partita.
+fantaUserId: oldFantaUserId,
 fantaUserName: "TigerFan_" + Math.floor(1000 + Math.random() * 9000),
 fantaDeployedCardId: null,
 fantaTotalPoints: 0,
@@ -3905,6 +3909,17 @@ fantaProcessedMatches: {},
 fantaLastSeasonNumber: null,
 fantaDeploymentHistory: []
 };
+localStorage.removeItem('tigerCardsState_v6');
+
+// Cancella anche il salvataggio in cloud, altrimenti alla prossima apertura
+// verrebbe considerato "più recente" del nuovo stato vuoto e la partita appena
+// cancellata tornerebbe indietro, su questo dispositivo e su tutti gli altri.
+if (firebaseReady && db && oldFantaUserId) {
+db.collection('playerSaves').doc(oldFantaUserId).delete().catch(function(err) {
+console.error("Errore rimozione salvataggio in cloud:", err);
+});
+}
+
 saveState();
 closeResetModal();
 
@@ -3980,6 +3995,87 @@ loadState();
 /* ===== TIGER CARDS v6 — GAMEPLAY / SOCIAL / PWA ===== */
 (function(){
   const V6_KEY='tigerCardsState_v6';
+
+  // ===== SINCRONIZZAZIONE SALVATAGGIO TRA DISPOSITIVI =====
+  // Il salvataggio (carte, punti, statistiche, trofei, streak, dati fantaTigers)
+  // viene tenuto in cloud sotto il proprio UID: accedendo con lo stesso account
+  // Google su più dispositivi si ritrova la stessa partita.
+  //
+  // Strategia anti-conflitto: ogni salvataggio incrementa un contatore
+  // "saveVersion". Chi ha la versione più alta vince ed è quella che viene
+  // adottata. Non si fa un "merge" campo per campo perché produrrebbe risultati
+  // incoerenti (es. punti spesi due volte su due dispositivi diversi).
+  //
+  // Campi volutamente NON sincronizzati, perché specifici del dispositivo:
+  // fantaUserId (è l'identità stessa), dailyRemindersEnabled e
+  // lastReminderNotifDate (i permessi notifiche valgono per dispositivo).
+  const CLOUD_SAVE_SKIP_KEYS = ['fantaUserId','dailyRemindersEnabled','lastReminderNotifDate'];
+  let cloudSaveReady = false;      // true solo dopo la prima pull andata a buon fine
+  let cloudPushTimer = null;
+
+  function buildCloudSavePayload(){
+    const payload = {};
+    Object.keys(state).forEach(k => {
+      if (CLOUD_SAVE_SKIP_KEYS.indexOf(k) !== -1) return;
+      if (typeof state[k] === 'function' || state[k] === undefined) return;
+      payload[k] = state[k];
+    });
+    return payload;
+  }
+
+  // Scarica il salvataggio remoto. Se è più recente di quello locale lo adotta,
+  // altrimenti carica quello locale in cloud.
+  window.pullCloudSave = async function(){
+    if(!firebaseReady||!db||!state.fantaUserId) return;
+    try{
+      const doc = await db.collection('playerSaves').doc(state.fantaUserId).get();
+      const localVersion = state.saveVersion || 0;
+      if (doc.exists) {
+        const remote = doc.data() || {};
+        const remoteVersion = remote.saveVersion || 0;
+        if (remoteVersion > localVersion && remote.data) {
+          // Il cloud è più avanti: adottiamo il salvataggio remoto.
+          Object.keys(remote.data).forEach(k => {
+            if (CLOUD_SAVE_SKIP_KEYS.indexOf(k) !== -1) return;
+            state[k] = remote.data[k];
+          });
+          state.saveVersion = remoteVersion;
+          localStorage.setItem(V6_KEY, JSON.stringify(state));
+          localStorage.setItem('tigerCardsState_v5', JSON.stringify(state));
+          cloudSaveReady = true;
+          updateUI(); renderCollection(); renderProfilePage(); renderStreakTracker();
+          if (typeof initFantaTigers === 'function') initFantaTigers();
+          toast('Partita sincronizzata da un altro dispositivo.');
+          return;
+        }
+      }
+      // Nessun salvataggio remoto, o il locale è più avanti: pubblichiamo il locale.
+      cloudSaveReady = true;
+      pushCloudSave(true);
+    }catch(e){
+      console.error('Errore sincronizzazione salvataggio:', e);
+      // In caso di errore restiamo comunque operativi in locale, ma NON attiviamo
+      // il push: eviterebbe di sovrascrivere un salvataggio cloud che non siamo
+      // riusciti a leggere.
+    }
+  }
+
+  // Invio in cloud, raggruppato: molte azioni ravvicinate (apertura pacchetto con
+  // più carte) producono una sola scrittura invece di dieci.
+  window.pushCloudSave = function(immediate){
+    if(!cloudSaveReady||!firebaseReady||!db||!state.fantaUserId) return;
+    clearTimeout(cloudPushTimer);
+    const doPush = () => {
+      state.saveVersion = (state.saveVersion || 0) + 1;
+      localStorage.setItem(V6_KEY, JSON.stringify(state));
+      db.collection('playerSaves').doc(state.fantaUserId).set({
+        saveVersion: state.saveVersion,
+        data: buildCloudSavePayload(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(e => console.error('Errore salvataggio in cloud:', e));
+    };
+    if (immediate) doPush(); else cloudPushTimer = setTimeout(doPush, 1500);
+  }
   const OLD_KEY='tigerCardsState_v5';
   const logoPath=(typeof HEADER_LOGO_PATH!=='undefined'&&HEADER_LOGO_PATH)?HEADER_LOGO_PATH:(typeof LOGO_PLACEHOLDER!=='undefined'?LOGO_PLACEHOLDER:'');
   const legacyOpenPack=window.openPack;
@@ -4096,7 +4192,7 @@ loadState();
     }
     if(snap.empty){statusEl.textContent='Codice amico non trovato. Controlla che sia corretto e che l\'amico abbia aperto l\'app almeno una volta con connessione attiva.';btn.disabled=false;btn.textContent=originalLabel;return}
     const d=snap.docs[0].data(),targetId=snap.docs[0].id;
-    if(targetId===state.fantaUserId){toast('Questo è il tuo codice.');btn.disabled=false;btn.textContent=originalLabel;return}
+    if(targetId===state.fantaUserId){statusEl.textContent='Questo codice appartiene al TUO stesso account. Se è un tuo secondo dispositivo, entrambi usano lo stesso login Google: usa "Giocatore separato" nel menu ☰ su quel dispositivo per renderlo un giocatore indipendente.';btn.disabled=false;btn.textContent=originalLabel;return}
     if((state.friends||[]).some(x=>(x.id||x)===targetId)){statusEl.textContent='È già tuo amico.';btn.disabled=false;btn.textContent=originalLabel;return}
     btn.textContent='INVIO...';
     try{
@@ -4471,11 +4567,18 @@ loadState();
   }
 
   window.adminSignOut = function(){
-    if (firebaseReady && fbAuth) fbAuth.signOut();
+    // IMPORTANTE: NON chiamiamo fbAuth.signOut() qui. Dopo il linking, l'account
+    // Google È diventato l'identità di gioco di questo dispositivo (stesso UID):
+    // disconnettersi creerebbe al riavvio un nuovo utente anonimo con un UID
+    // diverso, facendo perdere classifica, amici e scambi. Qui blocchiamo solo
+    // l'interfaccia del pannello admin.
     document.getElementById('admin-form-section').style.display = 'none';
     document.getElementById('admin-password-section').style.display = 'block';
     document.getElementById('admin-password-error').textContent = '';
+    closeAdminPanel();
+    toast('Pannello admin bloccato.');
   };
+
   // Mantiene l'interfaccia sincronizzata con lo stato Auth reale.
   // Firebase garantisce che onAuthStateChanged venga chiamato dopo il ripristino
   // dello stato di autenticazione, quindi non mostriamo il login per un istante
@@ -4515,7 +4618,7 @@ loadState();
   // Override switchTab to include profile and redraws.
   const oldSwitch=window.switchTab;window.switchTab=function(tabId,el){closeSideDrawer();if(tabId==='profile'){openProfilePage();return}oldSwitch(tabId,el);if(tabId==='collection')setTimeout(renderCollection,0);if(tabId==='fantaTigers'){ensureLeaderboardControls();renderLeaderboard()}};
   // Save wrapper adds V6 persistence and XP cloud.
-  const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile()};
+  const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile();pushCloudSave()};
   window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();bootstrapFirebaseIdentity();handleAdminRedirectResult();refreshDailyReminderBtnLabel();checkDailyReminder();setTimeout(renderStreakTracker,50);});
   // migration from v5 remains intact; v6 is additive.
 })();
