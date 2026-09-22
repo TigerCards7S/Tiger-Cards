@@ -2144,7 +2144,7 @@ async function bootstrapFirebaseIdentity(){
 if (!firebaseReady || !fbAuth) return;
 try {
 await firebaseAuthPersistenceReady;
-let user = await firebaseAuthReady;
+let user = fbAuth.currentUser || await firebaseAuthReady;
 if (!user) {
 const cred = await fbAuth.signInAnonymously();
 user = cred.user;
@@ -4451,6 +4451,10 @@ loadState();
       return false;
     }
 
+    // Dopo un redirect a pagina intera (Google), il pannello torna chiuso perché
+    // la pagina si è ricaricata: qui lo riapriamo esplicitamente, altrimenti
+    // l'accesso riesce "dietro le quinte" ma non si vede nulla in schermo.
+    document.getElementById('admin-modal').classList.add('active');
     document.getElementById('admin-password-error').textContent = '';
     document.getElementById('admin-password-section').style.display = 'none';
     document.getElementById('admin-form-section').style.display = 'block';
@@ -4619,7 +4623,7 @@ loadState();
   const oldSwitch=window.switchTab;window.switchTab=function(tabId,el){closeSideDrawer();if(tabId==='profile'){openProfilePage();return}oldSwitch(tabId,el);if(tabId==='collection')setTimeout(renderCollection,0);if(tabId==='fantaTigers'){ensureLeaderboardControls();renderLeaderboard()}};
   // Save wrapper adds V6 persistence and XP cloud.
   const oldSave=window.saveState;window.saveState=function(){ensureV6State();localStorage.setItem(V6_KEY,JSON.stringify(state));oldSave();publishFriendProfile();pushCloudSave()};
-  window.addEventListener('load',()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();bootstrapFirebaseIdentity();handleAdminRedirectResult();refreshDailyReminderBtnLabel();checkDailyReminder();setTimeout(renderStreakTracker,50);});
+  window.addEventListener('load',async()=>{ensureV6State();document.getElementById('drawer-logo').src=logoPath;document.getElementById('profile-avatar').src=logoPath;renderProfilePage();renderCollection();ensureLeaderboardControls();startNews();startShop();await handleAdminRedirectResult();bootstrapFirebaseIdentity();refreshDailyReminderBtnLabel();checkDailyReminder();setTimeout(renderStreakTracker,50);});
   // migration from v5 remains intact; v6 is additive.
 })();
 </script>
