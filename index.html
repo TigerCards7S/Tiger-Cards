@@ -4398,11 +4398,19 @@ loadState();
   // alla pagina, senza un vero errore utile): in quei casi usiamo il flusso a redirect, molto più
   // affidabile. Su desktop resta il popup, più comodo, con fallback automatico al redirect se blocca.
   function shouldUseAuthRedirect(){
+    // NOTA: qui c'era anche il controllo "è un browser mobile" (Android/iPhone),
+    // rimosso perché nella pratica il redirect si è rivelato inaffidabile su
+    // Chrome mobile "normale" (non installato come PWA): il flusso arriva fino
+    // alla scelta dell'account Google ma il passaggio di consegne al ritorno
+    // nell'app si perde nel nulla, senza errori. Il popup, chiamato in modo
+    // sincrono rispetto al tap, funziona correttamente anche su mobile.
+    // Il redirect resta necessario SOLO per le PWA installate (standalone),
+    // dove il sistema operativo blocca i popup a monte prima ancora che possano
+    // fallire in modo intercettabile.
     const isStandalone =
       (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
       window.navigator.standalone === true;
-    const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    return isStandalone || isMobileUA;
+    return isStandalone;
   }
 
   function getAdminEmail(user){
@@ -4504,10 +4512,12 @@ loadState();
       }
     }
 
-    // Su mobile e nelle PWA installate (standalone) evitiamo del tutto il popup:
-    // in quegli ambienti il sistema spesso lo blocca/chiude in silenzio (schermata
-    // bianca e ritorno immediato, senza un errore utile da intercettare) invece di
-    // restituire un codice di errore riconoscibile. Il redirect è più affidabile.
+    // Solo nelle PWA installate (standalone) evitiamo del tutto il popup: lì il
+    // sistema operativo lo blocca/chiude in silenzio (schermata bianca e ritorno
+    // immediato, senza un errore intercettabile) invece di restituire un codice
+    // di errore riconoscibile. Il redirect è l'unica opzione affidabile in quel
+    // caso specifico. Ovunque altro (browser normale, anche mobile) il popup
+    // funziona correttamente se avviato in modo sincrono rispetto al tap.
     if (shouldUseAuthRedirect()) { await doRedirect(); return; }
 
     async function afterPopupOrRedirectFail(e) {
