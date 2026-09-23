@@ -4471,7 +4471,59 @@ loadState();
     return true;
   }
 
-  window.adminGoogleSignIn = async function(){
+  // ===== LOGIN ADMIN ROBUSTO =====
+  // Il pannello usa lo stesso account Firebase dell'utente anonimo quando possibile.
+  // Per il redirect salviamo un piccolo flag di sessione: dopo il ritorno da Google
+  // onAuthStateChanged può arrivare prima di getRedirectResult(), quindi non dobbiamo
+  // dipendere esclusivamente dal valore restituito da getRedirectResult().
+  const ADMIN_PENDING_KEY = 'tigerCards_admin_login_pending_v2';
+
+  function setAdminPending(value) {
+    try {
+      if (value) sessionStorage.setItem(ADMIN_PENDING_KEY, '1');
+      else sessionStorage.removeItem(ADMIN_PENDING_KEY);
+    } catch (e) {}
+  }
+
+  function isAdminPending() {
+    try { return sessionStorage.getItem(ADMIN_PENDING_KEY) === '1'; }
+    catch (e) { return false; }
+  }
+
+  function finishAdminLogin(user){
+    const email = getAdminEmail(user);
+
+    if (!isAuthorizedAdmin(user)) {
+      const err = document.getElementById('admin-password-error');
+      if (err) err.textContent =
+        'Account non autorizzato (' + (email || '—') + ').';
+      setAdminPending(false);
+      return false;
+    }
+
+    setAdminPending(false);
+
+    const modal = document.getElementById('admin-modal');
+    const loginSection = document.getElementById('admin-password-section');
+    const formSection = document.getElementById('admin-form-section');
+    const loggedAs = document.getElementById('admin-logged-as');
+    const errorEl = document.getElementById('admin-password-error');
+
+    // Questo è fondamentale dopo un redirect: Google ricarica completamente
+    // index.html, quindi il modal deve essere riaperto qui.
+    if (modal) modal.classList.add('active');
+    if (errorEl) errorEl.textContent = '';
+    if (loginSection) loginSection.style.display = 'none';
+    if (formSection) formSection.style.display = 'block';
+    if (loggedAs) loggedAs.innerText = '👤 ' + email;
+
+    try { populateAdminForm(); } catch (e) {
+      console.error('Errore apertura form admin:', e);
+    }
+    return true;
+  }
+
+  window.adminGoogleSignIn = function(){
     if (!firebaseReady || !fbAuth) {
       document.getElementById('admin-password-error').textContent =
         'Firebase non disponibile: impossibile accedere.';
@@ -4480,77 +4532,85 @@ loadState();
 
     document.getElementById('admin-password-error').textContent = '';
 
-    // IMPORTANTE: non mettiamo nessun "await" prima di avviare il redirect/popup.
-    // Un "await" qui, anche su una promise già risolta, fa perdere al browser
-    // l'associazione "questo è avvenuto per un tap diretto dell'utente": alcuni
-    // browser mobile allora bloccano o non completano correttamente il ritorno
-    // da Google, in modo silenzioso (nessun errore, semplicemente non funziona).
-    // Era questa la causa reale del loop, non solo la sequenza con la sync cloud
-    // corretta in precedenza (che restava comunque un problema vero, ma secondario).
-    if (!firebaseAuthInitialized) {
-      console.warn('Login Google avviato prima che la persistenza fosse pronta: procedo comunque per non perdere il gesto dell\'utente.');
-    }
-
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
-    // Se l'utente ha già un'identità anonima (il caso normale: ogni giocatore ne ha
-    // una per punti/amici/scambi), COLLEGHIAMO l'account Google a quella identità
-    // invece di sostituirla: così l'admin non perde i propri dati di gioco quando
-    // accede al pannello. Se quell'account Google risulta già collegato a un'altra
-    // identità (es. login precedente da un dispositivo diverso), passiamo
-    // automaticamente a quella identità esistente.
     const currentUser = fbAuth.currentUser;
-    const shouldLink = currentUser && currentUser.isAnonymous;
+    const shouldLink = !!(currentUser && currentUser.isAnonymous);
 
-    async function doRedirect() {
+    // Memorizziamo l'intenzione PRIMA di lasciare la pagina.
+    setAdminPending(true);
+
+    function startRedirect(){
+      // Non fare await prima dell'avvio: deve rimanere direttamente legato
+      // al tap dell'utente, soprattutto su Chrome/Android.
       try {
-        if (shouldLink) await currentUser.linkWithRedirect(provider);
-        else await fbAuth.signInWithRedirect(provider);
-      } catch (e2) {
-        showAdminAuthError(e2, 'Accesso non riuscito.');
+        const promise = shouldLink
+          ? currentUser.linkWithRedirect(provider)
+          : fbAuth.signInWithRedirect(provider);
+
+        promise.catch(function(e){
+          setAdminPending(false);
+          showAdminAuthError(e, 'Accesso non riuscito.');
+        });
+      } catch (e) {
+        setAdminPending(false);
+        showAdminAuthError(e, 'Accesso non riuscito.');
       }
     }
 
-    // Solo nelle PWA installate (standalone) evitiamo del tutto il popup: lì il
-    // sistema operativo lo blocca/chiude in silenzio (schermata bianca e ritorno
-    // immediato, senza un errore intercettabile) invece di restituire un codice
-    // di errore riconoscibile. Il redirect è l'unica opzione affidabile in quel
-    // caso specifico. Ovunque altro (browser normale, anche mobile) il popup
-    // funziona correttamente se avviato in modo sincrono rispetto al tap.
-    if (shouldUseAuthRedirect()) { await doRedirect(); return; }
+    // Nella PWA standalone preferiamo redirect; nel browser normale proviamo
+    // prima il popup, che mantiene meglio il contesto del tap su Android.
+    const isStandalone =
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      window.navigator.standalone === true;
 
-    async function afterPopupOrRedirectFail(e) {
-      if (e && (
-        e.code === 'auth/popup-blocked' ||
-        e.code === 'auth/operation-not-supported-in-this-environment'
-      )) {
-        await doRedirect();
-        return true;
-      }
-      return false;
+    if (isStandalone) {
+      startRedirect();
+      return;
     }
 
     try {
-      const result = shouldLink
-        ? await currentUser.linkWithPopup(provider)
-        : await fbAuth.signInWithPopup(provider);
-      finishAdminLogin(result.user);
-    } catch (e) {
-      if (e && e.code === 'auth/credential-already-in-use') {
-        // Questo account Google è già collegato a un'altra identità Firebase
-        // (es. hai già fatto l'accesso admin da un altro dispositivo/sessione):
-        // passiamo a quella identità esistente invece di fallire.
-        try {
-          const result2 = await fbAuth.signInWithCredential(e.credential);
-          finishAdminLogin(result2.user);
-        } catch (e2) {
-          showAdminAuthError(e2, 'Accesso non riuscito.');
+      const promise = shouldLink
+        ? currentUser.linkWithPopup(provider)
+        : fbAuth.signInWithPopup(provider);
+
+      promise.then(function(result){
+        setAdminPending(false);
+        finishAdminLogin(result.user);
+      }).catch(function(e){
+        if (e && (
+          e.code === 'auth/popup-blocked' ||
+          e.code === 'auth/operation-not-supported-in-this-environment' ||
+          e.code === 'auth/popup-closed-by-user'
+        )) {
+          // Popup bloccato/chiuso: passiamo al redirect.
+          startRedirect();
+          return;
         }
-        return;
-      }
-      if (await afterPopupOrRedirectFail(e)) return;
-      showAdminAuthError(e, 'Accesso annullato o non riuscito.');
+
+        if (e && e.code === 'auth/credential-already-in-use' && e.credential) {
+          // Il Google account esiste già come identità Firebase separata.
+          // In questo caso non possiamo fare link sull'identità anonima:
+          // accediamo direttamente a quell'identità.
+          fbAuth.signInWithCredential(e.credential)
+            .then(function(result){
+              setAdminPending(false);
+              finishAdminLogin(result.user);
+            })
+            .catch(function(e2){
+              setAdminPending(false);
+              showAdminAuthError(e2, 'Accesso non riuscito.');
+            });
+          return;
+        }
+
+        setAdminPending(false);
+        showAdminAuthError(e, 'Accesso annullato o non riuscito.');
+      });
+    } catch (e) {
+      setAdminPending(false);
+      showAdminAuthError(e, 'Accesso non riuscito.');
     }
   };
 
@@ -4558,40 +4618,41 @@ loadState();
     if (!firebaseReady || !fbAuth) return;
 
     try {
-      // Anche il recupero del redirect deve avvenire dopo che la persistenza
-      // è stata inizializzata. In questo modo Firebase può ripristinare
-      // correttamente l'utente quando si torna dalla schermata Google.
       await firebaseAuthPersistenceReady;
+
+      // getRedirectResult() può restituire null anche quando onAuthStateChanged
+      // ha già ripristinato correttamente la sessione. Per questo il vero punto
+      // di ingresso è anche il listener onAuthStateChanged qui sotto.
       const result = await fbAuth.getRedirectResult();
 
-      if (!result || !result.user) return;
-
-      finishAdminLogin(result.user);
+      if (result && result.user) {
+        finishAdminLogin(result.user);
+      }
     } catch (e) {
+      console.error('Errore risultato redirect Google:', e);
+
+      // Se il redirect ha prodotto una credenziale già collegata, recuperiamola.
       if (e && e.code === 'auth/credential-already-in-use' && e.credential) {
         try {
           const result2 = await fbAuth.signInWithCredential(e.credential);
           finishAdminLogin(result2.user);
           return;
         } catch (e2) {
-          console.error('Errore accesso con credenziale esistente:', e2);
-          openAdminPanel();
+          setAdminPending(false);
           showAdminAuthError(e2, 'Accesso non riuscito.');
           return;
         }
       }
-      console.error('Errore risultato redirect Google:', e);
-      openAdminPanel();
+
+      setAdminPending(false);
       showAdminAuthError(e, 'Accesso Google non riuscito.');
     }
   }
 
   window.adminSignOut = function(){
-    // IMPORTANTE: NON chiamiamo fbAuth.signOut() qui. Dopo il linking, l'account
-    // Google È diventato l'identità di gioco di questo dispositivo (stesso UID):
-    // disconnettersi creerebbe al riavvio un nuovo utente anonimo con un UID
-    // diverso, facendo perdere classifica, amici e scambi. Qui blocchiamo solo
-    // l'interfaccia del pannello admin.
+    // Il pulsante non esegue signOut Firebase: l'identità di gioco deve restare
+    // persistente. Blocca soltanto la schermata admin.
+    setAdminPending(false);
     document.getElementById('admin-form-section').style.display = 'none';
     document.getElementById('admin-password-section').style.display = 'block';
     document.getElementById('admin-password-error').textContent = '';
@@ -4599,17 +4660,17 @@ loadState();
     toast('Pannello admin bloccato.');
   };
 
-  // Mantiene l'interfaccia sincronizzata con lo stato Auth reale.
-  // Firebase garantisce che onAuthStateChanged venga chiamato dopo il ripristino
-  // dello stato di autenticazione, quindi non mostriamo il login per un istante
-  // mentre currentUser sta ancora venendo inizializzato.
+  // Stato Auth reale. Questo listener gestisce anche il ritorno da Google:
+  // se la pagina è stata ricaricata e Firebase ha già ripristinato l'admin,
+  // riapriamo il pannello senza dipendere dall'ordine tra getRedirectResult
+  // e onAuthStateChanged.
   if (firebaseReady && fbAuth) {
     fbAuth.onAuthStateChanged(function(user){
       const adminModal = document.getElementById('admin-modal');
       if (!adminModal) return;
 
       if (user && isAuthorizedAdmin(user)) {
-        if (adminModal.classList.contains('active')) {
+        if (isAdminPending() || adminModal.classList.contains('active')) {
           finishAdminLogin(user);
         }
       } else if (adminModal.classList.contains('active')) {
