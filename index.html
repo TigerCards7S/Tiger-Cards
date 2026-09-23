@@ -4472,10 +4472,16 @@ loadState();
 
     document.getElementById('admin-password-error').textContent = '';
 
-    // Non avviare OAuth finché la persistenza LOCAL non è stata applicata.
-    // Questo è particolarmente importante su Android.
-    await firebaseAuthPersistenceReady;
-    await firebaseAuthReady;
+    // IMPORTANTE: non mettiamo nessun "await" prima di avviare il redirect/popup.
+    // Un "await" qui, anche su una promise già risolta, fa perdere al browser
+    // l'associazione "questo è avvenuto per un tap diretto dell'utente": alcuni
+    // browser mobile allora bloccano o non completano correttamente il ritorno
+    // da Google, in modo silenzioso (nessun errore, semplicemente non funziona).
+    // Era questa la causa reale del loop, non solo la sequenza con la sync cloud
+    // corretta in precedenza (che restava comunque un problema vero, ma secondario).
+    if (!firebaseAuthInitialized) {
+      console.warn('Login Google avviato prima che la persistenza fosse pronta: procedo comunque per non perdere il gesto dell\'utente.');
+    }
 
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
